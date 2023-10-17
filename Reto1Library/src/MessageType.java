@@ -6,8 +6,13 @@
 
 /**
  *
- * @author 2dam
+ * @author andoni
  */
 public enum MessageType {
-    
+    Request,
+    Response,
+    Data,
+    Ex_Credentials,
+    Ex_EmailAlreadyExists,
+    Ex_ServerError
 }
