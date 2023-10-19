@@ -1,5 +1,6 @@
 package main;
 
+import libraries.User;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -16,14 +17,15 @@ import javafx.stage.Stage;
  *
  * @author 2dam
  */
-public class Client extends Application{
+public class Client extends Application {
+
     /**
      * @param args the command line arguments
      */
     private final int PUERTO = 5004;
-    private final String IP = "192.168.21.0";
-    
-    public void iniciar() throws ClassNotFoundException{
+    private final String IP = "192.168.21.32";
+
+    public void iniciar() throws ClassNotFoundException {
         Socket sCliente = null;
         ObjectInputStream entrada = null;
         ObjectOutputStream salida = null;
@@ -32,8 +34,7 @@ public class Client extends Application{
             sCliente = new Socket(IP, PUERTO);
             entrada = new ObjectInputStream(sCliente.getInputStream());
             salida = new ObjectOutputStream(sCliente.getOutputStream());
-            
-            
+
             String noConnection = (String) entrada.readObject();
             System.out.println(noConnection);
             //salida.writeObject();
@@ -47,12 +48,13 @@ public class Client extends Application{
      *
      * @return
      */
-    public User sendUserToDB(){
+    public User sendUserToDB() {
         //User y MessageType
+        return null;
     }
-    
+
     public static void main(String[] args) throws ClassNotFoundException {
-        
+
         Client c1 = new Client();
         c1.iniciar();
     }
@@ -61,8 +63,8 @@ public class Client extends Application{
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("your_fxml_file.fxml"));
         Parent root = loader.load();
-        MyController controller = loader.getController();
-        controller.initStage(primaryStage); // Pass the Stage to the controller
+        //MyController controller = loader.getController();
+        //controller.initStage(primaryStage); // Pass the Stage to the controller
         primaryStage.setTitle("Your Application");
         primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.show();
