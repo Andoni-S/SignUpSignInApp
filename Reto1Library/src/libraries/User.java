@@ -1,3 +1,5 @@
+package libraries;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -10,6 +12,7 @@
  */
 public class User {
     private int id;
+    private int CompanyId;
     private String login;
     private String password;
     private String street;
@@ -17,8 +20,13 @@ public class User {
     private String province;
     private String name;
     private String mobilePhone;
-
+    private boolean active;
+    private NotificationType notificationType; 
+    
     public User() {
+        this.CompanyId = 1;
+        this.active= true;
+        this.notificationType = NotificationType.email;
     }
 
     public User(int id, String login, String password, String street, String postalCode, String province, String name, String mobilePhone) {
@@ -30,6 +38,10 @@ public class User {
         this.province = province;
         this.name = name;
         this.mobilePhone = mobilePhone;
+        
+        this.CompanyId = 1;
+        this.active= true;
+        this.notificationType = NotificationType.email;
     }
 
     public int getId() {
@@ -96,5 +108,27 @@ public class User {
         this.mobilePhone = mobilePhone;
     }
     
+    public void setCompanyId(int CompanyId) {
+        this.CompanyId = CompanyId;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public int getCompanyId() {
+        return CompanyId;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
     
+    public NotificationType getNotificationType() {
+        return notificationType;
+    }
+
+    public void setNotificationType(NotificationType notificationType) {
+        this.notificationType = notificationType;
+    }
 }

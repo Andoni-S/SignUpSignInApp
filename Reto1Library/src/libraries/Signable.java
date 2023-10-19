@@ -1,3 +1,5 @@
+package libraries;
+
 
 import exceptions.CredentialsException;
 import exceptions.EmailAlreadyExistsException;
@@ -14,6 +16,6 @@ import exceptions.ServerErrorException;
  * @author 2dam
  */
 public interface Signable {
-    public User signUp() throws ServerErrorException, EmailAlreadyExistsException;
-    public User logIn() throws ServerErrorException, CredentialsException;
+    public User signUp(User user) throws ServerErrorException, EmailAlreadyExistsException;
+    public User logIn(User user) throws ServerErrorException, CredentialsException;
 }

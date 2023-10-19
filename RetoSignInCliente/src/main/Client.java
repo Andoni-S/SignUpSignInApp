@@ -1,70 +1,98 @@
 package main;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import java.util.Scanner;
 
-/**
- *
- * @author 2dam
- */
-public class Client extends Application{
-    /**
-     * @param args the command line arguments
-     */
-    private final int PUERTO = 5004;
-    private final String IP = "192.168.21.0";
-    
-    public void iniciar() throws ClassNotFoundException{
-        Socket sCliente = null;
+public class Client {
+
+    private final int PUERTO = 5000;
+    private final String IP = "127.0.0.1";
+
+    public void iniciar() {
+        Socket cliente = null;
         ObjectInputStream entrada = null;
         ObjectOutputStream salida = null;
-
+        Scanner scanner = new Scanner(System.in);
         try {
-            sCliente = new Socket(IP, PUERTO);
-            entrada = new ObjectInputStream(sCliente.getInputStream());
-            salida = new ObjectOutputStream(sCliente.getOutputStream());
+            cliente = new Socket(IP, PUERTO);
+            System.out.println("Conexión realizada con servidor");
+
+            //Cogemos los datos del deportivo
+            System.out.println("Ingresa los datos de un deportivo:");
+
+            System.out.print("Matrícula: ");
+            String matricula = scanner.nextLine();
+
+            System.out.print("Marca: ");
+            String marca = scanner.nextLine();
+
+            System.out.print("Tamaño del Depósito: ");
+            double tamanoDeposito = scanner.nextDouble();
+            scanner.nextLine(); // Consumir la nueva línea pendiente
+
+            System.out.print("Modelo: ");
+            String modelo = scanner.nextLine();
+            //Datos del Propietario
+            System.out.print("Nombre Propietario: ");
+            String nombre = scanner.nextLine();
+            System.out.print("Telefono Propietario: ");
+            int telefono = Integer.valueOf(scanner.nextLine());
+            //creamos objetos
+            Propietario prop = new Propietario(nombre, telefono);
+            Deportivo deportivo = new Deportivo(matricula, marca, tamanoDeposito, modelo, prop);
             
+            entrada = new ObjectInputStream(cliente.getInputStream());
+            salida = new ObjectOutputStream(cliente.getOutputStream());
             
-            String noConnection = (String) entrada.readObject();
-            System.out.println(noConnection);
-            //salida.writeObject();
-        } catch (IOException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            //envia el objeto al servidor
+            salida.writeObject(deportivo);
+            //lee el objeto y printealo por pantalla
+            Deportivo mensaje = (Deportivo) entrada.readObject();
+            System.out.println("Datos del deportivo almacenados en el archivo:");
+            System.out.println("Matrícula: " + mensaje.getMatricula());
+            System.out.println("Marca: " + mensaje.getMarca());
+            System.out.println("Tamaño del Depósito: " + mensaje.getDeposito());
+            System.out.println("Modelo: " + mensaje.getModelo());
+            System.out.println("Nombre Propietario: " + mensaje.getPropietario().getNombre());
+            System.out.println("Telefono Propietario: " + mensaje.getPropietario().getTelefono());
+            
+            //Scanner input = new Scanner(System.in);
+            /*if (!mensaje.substring(0, 5).equalsIgnoreCase("ERROR")) {
+                String opcion = input.nextLine();
+                salida.writeObject(opcion);
+                mensaje = (String) entrada.readObject();
+                System.out.println(mensaje);
+            }*/
+        } catch (IOException e) {
+            System.out.println("Error: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            try {
+                if (cliente != null) {
+                    cliente.close();
+                }
+                if (entrada != null) {
+                    entrada.close();
+                }
+                if (salida != null) {
+                    salida.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Fin cliente");
         }
-
     }
 
-    /**
-     *
-     * @return
-     */
-    public User sendUserToDB(){
-        //User y MessageType
-    }
-    
-    public static void main(String[] args) throws ClassNotFoundException {
+    public static void main(String[] args) {
+        
+        
         
         Client c1 = new Client();
         c1.iniciar();
     }
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("your_fxml_file.fxml"));
-        Parent root = loader.load();
-        MyController controller = loader.getController();
-        controller.initStage(primaryStage); // Pass the Stage to the controller
-        primaryStage.setTitle("Your Application");
-        primaryStage.setScene(new Scene(root, 600, 400));
-        primaryStage.show();
-    }
-}
+}// Cliente___

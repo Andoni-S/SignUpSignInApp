@@ -9,6 +9,13 @@ package exceptions;
  *
  * @author 2dam
  */
-public class UserAlreadyExistsException {
-    
+public class ClassNotFoundException extends Exception{
+        
+        public ClassNotFoundException() {
+		super();
+	}
+	public ClassNotFoundException(String msg)
+	{
+		super(msg);
+	}
 }
