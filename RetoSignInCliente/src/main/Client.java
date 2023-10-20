@@ -1,5 +1,7 @@
 package main;
 
+import exceptions.CredentialsException;
+import exceptions.EmailAlreadyExistsException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -77,16 +79,26 @@ public class Client{
     /**
      * This method writes a User through the Socket with the MessageType indicating that its a login
      * @param User u
-     * @throws IOException
+     * @throws IOException, ClassNotFoundException, CredentialsException, EmailAlreadyExistsException
      */
-    public void checkUser(User u) throws IOException{
+    public void checkUser(User u) throws IOException, ClassNotFoundException, CredentialsException, EmailAlreadyExistsException{
         ObjectOutputStream salida = null;
+        ObjectInputStream entrada = null;
         ApplicationPDU app = null;
         
         app.setMessageType(MessageType.LogIn);
         app.setUser(u);
         salida = new ObjectOutputStream(sCliente.getOutputStream());
-        salida.writeObject(app);
+        salida.writeObject(app); 
+        
+        entrada = new ObjectInputStream(sCliente.getInputStream());
+        app = (ApplicationPDU) entrada.readObject();
+        if (app.getMessageType().equals("Ex_Credentials")){
+            throw new CredentialsException();
+        }
+        if (app.getMessageType().equals("Ex_EmailAlreadyExists")){
+            throw new EmailAlreadyExistsException();
+        }
     }
     
     /**
