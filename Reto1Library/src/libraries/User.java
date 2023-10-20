@@ -11,20 +11,20 @@ package libraries;
  * @author 2dam
  */
 public class User {
-    private int id;
-    private int CompanyId;
-    private String login;
-    private String password;
-    private String street;
-    private String postalCode;
-    private String province;
-    private String name;
-    private String mobilePhone;
-    private boolean active;
-    private NotificationType notificationType; 
+    private int id; //id res_users, uid res_groups_users_rel, user_id res_company_users_rel
+    private int companyId; //cid res_company_users_rel
+    private String login; //login res_users
+    private String password; //password res_users
+    private String street; //street res_partner
+    private String postalCode; //zip res_partner
+    private String province; //street2 res_partner
+    private String name; //name res_partner
+    private String mobilePhone; //mobile res_partner
+    private boolean active; //active res_partner
+    private NotificationType notificationType; //notification_type res_users
     
     public User() {
-        this.CompanyId = 1;
+        this.companyId = 1;
         this.active= true;
         this.notificationType = NotificationType.email;
     }
@@ -39,7 +39,7 @@ public class User {
         this.name = name;
         this.mobilePhone = mobilePhone;
         
-        this.CompanyId = 1;
+        this.companyId = 1;
         this.active= true;
         this.notificationType = NotificationType.email;
     }
@@ -108,8 +108,8 @@ public class User {
         this.mobilePhone = mobilePhone;
     }
     
-    public void setCompanyId(int CompanyId) {
-        this.CompanyId = CompanyId;
+    public void setCompanyId(int companyId) {
+        this.companyId = companyId;
     }
 
     public void setActive(boolean active) {
@@ -117,7 +117,7 @@ public class User {
     }
 
     public int getCompanyId() {
-        return CompanyId;
+        return companyId;
     }
 
     public boolean isActive() {

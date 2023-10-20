@@ -12,13 +12,13 @@ import libraries.User;
 
 public class Server {
     
-    //declarar resource bundle
+    //declare resource bundle
     private ResourceBundle configFile = ResourceBundle.getBundle("properties.Config");
-    //puerto
+    //Port to listen to
     private final int PUERTO = 5004;
-    //numero clientes
+    //client number
     private int clienteN = 0;
-    //clientes maximos
+    //maximum clients
     private final int  MAXIMUM_CLIENTS = Integer.valueOf(configFile.getString("MAXCLIENTS"));
 
     public void iniciar() {
@@ -28,11 +28,11 @@ public class Server {
         ObjectInputStream entrada = null;
         ObjectOutputStream salida = null;
         try {
-            //Instanciar ServerSocket
+            //Instance ServerSocket
             servidor = new ServerSocket(PUERTO);
             System.out.println("MAXIMUM CLIENTS: "+ MAXIMUM_CLIENTS);
             
-            //ciclo de admision de clientes
+            //cicle of admission of new clients
             while (true) {
                 
                 User user = new User();
@@ -41,14 +41,14 @@ public class Server {
                 cliente = servidor.accept();
                 System.out.println("Cliente conectado");
                 
-                //si el numero de clientes no ha llegado al maximo
+                //If the number of clients has not reached the maximum
                 if(clienteN < MAXIMUM_CLIENTS){
-                    //crear un worker thread donde le permita hacer las operaciones de SignIn/SignUp
+                    //create a worker thread where SignIn/SignUp operations are done
                     WorkerThread wt = new WorkerThread(cliente);
                     clienteN++;
                     wt.start();
                     
-                } else{ //en caso de que haya llegado al numero maximo de clientes crear un thread que rechace al cliente
+                } else{ //In case you have reached the maximum number of clients create a thread to reject the client.
                    DeclineThread dt = new DeclineThread(cliente);
                    dt.start();
                 }
