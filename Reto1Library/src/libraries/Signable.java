@@ -1,3 +1,5 @@
+package libraries;
+
 
 import exceptions.CredentialsException;
 import exceptions.EmailAlreadyExistsException;
