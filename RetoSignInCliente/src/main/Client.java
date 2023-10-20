@@ -113,7 +113,8 @@ public class Client{
     public User getUser() throws IOException, ClassNotFoundException{
         ObjectInputStream entrada = null;
         
-        User u = (User) entrada.readObject();
+        ApplicationPDU app = (ApplicationPDU) entrada.readObject();
+        User u = app.getUser();
         return u;
     }
     
