@@ -18,7 +18,7 @@ import libraries.User;
 
 /**
  *
- * @author 2dam
+ * @author Jagoba Bartolomé Barroso
  */
 public class Client{
    
