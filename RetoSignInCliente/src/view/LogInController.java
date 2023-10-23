@@ -60,17 +60,21 @@ public class LogInController {
             // Establish the 'Entrar' button as the default button
             loginButton.setDefaultButton(true);
 
+            // Show the window
+            stage.show();
+
             // Set control events handlers
             loginButton.setOnAction(this::handleLoginButtonAction);
             hrefSignUp.setOnAction(this::handleHrefSignupAction);
-            txtEmail.addEventHandler(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, this::handleEmailChange);
-            pwdPassword.addEventHandler(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, this::handlePasswordChange);
+            txtEmail.addEventHandler(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, this::handleTextChange);
+            pwdPassword.addEventHandler(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, this::handleTextChange);
 
         } catch (Exception ex) {
 
         }
     }
 
+    @FXML
     private void handleLoginButtonAction(ActionEvent e) {
         try {
             // Validate that compulsory fields are not empty
@@ -89,14 +93,27 @@ public class LogInController {
         }
     }
 
-    private void handleEmailChange() {
+    @FXML
+    private void handleTextChange(InputMethodEvent e) {
+        try {
+            String email = txtEmail.getText();
+            String password = pwdPassword.getText();
 
+            if (email.trim().isEmpty() || password.trim().isEmpty()) {
+                // Disable 'Entrar' button
+                loginButton.setDisable(true);
+                // throw EmptyFieldException
+            }
+
+            // Enable 'Entrar' button
+            loginButton.setDisable(false);
+
+        } catch (Exception ex) {
+
+        }
     }
 
-    private void handlePasswordChange() {
-
-    }
-
+    @FXML
     private void handleHrefSignupAction(ActionEvent e) {
         // Show the Register window
         //view.SignUpController.initStage(Parent root);
