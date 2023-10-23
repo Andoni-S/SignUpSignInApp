@@ -2,6 +2,7 @@ package main;
 
 import exceptions.CredentialsException;
 import exceptions.EmailAlreadyExistsException;
+import exceptions.ServerErrorException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -16,16 +17,26 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import libraries.ApplicationPDU;
 import libraries.MessageType;
+import libraries.Signable;
 import libraries.User;
 
 /**
  *
  * @author Jagoba Bartolomé Barroso
  */
-public class Client{
-   
+public class Client implements Signable{
+   /**
+    * The port number for the socket communication.
+    */
     private final int PUERTO = 5004;
+    //TODO 
+    /**
+     * The IP address for the socket communication.
+     */
     private final String IP = "192.168.21.0";
+    /**
+     * The client socket.
+     */
     private Socket sCliente = null;
     
     /**
@@ -43,92 +54,62 @@ public class Client{
 
         String noConnection = (String) entrada.readObject();
         System.out.println(noConnection);
-
-    }
-/**
-     * This is the main method
-     * @param args
-     * @throws ClassNotFoundException
-     * @throws IOException 
-     */
-    public static void main(String[] args) throws ClassNotFoundException, IOException {
-        Client c1 = new Client();
-        c1.iniciar();
-        launch(args);
     }
     
     /**
-     * This method is called when the JavaFX application is launched. It is used
-     * to initialize the primary stage (the main window) and set up the user
-     * interface of the application.
-     *
-     * @param primaryStage The primary stage for this application, where
-     * the application scene can be set. The stage represents the main window of
-     * the application.
-     */
-    public void start(Stage primaryStage) throws IOException{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("LogInFXML.fxml"));
-        Parent root = loader.load();
-        LogInController controller = loader.getController();
-        controller.initStage(primaryStage); // Pass the Stage to the controller
-        primaryStage.setTitle("Log in");
-        primaryStage.setScene(new Scene(root, 600, 400));
-        primaryStage.show();
-    }
-    
-    /**
-     * This method writes a User through the Socket with the MessageType indicating that its a login
+     * This method writes a User through the Socket with the MessageType indicating that its a login. 
+     * It returns a User with all the necessary data and a MessageType indicating any exception.
      * @param User u
      * @throws IOException, ClassNotFoundException, CredentialsException, EmailAlreadyExistsException
      */
-    public void checkUser(User u) throws IOException, ClassNotFoundException, CredentialsException, EmailAlreadyExistsException{
+    public User logIn(User u) throws IOException, ClassNotFoundException, CredentialsException, EmailAlreadyExistsException, ServerErrorException{
         ObjectOutputStream salida = null;
         ObjectInputStream entrada = null;
-        ApplicationPDU app = null;
+        ApplicationPDU pdu = null;
         
-        app.setMessageType(MessageType.LogIn);
-        app.setUser(u);
+        pdu.setMessageType(MessageType.LogIn);
+        pdu.setUser(u);
         salida = new ObjectOutputStream(sCliente.getOutputStream());
-        salida.writeObject(app); 
+        salida.writeObject(pdu); 
         
         entrada = new ObjectInputStream(sCliente.getInputStream());
-        app = (ApplicationPDU) entrada.readObject();
-        if (app.getMessageType().equals("Ex_Credentials")){
+        pdu = (ApplicationPDU) entrada.readObject();
+        if (pdu.getMessageType().toString().equals("Ex_Credentials")){
             throw new CredentialsException();
         }
-        if (app.getMessageType().equals("Ex_EmailAlreadyExists")){
+        if (pdu.getMessageType().toString().equals("Ex_EmailAlreadyExists")){
             throw new EmailAlreadyExistsException();
         }
+        if (pdu.getMessageType().toString().equals("Ex_ServerError")){
+            throw new ServerErrorException();
+        }
+        return pdu.getUser();      
     }
     
     /**
-     * This method writes a User through the Socket with the MessageType indicating that its a register
+     * This method writes a User through the Socket with the MessageType indicating that its a register.
+     * It returns a User with all the necessary data and a MessageType indicating any exception.
      * @param User u
      * @throws IOException
      */
-    public void sendUser(User u) throws IOException{
+    public User signUp(User u) throws IOException, ClassNotFoundException, EmailAlreadyExistsException, ServerErrorException{
         ObjectOutputStream salida = null;
-        ApplicationPDU app = null;
-        
-        app.setMessageType(MessageType.SignIn);
-        app.setUser(u);
-        salida = new ObjectOutputStream(sCliente.getOutputStream());
-        salida.writeObject(app);
-    }
-    
-    /**
-     * This method reads the data of a User from the Server and converts it into an object User
-     * @return User
-     * @throws IOException
-     * @throws ClassNotFoundException 
-     */
-    public User getUser() throws IOException, ClassNotFoundException{
         ObjectInputStream entrada = null;
+        ApplicationPDU pdu = null;
         
-        ApplicationPDU app = (ApplicationPDU) entrada.readObject();
-        User u = app.getUser();
-        return u;
+        pdu.setMessageType(MessageType.SignIn);
+        pdu.setUser(u);
+        salida = new ObjectOutputStream(sCliente.getOutputStream());
+        salida.writeObject(pdu);
+        
+        entrada = new ObjectInputStream(sCliente.getInputStream());
+        pdu = (ApplicationPDU) entrada.readObject();
+        if (pdu.getMessageType().toString().equals("Ex_EmailAlreadyExists")){
+            throw new EmailAlreadyExistsException();
+        }
+        if (pdu.getMessageType().toString().equals("Ex_ServerError")){
+            throw new ServerErrorException();
+        }
+        return pdu.getUser();
     }
-    
-    
 }
