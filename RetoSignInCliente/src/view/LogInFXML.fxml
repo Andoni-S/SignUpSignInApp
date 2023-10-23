@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
@@ -11,14 +12,14 @@
    <children>
       <Label fx:id="lblEmail" layoutX="199.0" layoutY="146.0" prefHeight="18.0" prefWidth="48.0" text="Email" />
       <Label fx:id="lblPassword" layoutX="199.0" layoutY="203.0" text="Contraseña" />
-      <TextField fx:id="txtEmail" layoutX="199.0" layoutY="164.0" prefHeight="25.0" prefWidth="201.0" />
-      <TextField fx:id="pwdPassword" layoutX="199.0" layoutY="227.0" prefHeight="25.0" prefWidth="201.0" />
+      <TextField id="Email" fx:id="txtEmail" layoutX="199.0" layoutY="164.0" prefHeight="25.0" prefWidth="201.0" />
       <Hyperlink fx:id="hrefSignUp" layoutX="193.0" layoutY="294.0" text="¿No tienes usuario? Registrate Aquí" />
       <Label layoutX="251.0" layoutY="69.0" prefHeight="18.0" prefWidth="104.0" text="Iniciar Sesión" textAlignment="CENTER">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
       </Label>
-      <Button fx:id="loginButton" defaultButton="true" layoutX="532.0" layoutY="354.0" mnemonicParsing="false" text="Entrar" />
+      <Button fx:id="loginButton" defaultButton="true" layoutX="532.0" layoutY="354.0" mnemonicParsing="false" onAction="#handleLoginButtonAction" text="Entrar" />
+      <PasswordField fx:id="pwdPassword" layoutX="199.0" layoutY="227.0" prefHeight="25.0" prefWidth="201.0" />
    </children>
 </Pane>

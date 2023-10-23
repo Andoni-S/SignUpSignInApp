@@ -5,52 +5,76 @@
  */
 package view;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 import static javafx.application.ConditionalFeature.FXML;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.InputMethodEvent;
 import javafx.stage.Stage;
 import libraries.User;
 
 /**
- * FXML Controller class
+ * This class contains the responses for behavior of the Log In view
  *
  * @author Ander Goirigolzarri Iturburu
  */
-public class LogInController implements Initializable {
+public class LogInController {
 
     private Stage stage;
 
     @FXML
     private Label lblEmail, lblPassword;
     @FXML
-    private TextField txtEmail, pwdPassword;
+    private TextField txtEmail;
+    @FXML
+    private PasswordField pwdPassword;
     @FXML
     private Hyperlink hrefSignUp;
     @FXML
     private Button loginButton;
 
-    public void initStage(Stage stage) {
-        this.stage = stage;
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        // You can initialize your controller here.
-
-        loginButton.setOnAction(this::handleLoginButtonAction); //Set handleLogInButton as the action for the button
-    }
-
-    @FXML
-    private void handleLoginButtonAction(ActionEvent event) {
+    /**
+     * This method creates the Stage for this window.
+     *
+     * @param Stage
+     */
+    public void initStage(Parent root) {
         try {
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+
+            // Establish window title
+            stage.setTitle("Iniciar sesión");
+            // Window is not resizable
+            stage.setResizable(false);
+            // Disable 'Entrar' button
+            loginButton.setDisable(true);
+            // Establish the focus on the first field
+
+            // Establish the 'Entrar' button as the default button
+            loginButton.setDefaultButton(true);
+
+            // Set control events handlers
+            loginButton.setOnAction(this::handleLoginButtonAction);
+            hrefSignUp.setOnAction(this::handleHrefSignupAction);
+            txtEmail.addEventHandler(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, this::handleEmailChange);
+            pwdPassword.addEventHandler(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, this::handlePasswordChange);
+
+        } catch (Exception ex) {
+
+        }
+    }
+
+    private void handleLoginButtonAction(ActionEvent e) {
+        try {
+            // Validate that compulsory fields are not empty
+
             // Handle the login button click event here.
             String email = txtEmail.getText();
             String password = pwdPassword.getText();
@@ -59,15 +83,25 @@ public class LogInController implements Initializable {
             User user = new User();
             user.setLogin(email);
             user.setPassword(password);
-        } catch (Exception e){
-            e.getMessage();
-        }
 
-        //espera a que salte el evento del boton
-        //cuando recibe el evento recoge los campos informados de las ventanas
-        //instancia un objeto User con la informacion recogida de los campos informados
-        //manda el objeto User al Socket
-        // You can use 'stage' to manipulate the window (e.g., close it, show a new scene, etc.).
+        } catch (Exception ex) { //de momento está puesta una exception generica pero aqui deberian saltar las excepciones de conexion a la base de datos y de credenciales
+            ex.getMessage();
+        }
+    }
+
+    private void handleEmailChange() {
+
+    }
+
+    private void handlePasswordChange() {
+
+    }
+
+    private void handleHrefSignupAction(ActionEvent e) {
+        // Show the Register window
+        //view.SignUpController.initStage(Parent root);
+        // Close this window
+        stage.close();
     }
 
 }
