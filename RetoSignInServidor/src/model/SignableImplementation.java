@@ -1,5 +1,6 @@
 package model;
 
+import connection.DBConnection;
 import exceptions.CredentialsException;
 import exceptions.EmailAlreadyExistsException;
 import exceptions.ServerErrorException;

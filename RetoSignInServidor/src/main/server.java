@@ -2,6 +2,7 @@ package main;
 
 import Threads.DeclineThread;
 import Threads.WorkerThread;
+import connection.SSHConnection;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -27,13 +28,17 @@ public class Server {
         Socket cliente = null;
         ObjectInputStream entrada = null;
         ObjectOutputStream salida = null;
+        SSHConnection sshConnection = SSHConnection.getSSHConnection();
         try {
+            
+            sshConnection.connectSSH();
             //Instance ServerSocket
             servidor = new ServerSocket(PUERTO);
             System.out.println("MAXIMUM CLIENTS: "+ MAXIMUM_CLIENTS);
             
             //cicle of admission of new clients
             while (true) {
+                             
                 
                 User user = new User();
                 //aceptar un cliente en el servidor
