@@ -34,8 +34,8 @@ public class Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("LogInFXML.fxml"));
         Parent root = loader.load();
         LogInController controller = loader.getController();
-        controller.initStage(primaryStage); // Pass the Stage to the controller
-        primaryStage.setTitle("SignInSignUpApp");
+        controller.initStage(primaryStage); 
+        primaryStage.setTitle("LogIn");
         primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.show();
     }
