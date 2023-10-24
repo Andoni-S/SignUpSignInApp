@@ -24,7 +24,7 @@ import libraries.User;
  *
  * @author Jagoba Bartolomé Barroso
  */
-public class Client implements Signable{
+public class SignableImplementation implements Signable{
    /**
     * The port number for the socket communication.
     */
@@ -40,23 +40,6 @@ public class Client implements Signable{
     private Socket sCliente = null;
     
     /**
-     * This method connects the Client with the Server through a Socket, 
-     * if the Client reads a message, it's warning that there are no connections left
-     * @throws ClassNotFoundException, IOException
-     */   
-    public void iniciar() throws ClassNotFoundException, IOException{
-        ObjectInputStream entrada = null;
-        ObjectOutputStream salida = null;
-
-        sCliente = new Socket(IP, PUERTO);
-        entrada = new ObjectInputStream(sCliente.getInputStream());
-        salida = new ObjectOutputStream(sCliente.getOutputStream());
-
-        String noConnection = (String) entrada.readObject();
-        System.out.println(noConnection);
-    }
-    
-    /**
      * This method writes a User through the Socket with the MessageType indicating that its a login. 
      * It returns a User with all the necessary data and a MessageType indicating any exception.
      * @param User u
@@ -65,6 +48,13 @@ public class Client implements Signable{
     public User logIn(User u) throws IOException, ClassNotFoundException, CredentialsException, EmailAlreadyExistsException, ServerErrorException{
         ObjectOutputStream salida = null;
         ObjectInputStream entrada = null;
+        sCliente = new Socket(IP, PUERTO);
+        entrada = new ObjectInputStream(sCliente.getInputStream());
+        salida = new ObjectOutputStream(sCliente.getOutputStream());
+
+        String noConnection = (String) entrada.readObject();
+        System.out.println(noConnection);
+        
         ApplicationPDU pdu = null;
         
         pdu.setMessageType(MessageType.LogIn);
@@ -95,6 +85,13 @@ public class Client implements Signable{
     public User signUp(User u) throws IOException, ClassNotFoundException, EmailAlreadyExistsException, ServerErrorException{
         ObjectOutputStream salida = null;
         ObjectInputStream entrada = null;
+        sCliente = new Socket(IP, PUERTO);
+        entrada = new ObjectInputStream(sCliente.getInputStream());
+        salida = new ObjectOutputStream(sCliente.getOutputStream());
+
+        String noConnection = (String) entrada.readObject();
+        System.out.println(noConnection);
+        
         ApplicationPDU pdu = null;
         
         pdu.setMessageType(MessageType.SignIn);
