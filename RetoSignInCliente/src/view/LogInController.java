@@ -70,7 +70,7 @@ public class LogInController {
             pwdPassword.addEventHandler(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, this::handleTextChange);
 
         } catch (Exception ex) {
-
+            ex.getMessage();
         }
     }
 
@@ -87,6 +87,9 @@ public class LogInController {
             User user = new User();
             user.setLogin(email);
             user.setPassword(password);
+            
+            // Send the User object 
+            // Client.logIn(user);
 
         } catch (Exception ex) { //de momento está puesta una exception generica pero aqui deberian saltar las excepciones de conexion a la base de datos y de credenciales
             ex.getMessage();
@@ -109,7 +112,7 @@ public class LogInController {
             loginButton.setDisable(false);
 
         } catch (Exception ex) {
-
+            ex.getMessage();
         }
     }
 
