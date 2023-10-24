@@ -28,10 +28,10 @@ public class Server {
         Socket cliente = null;
         ObjectInputStream entrada = null;
         ObjectOutputStream salida = null;
-        SSHConnection sshConnection = SSHConnection.getSSHConnection();
+        //SSHConnection sshConnection = SSHConnection.getSSHConnection();
         try {
             
-            sshConnection.connectSSH();
+            //sshConnection.connectSSH();
             //Instance ServerSocket
             servidor = new ServerSocket(PUERTO);
             System.out.println("MAXIMUM CLIENTS: "+ MAXIMUM_CLIENTS);
