@@ -5,9 +5,11 @@
  */
 package controller;
 
-import static javafx.application.ConditionalFeature.FXML;
+import factory.SignableFactory;
+import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -42,13 +44,13 @@ public class LogInController {
     /**
      * This method creates the Stage for this window.
      *
-     * @param Stage
+     * @param root
      */
     public void initStage(Parent root) {
         try {
             Scene scene = new Scene(root);
             stage.setScene(scene);
-
+//TO-DO: mirar que se cargue la escena bien
             // Establish window title
             stage.setTitle("Iniciar sesión");
             // Window is not resizable
@@ -91,13 +93,17 @@ public class LogInController {
             String email = txtEmail.getText();
             String password = pwdPassword.getText();
 
-            // Create a User object with the entered data
+            // Create a User object with the provided data
             User user = new User();
             user.setLogin(email);
             user.setPassword(password);
 
-            // Send the User object 
-            // Client.logIn(user);
+            // Send the User created to the logic Tier and recieve a full informed User
+            //User mainWindowUser = new User();
+            //mainWindowUser = SignableFactory.getSignable().logIn(user);
+            // Close this window and open a MainWindow
+            stage.close();
+
         } catch (Exception ex) { //de momento está puesta una exception generica pero aqui deberian saltar las excepciones de conexion a la base de datos y de credenciales
             ex.getMessage();
         }
@@ -125,10 +131,18 @@ public class LogInController {
 
     @FXML
     private void handleHrefSignupAction(ActionEvent e) {
-        // Show the Register window
-        //view.SignUpController.initStage(Parent root);
-        // Close this window
-        stage.close();
-    }
+        try {
+            // Show the Sign Up window
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignUpFXML.fxml"));
+            Parent root = (Parent) loader.load();
+            SignUpController signupcontroller = ((SignUpController) loader.getController());
 
+            signupcontroller.initStage(root);
+
+            // Close this window
+            stage.close();
+        } catch (IOException ex) {
+            // Gestionar la exception
+        }
+    }
 }
