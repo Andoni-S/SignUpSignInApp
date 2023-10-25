@@ -6,28 +6,24 @@ import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import view.MainWindowController;
 
 public class Application extends javafx.application.Application {
 
     @Override
     public void start(Stage primaryStage) {
         try {
-            // Load the FXML file
-            Parent root = FXMLLoader.load(getClass().getResource("/view/MainWindow.fxml"));
-            
-            // Create the main window
-            Scene scene = new Scene(root, 800, 600);
-            
-            // Set the title of the main window
-            primaryStage.setTitle("JavaFX Main Window");
-            
-            // Set the scene for the primary stage
-            primaryStage.setScene(scene);
-            
-            // Show the main window
+   
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainWindow.fxml"));
+            Parent root = loader.load();
+            MainWindowController controller = loader.getController();
+            controller.setStage(primaryStage);
+            controller.initStage(root);
+            //primaryStage.setTitle("LogIn");
+            primaryStage.setScene(new Scene(root, 600, 400));
             primaryStage.show();
+            
             
         } catch (IOException ex) {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);

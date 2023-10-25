@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main;
+package view;
 
 import java.util.Optional;
 import javafx.application.Application;
@@ -21,6 +21,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import libraries.User;
 
 /**
  *
@@ -35,7 +37,7 @@ public class MainWindowController {
      * Stage setter.
      * @param stage the stage to set
     */
-@FXML
+    @FXML
     private Label lblEmail;
 
     @FXML
@@ -68,6 +70,16 @@ public class MainWindowController {
     @FXML
     private Button btnLogout;
       
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+   
     public void setStage(Stage stage) {
         this.stage = stage;
     }
@@ -75,8 +87,8 @@ public class MainWindowController {
     public void initStage(Parent root) {
         try {
             //Set scene and view DOM root
-            Scene scene = new Scene(root);
-            stage = new Stage();
+            //Scene scene = new Scene(root);
+            //stage = new Stage();
             //Establecer el título de la ventana al valor “Registro.”
             stage.setTitle("Registro");
             //La ventana no es redimensionable.
@@ -86,6 +98,18 @@ public class MainWindowController {
             //Establecer el botón Registrar como Default Button mediante setDefaultButton y el botón Cancelar cómo Cancel Button mediante setCancelButton.
             btnLogout.setDefaultButton(true);
             //Mostrar la ventana.
+            user = new User();
+            
+            stage.setOnCloseRequest(event -> handleCloseRequest(event));
+            
+            btnLogout.setDefaultButton(true);
+            textEmail.setEditable(false);
+            textName.setEditable(false);
+            textPhone.setEditable(false);
+            textAddress.setEditable(false);
+            textPostalCode.setEditable(false);
+            loadUser();
+            
             stage.show();
            
         } catch (Exception e) {
@@ -93,6 +117,30 @@ public class MainWindowController {
         }
     }
 
+    public void loadUser(){
+        textEmail.setText("andoni@gmail.com");
+        //textEmail.setText(user.getLogin());
+        textName.setText(user.getName());
+        textPhone.setText(user.getMobilePhone());
+        textAddress.setText(user.getStreet());
+        textPostalCode.setText(user.getPostalCode());
+    }
+    
+    @FXML
+    void handleBtnClose(ActionEvent event) {
+        // Obtenemos el escenario (Stage) actual a través del botón
+        Stage stage = (Stage) btnLogout.getScene().getWindow();
+        // Cerramos la ventana
+        stage.close();
+    }
+    
+     private void handleCloseRequest(WindowEvent event) {
+        // Obtenemos el escenario (Stage) actual a través del botón
+        Stage stage = (Stage) btnLogout.getScene().getWindow();
+        // Cerramos la ventana
+        stage.close();
+    }
+     
     public void handleOnButtonClick(Observable observable) {
         try {
            
@@ -113,5 +161,7 @@ public class MainWindowController {
         alert.setContentText(e.toString());
         alert.showAndWait();
     }
+
+   
 
 }
