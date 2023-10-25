@@ -10,6 +10,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ResourceBundle;
 import libraries.User;
+import model.Pool;
 
 public class Server {
     
@@ -28,13 +29,16 @@ public class Server {
         Socket cliente = null;
         ObjectInputStream entrada = null;
         ObjectOutputStream salida = null;
-        //SSHConnection sshConnection = SSHConnection.getSSHConnection();
+        SSHConnection sshConnection = null;
+        Pool pool = Pool.getPool();
         try {
+            sshConnection = new SSHConnection();
+            sshConnection.connectSSH();
             
-            //sshConnection.connectSSH();
             //Instance ServerSocket
             servidor = new ServerSocket(PUERTO);
             System.out.println("MAXIMUM CLIENTS: "+ MAXIMUM_CLIENTS);
+            
             
             //cicle of admission of new clients
             while (true) {
@@ -74,6 +78,9 @@ public class Server {
                     entrada.close();
                 if (salida != null)
                     salida.close();
+                
+                
+                sshConnection.discconectSSH();
             } catch (IOException e) {
                 e.printStackTrace();
             }

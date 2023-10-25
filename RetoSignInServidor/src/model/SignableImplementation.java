@@ -40,63 +40,59 @@ public class SignableImplementation implements Signable{
         try {
             	
             Connection con;
-            PreparedStatement stmt = null;
-            DBConnection conController = new DBConnection();
-        
-
-            con = conController.openConnection();
+            Pool pool = Pool.getPool();
+            con = pool.getConnection();
             
             if(con == null)
                 System.out.println("Error");
-            
-
+           
             //String insertResPartner = "INSERT INTO res_partner DEFAULT VALUES";
             String insertResPartner = "INSERT INTO res_partner (id, street, zip, street2, name, mobile, active) VALUES (DEFAULT, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement pstmtResPartner = con.prepareStatement(insertResPartner, Statement.RETURN_GENERATED_KEYS);
-            pstmtResPartner.setString(1, user.getStreet());
-            pstmtResPartner.setString(2, user.getPostalCode());
-            pstmtResPartner.setString(3, user.getProvince());
-            pstmtResPartner.setString(4, user.getName());
-            pstmtResPartner.setString(5, user.getMobilePhone());
-            pstmtResPartner.setBoolean(6, user.isActive());
-            pstmtResPartner.executeUpdate();
+            PreparedStatement pstmt = con.prepareStatement(insertResPartner, Statement.RETURN_GENERATED_KEYS);
+            pstmt.setString(1, user.getStreet());
+            pstmt.setString(2, user.getPostalCode());
+            pstmt.setString(3, user.getProvince());
+            pstmt.setString(4, user.getName());
+            pstmt.setString(5, user.getMobilePhone());
+            pstmt.setBoolean(6, user.isActive());
+            pstmt.executeUpdate();
 
             // Obtain the ID res_partner
-            ResultSet generatedKeys = pstmtResPartner.getGeneratedKeys();
+            ResultSet generatedKeys = pstmt.getGeneratedKeys();
             int partner_id = -1;
             if (generatedKeys.next()) {
                 partner_id = generatedKeys.getInt(1);
             }
             
             String insertResUsers = "INSERT INTO res_users (login, password, partner_id, company_id, notification_type) VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement pstmtResUsers = con.prepareStatement(insertResUsers);
-            pstmtResUsers.setString(1, user.getLogin());
-            pstmtResUsers.setString(2, user.getPassword());
-            pstmtResUsers.setInt(3, partner_id);
-            pstmtResUsers.setInt(4, 1);
-            pstmtResUsers.setString(5, user.getNotificationType().toString()); 
-            pstmtResUsers.executeUpdate();
+            pstmt = con.prepareStatement(insertResUsers);
+            pstmt.setString(1, user.getLogin());
+            pstmt.setString(2, user.getPassword());
+            pstmt.setInt(3, partner_id);
+            pstmt.setInt(4, 1);
+            pstmt.setString(5, user.getNotificationType().toString()); 
+            pstmt.executeUpdate();
             
             String insertResGroupUsersRel = "INSERT INTO res_groups_users_rel (uid, gid) VALUES (?, ?),(?, ?),(?, ?),(?, ?))";
-            PreparedStatement pstmtResGroupUsersRel = con.prepareStatement(insertResGroupUsersRel);
+            pstmt = con.prepareStatement(insertResGroupUsersRel);
             int userID = getUserIdByLogin(con, "correo2@ejemplo.com");
-            pstmtResGroupUsersRel.setInt(1, userID);
-            pstmtResGroupUsersRel.setInt(2, 1);
-            pstmtResGroupUsersRel.setInt(3, userID);
-            pstmtResGroupUsersRel.setInt(4, 7);
-            pstmtResGroupUsersRel.setInt(5, userID);
-            pstmtResGroupUsersRel.setInt(6, 8);
-            pstmtResGroupUsersRel.setInt(7, userID);
-            pstmtResGroupUsersRel.setInt(8, 9);
-            pstmtResGroupUsersRel.executeUpdate();
+            pstmt.setInt(1, userID);
+            pstmt.setInt(2, 1);
+            pstmt.setInt(3, userID);
+            pstmt.setInt(4, 7);
+            pstmt.setInt(5, userID);
+            pstmt.setInt(6, 8);
+            pstmt.setInt(7, userID);
+            pstmt.setInt(8, 9);
+            pstmt.executeUpdate();
             
             String insertResCompanyUsersRel = "INSERT INTO res_company_users_rel (cid, user_id) VALUES (?, ?)";
-            PreparedStatement pstmtResCompanyUsersRel = con.prepareStatement(insertResCompanyUsersRel);
-            pstmtResCompanyUsersRel.setInt(1, userID);
-            pstmtResCompanyUsersRel.setInt(2, 1);
-            pstmtResCompanyUsersRel.executeUpdate();
+            pstmt = con.prepareStatement(insertResCompanyUsersRel);
+            pstmt.setInt(1, userID);
+            pstmt.setInt(2, 1);
+            pstmt.executeUpdate();
             
-            con.close();
+            pstmt.close();
             
             return user;
         } catch (SQLException e) {
@@ -119,9 +115,8 @@ public class SignableImplementation implements Signable{
     public User logIn(User user) throws ServerErrorException, CredentialsException {
         try {
         Connection con;
-        PreparedStatement stmt = null;
-        DBConnection conController = new DBConnection();
-        con = conController.openConnection();
+        Pool pool = Pool.getPool();
+        con = pool.getConnection();
             
         String selectUser = "SELECT * FROM res_users WHERE login = ? AND password = ?";
         PreparedStatement pstmt;
@@ -142,11 +137,12 @@ public class SignableImplementation implements Signable{
 
         result.close();
         pstmt.close();
-        con.close();
             
         return new User();
         
         } catch (SQLException ex) {
+            Logger.getLogger(SignableImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(SignableImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
