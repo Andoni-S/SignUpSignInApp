@@ -44,7 +44,7 @@ public class LogInController {
      *
      * @param Stage
      */
-    public void initStage(Parent root) {
+    public void initStage(PArent root) {
         try {
             Scene scene = new Scene(root);
             stage.setScene(scene);

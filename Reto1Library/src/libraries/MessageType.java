@@ -5,15 +5,14 @@ package libraries;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author andoni
  */
 public enum MessageType {
-    Request,
-    Response,
-    Data,
+    SignIn,
+    LogIn,
+    Ex_ClassNotFound,
     Ex_Credentials,
     Ex_EmailAlreadyExists,
     Ex_ServerError
