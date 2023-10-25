@@ -1,8 +1,11 @@
-/**
- *
- * @author 2dam
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package main;
+
+import controller.LogInController;
 import java.io.IOException;
 import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
@@ -19,8 +22,8 @@ import controller.LogInController;
  *
  * @author 2dam
  */
-public class Application {
 
+public class Application {    
     /**
      * This method is called when the JavaFX application is launched. It is used
      * to initialize the primary stage (the main window) and set up the user

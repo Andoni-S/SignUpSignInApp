@@ -29,30 +29,34 @@ public class SignUpController {
 
     /**
      * Application stage.
-     */
+    */
     private Stage stage;
     /**
      * Stage setter.
-     *
      * @param stage the stage to set
-     */
+    */
     @FXML
     private Button btnRegistrar;
+
     @FXML
     private Button btnCancelar;
+    
     @FXML
     private TextField txtEmail;
+   
     @FXML
     private TextField txtNombre;
+    
     @FXML
     private TextField txtContrasena;
+    
     @FXML
     private TextField txtConfirmar;
-
+    
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-
+      
     public void initStage(Parent root) {
         try {
             //Set scene and view DOM root
@@ -71,15 +75,17 @@ public class SignUpController {
             btnCancelar.setCancelButton(true);
             //Mostrar la ventana.
             stage.show();
+ 
             //Listeners
             txtEmail.textProperty().addListener(this::handleOnTextNotEmpty);
         } catch (Exception e) {
-            this.showErrorAlert(e);
+             this.showErrorAlert(e);
         }
     }
 
     public void handleOnButtonClick(Observable observable) {
         try {
+
         } catch (Exception e) {
         }
     }
@@ -99,7 +105,7 @@ public class SignUpController {
                 btnRegistrar.setDisable(true);
                 throw new Exception("Empty fields.");
             }
-        } catch (Exception e) {
+        } catch (Exception e){
             this.showErrorAlert(e);
         }
     }

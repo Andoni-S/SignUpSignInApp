@@ -5,9 +5,10 @@ package libraries;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 /**
  *
- * @author andoni
+ * @author Andoni Sanz
  */
 public enum MessageType {
     SignIn,
