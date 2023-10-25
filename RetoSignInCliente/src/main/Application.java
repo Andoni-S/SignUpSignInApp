@@ -5,6 +5,7 @@
  */
 package main;
 
+import controller.LogInController;
 import java.io.IOException;
 import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
