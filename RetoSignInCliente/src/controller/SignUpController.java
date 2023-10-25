@@ -26,6 +26,7 @@ import javafx.stage.Stage;
  * @author 2dam
  */
 public class SignUpController {
+
     /**
      * Application stage.
     */
@@ -84,14 +85,15 @@ public class SignUpController {
 
     public void handleOnButtonClick(Observable observable) {
         try {
-           
-        } catch(Exception e){
-        
+
+        } catch (Exception e) {
         }
     }
-    
+
     /**
-     * Checks if a TextField is empty and enables the button Registrar, if its empty, disable the button.
+     * Checks if a TextField is empty and enables the button Registrar, if its
+     * empty, disable the button.
+     *
      * @param observable The observable value associated with the TextField's
      * text property.
      */
@@ -121,5 +123,4 @@ public class SignUpController {
         alert.setContentText(e.toString());
         alert.showAndWait();
     }
-
 }

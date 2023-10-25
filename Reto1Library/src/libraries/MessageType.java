@@ -8,7 +8,7 @@ package libraries;
 
 /**
  *
- * @author andoni
+ * @author Andoni Sanz
  */
 public enum MessageType {
     SignIn,
