@@ -13,7 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import view.LogInController;
+import controller.LogInController;
 
 /**
  *
@@ -31,10 +31,12 @@ public class Application {
      * application.
      */
     public void start(Stage primaryStage) throws IOException, ClassNotFoundException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("LogInFXML.fxml"));
-        Parent root = loader.load();
-        LogInController controller = loader.getController();
-        controller.initStage(primaryStage);
+        
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/LogInFXML.fxml"));
+        Parent root = (Parent) loader.load();
+        LogInController controller = ((LogInController)loader.getController());
+        controller.setStage(primaryStage);
+        controller.initStage(root);
         primaryStage.setTitle("LogIn");
         primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.show();

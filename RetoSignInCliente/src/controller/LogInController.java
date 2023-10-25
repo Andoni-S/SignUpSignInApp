@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package view;
+package controller;
 
 import static javafx.application.ConditionalFeature.FXML;
 import javafx.event.ActionEvent;
@@ -44,7 +44,7 @@ public class LogInController {
      *
      * @param Stage
      */
-    public void initStage(PArent root) {
+    public void initStage(Parent root) {
         try {
             Scene scene = new Scene(root);
             stage.setScene(scene);
@@ -74,6 +74,14 @@ public class LogInController {
         }
     }
 
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
     @FXML
     private void handleLoginButtonAction(ActionEvent e) {
         try {
@@ -87,10 +95,9 @@ public class LogInController {
             User user = new User();
             user.setLogin(email);
             user.setPassword(password);
-            
+
             // Send the User object 
             // Client.logIn(user);
-
         } catch (Exception ex) { //de momento está puesta una exception generica pero aqui deberian saltar las excepciones de conexion a la base de datos y de credenciales
             ex.getMessage();
         }
