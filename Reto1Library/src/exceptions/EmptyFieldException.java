@@ -9,6 +9,13 @@ package exceptions;
  *
  * @author 2dam
  */
-public class ServerException {
+public class EmptyFieldException extends Exception {
     
+	public EmptyFieldException() {
+		super();
+	}
+	public EmptyFieldException(String msg)
+	{
+		super(msg);
+	}
 }

@@ -45,6 +45,7 @@ public class SignableImplementation implements Signable{
      * @param User u
      * @throws IOException, ClassNotFoundException, CredentialsException, EmailAlreadyExistsException
      */
+    @Override
     public User logIn(User u) throws IOException, ClassNotFoundException, CredentialsException, EmailAlreadyExistsException, ServerErrorException{
         ObjectOutputStream salida = null;
         ObjectInputStream entrada = null;
@@ -82,6 +83,7 @@ public class SignableImplementation implements Signable{
      * @param User u
      * @throws IOException
      */
+    @Override
     public User signUp(User u) throws IOException, ClassNotFoundException, EmailAlreadyExistsException, ServerErrorException{
         ObjectOutputStream salida = null;
         ObjectInputStream entrada = null;
@@ -102,10 +104,10 @@ public class SignableImplementation implements Signable{
         entrada = new ObjectInputStream(sCliente.getInputStream());
         pdu = (ApplicationPDU) entrada.readObject();
         if (pdu.getMessageType().toString().equals("Ex_EmailAlreadyExists")){
-            throw new EmailAlreadyExistsException();
+            throw new EmailAlreadyExistsException("This email already exists.");
         }
         if (pdu.getMessageType().toString().equals("Ex_ServerError")){
-            throw new ServerErrorException();
+            throw new ServerErrorException("An error with the server has occurred.");
         }
         return pdu.getUser();
     }
