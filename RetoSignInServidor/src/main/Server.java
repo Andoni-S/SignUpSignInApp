@@ -10,7 +10,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ResourceBundle;
 import libraries.User;
-import model.Pool;
+import connection.Pool;
 
 public class Server {
     
@@ -30,8 +30,9 @@ public class Server {
         ObjectInputStream entrada = null;
         ObjectOutputStream salida = null;
         SSHConnection sshConnection = null;
-        Pool pool = Pool.getPool();
+        
         try {
+            Pool pool = Pool.getPool();
             sshConnection = new SSHConnection();
             sshConnection.connectSSH();
             

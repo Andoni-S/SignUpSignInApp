@@ -8,6 +8,7 @@ package connection;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
+import java.util.ResourceBundle;
 
 /**
  *
@@ -15,12 +16,22 @@ import com.jcraft.jsch.Session;
  */
 public class SSHConnection {
     
+    private ResourceBundle configFile;
     private String sshHost = "192.168.20.51";
     private String remoteHost = "192.168.10.2";
     private String sshUsername = "ubu";
     private int localPort = 9000;
     private int remotePort = 5432;
     Session session = null;
+    
+    public SSHConnection() {
+        configFile = ResourceBundle.getBundle("properties.Config");
+        sshHost = configFile.getString("HOST");
+        remoteHost = configFile.getString("REMOTE");
+        sshUsername = configFile.getString("SSH_USER");
+        localPort = Integer.valueOf(configFile.getString("LOCAL_PORT"));
+        remotePort = Integer.valueOf(configFile.getString("REMOTE_PORT"));
+    }
     
     public void connectSSH(){
         try{
