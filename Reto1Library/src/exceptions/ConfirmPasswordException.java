@@ -9,6 +9,13 @@ package exceptions;
  *
  * @author 2dam
  */
-public class ServerException {
-    
+public class ConfirmPasswordException extends Exception{
+     
+    public ConfirmPasswordException() {
+		super();
+	}
+	public ConfirmPasswordException(String msg)
+	{
+		super(msg);
+	}
 }

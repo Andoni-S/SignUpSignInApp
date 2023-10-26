@@ -1,20 +1,19 @@
-package libraries;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package connection;
+
+import java.util.Stack;
 
 /**
  *
- * @author andoni
+ * @author 2dam
  */
-public enum MessageType {
-    LogIn,
-    SignUp,
-    Ex_ClassNotFound,
-    Ex_Credentials,
-    Ex_EmailAlreadyExists,
-    Ex_ServerError
+public class Pool {
+    //Stack<Conexion> conexiones;
+    
+    
+    
 }

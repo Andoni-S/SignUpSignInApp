@@ -9,6 +9,13 @@ package exceptions;
  *
  * @author 2dam
  */
-public class UserAlreadyExistsException {
-    
+public class PasswordFormatException extends Exception{
+     
+    public PasswordFormatException() {
+		super();
+	}
+	public PasswordFormatException(String msg)
+	{
+		super(msg);
+	}
 }
