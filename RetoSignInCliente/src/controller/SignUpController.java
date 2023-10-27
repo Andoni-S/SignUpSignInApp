@@ -8,23 +8,31 @@ package controller;
 import exceptions.ConfirmPasswordException;
 import exceptions.EmailAlreadyExistsException;
 import exceptions.EmailFormatException;
-import exceptions.EmptyFieldException;
+import exceptions.MaxCharException;
+import exceptions.NameException;
+import exceptions.NumericException;
 import exceptions.PasswordFormatException;
 import exceptions.ServerErrorException;
 import factory.SignableFactory;
 import java.io.IOException;
+import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import javafx.beans.Observable;
-import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.InputMethodEvent;
 import javafx.stage.Stage;
+import libraries.Signable;
 import libraries.User;
 
 /**
@@ -37,10 +45,9 @@ public class SignUpController {
      * Application stage.
     */
     private Stage stage;
-    /**
-     * Stage setter.
-     * @param stage the stage to set
-    */
+    
+    Signable sign = SignableFactory.getSignable();
+    
     @FXML
     private Button btnRegistrar;
 
@@ -51,13 +58,11 @@ public class SignUpController {
     private TextField txtEmail;
    
     @FXML
-    private TextField txtNombre;
+    private TextField txtNombreCompleto;
     
     @FXML
     private PasswordField pwdContrasena;
     
-    @FXML
-    private TextField txtConfirmar;
     
     @FXML
     private PasswordField pwdConfirmar;
@@ -73,14 +78,16 @@ public class SignUpController {
     
     @FXML
     private Label lblError;
-    
+    /**
+     * Stage setter.
+     * @param stage the stage to set
+    */
     public void setStage(Stage stage) {
         this.stage = stage;
     }
       
     public void initStage(Parent root) {
         try {
-            //TODO Revisar esto con la llamada desde LogInController
             //Establish the title of the window to "Register"
             stage.setTitle("Registro");
             //The window is not resizable
@@ -95,56 +102,101 @@ public class SignUpController {
             //Show the window.
             stage.show();
             
-            //TODO JUAN
-            //Listeners of handleOnTextNotEmpty
-            StringProperty juan = txtNombre.textProperty();
+            //Listeners of handleOnTextNotEmpty 
             txtEmail.textProperty().addListener(this::handleOnTextNotEmpty);
-            juan.addListener(this::handleOnTextNotEmpty);
+            txtNombreCompleto.textProperty().addListener(this::handleOnTextNotEmpty);
             pwdContrasena.textProperty().addListener(this::handleOnTextNotEmpty);
             pwdConfirmar.textProperty().addListener(this::handleOnTextNotEmpty);
             //Listener of handleOnButtonClick
             btnRegistrar.setOnAction(this::handleOnButtonClick);
+            //Listener of handleOnCancelClick
+            btnCancelar.setOnAction(this::handleOnCancelButton);
         } catch (Exception e) {
-             this.showErrorAlert(e.getMessage());
+             this.showErrorAlert("An unexpected error occurred.");
         }
     }
     //Validate if the mandatory fields are filled in.
     public void handleOnButtonClick(ActionEvent event) {
         try {
-            User newUser = new User();
-            newUser.setLogin(txtEmail.getText());
-            newUser.setName(txtNombre.getText());
-            newUser.setPassword(txtConfirmar.getText());
+            //Validate the format of the password, it must have at least 4 characters
+            if (pwdContrasena.getText().length() < 4){
+                System.out.println("Compruebo contraseña");
+                throw new PasswordFormatException("The password must be at least 4 characters long.");
+            }
+            //Validate if the password field and the confirmation have the same text
+            if (!pwdContrasena.getText().equals(pwdConfirmar.getText())) {
+                throw new ConfirmPasswordException("Password must be the same.");
+            }
+            
+            //Validate the format of the email, it must have a text before an '@' and a text before and after '.'
+            //Pattern that must be respected
+            String regexEmail = "^[A-Za-z0-9]+@[A-Za-z0-9]+\\.[A-Za-z]{2,}$";
+            Pattern patternEmail = Pattern.compile(regexEmail);
+            //Checks if the pattern doesn't match the txtEmail field text
+            if (!patternEmail.matcher(txtEmail.getText()).matches()){
+                throw new EmailFormatException("The email doesn't have a correct format.");
+            }
+            //Validate the format of the name. Must be alphabetic and must have at least two words.
+            String regexName="^[A-Za-z]+( [A-Za-z]+)$";
+            Pattern patternName = Pattern.compile(regexName);
+            if (!patternName.matcher(txtNombreCompleto.getText()).matches()){
+                throw new NameException("The name must include a surname.");
+            }
+            //Creating a new User to send back to the Server with its proper attributes
+            User newUser = new User(); 
+            newUser.setLogin(txtEmail.getText());          
+            newUser.setName(txtNombreCompleto.getText());          
+            newUser.setPassword(pwdConfirmar.getText());
+                     
             //Check if the TextFields are empty
-            if (!txtCodigoPostal.getText().trim().isEmpty()){
+            if (!txtCodigoPostal.getText().trim().isEmpty()){  
+                //Validate the format of the postal code. Must be numeric and be 5 character long.
+                if (txtCodigoPostal.getText().length() > 5){
+                    throw new MaxCharException("5 character limit reached.");
+                }
+                String regexCod="^[0-9]+$";
+                Pattern patternCod = Pattern.compile(regexCod);
+                if (!patternCod.matcher(txtCodigoPostal.getText()).matches()){
+                    throw new NumericException("The code must only be numeric.");
+                }
+                //Setting the postal code for the user
                 newUser.setPostalCode(txtCodigoPostal.getText());
             }
             if (!txtTelefonoMovil.getText().trim().isEmpty()){
+                //Validate the format of the telephone number. Must be numeric and be 9 character long.
+                if (txtCodigoPostal.getText().length() > 9){
+                    throw new MaxCharException("9 character limit reached.");
+                }
+                    String regexCod="^[0-9]+$";
+                    Pattern patternCod = Pattern.compile(regexCod);
+                    if (!patternCod.matcher(txtCodigoPostal.getText()).matches()){
+                        throw new NumericException("The code must only be numeric.");
+                    }
+                //Setting the telephone number for the user
                 newUser.setMobilePhone(txtTelefonoMovil.getText());
             }
             if (!txtDireccion.getText().trim().isEmpty()){
+                //Setting the street address for the user
                 newUser.setStreet(txtDireccion.getText());
-            }
-
-            //Validate the format of the password, it must have at least 4 characters
-            if (pwdContrasena.getText().length() < 4){
-                throw new PasswordFormatException("The password must be at least 4 characters long.");
-            }
-            //TODO Validar del todo jaja
-            //Validate the format of the email, it must have an '@' and a '.'
-            if (!txtEmail.getText().contains("@") || !txtEmail.getText().contains(".")){
-                throw new EmailFormatException("The email does not have a correct format.");
-            }
+            }    
             //Register the user, if it already exists, it will throw an EmailAlreadyExistsException
-            User userServer = SignableFactory.getSignable().signUp(newUser);
+            User userServer = sign.signUp(newUser); 
             
+            // Show the MainWindow window
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainWindow.fxml"));
+            Parent root = loader.load();
+            MainWindowController mainWindowController = loader.getController();
             
+            mainWindowController.initStage(root, newUser);
+
+            // Close this window
+            stage.close();
+        } catch (ConfirmPasswordException | EmailFormatException | PasswordFormatException e) {
+            this.showErrorAlert(e.getMessage());
         } catch (EmailAlreadyExistsException e) {
-            this.showErrorAlert(e.getMessage());
-        } catch (EmailFormatException e) {
-            this.showErrorAlert(e.getMessage());
-        } catch (PasswordFormatException e) {
-            this.showErrorAlert(e.getMessage());
+            this.showErrorAlert("This email already exists.");
+        } catch (ServerErrorException e) {
+            this.showErrorAlert("A server error occurred. Please, try later.");
         } catch (Exception e) {
             this.showErrorAlert(e.getMessage());
         }
@@ -159,49 +211,56 @@ public class SignUpController {
      */
     public void handleOnTextNotEmpty(Observable observable) {
         try {
-            //TODO No entra al handler
             //Validate if one of the fields is empty
-            System.out.println("holaaaaaaaaaaaa");
-            System.out.println(txtNombre.getText().isEmpty());
-            System.out.println(txtEmail.getText().isEmpty());
-            System.out.println(pwdContrasena.getText().isEmpty());
-            System.out.println(pwdConfirmar.getText().isEmpty());
-            if (!txtNombre.getText().isEmpty()  && !txtEmail.getText().isEmpty()  && !pwdContrasena.getText().isEmpty() && !pwdConfirmar.getText().isEmpty()) {
+            if (!txtEmail.getText().trim().isEmpty() && !txtNombreCompleto.getText().trim().isEmpty() && !pwdContrasena.getText().trim().isEmpty() && !pwdConfirmar.getText().trim().isEmpty()) {
+                //We clean the error label
+                lblError.setText("");
+                //Enable the button
+                btnRegistrar.setDisable(false);           
+            } else {
                 //Disable the button
-                System.out.println("Jaja deberia activarse el boton");
-                btnRegistrar.setDisable(false);  
-               
+                btnRegistrar.setDisable(true); 
+            }   
+            //Validate if the characters' max length is reached
+            if(txtEmail.getText().length() > 300 || txtNombreCompleto.getText().length() > 300 || pwdContrasena.getText().length() > 300 || pwdConfirmar.getText().length() > 300) {
+                //Disable the button
+                btnRegistrar.setDisable(true);
+                throw new MaxCharException("300 character limit reached.");
             } else {
                 //Enable the button
-                System.out.println("Jaja vacio");
-                btnRegistrar.setDisable(true); 
-                throw new EmptyFieldException("A field is empty.");
+                btnRegistrar.setDisable(false);
             }
-        } catch (EmptyFieldException e) {
-            this.showErrorAlert(e.getMessage());
         } catch (Exception e) {
-            this.showErrorAlert(e.getMessage());
+            this.showErrorAlert("An unexpected error occurred.");
         }
     }
-
     /**
-     * This handler checks if both PasswordFields are equal.
-     *
-     * @param observable
+     * This method will handle the Cancel button ActionEvent and if the user accepts the alert, go back to the LogIn window
+     * @param event 
      */
-    public void handleOnCheckPassword(Observable observable, String length) {
-        try {
-            //Validate if the password TextField and the confirmation have the same text
-            if (!pwdContrasena.getText().equals(pwdConfirmar.getText())) {
-                throw new ConfirmPasswordException("Password must be the same.");
+    public void handleOnCancelButton(ActionEvent event){
+        try {   
+            //Show and alert to confirm going to the Log in window
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText(null);
+            alert.setTitle("Confirmación");
+            alert.setContentText("Are you sure you want to exit?");
+            Optional<ButtonType> action = alert.showAndWait();
+            if(action.get() == ButtonType.OK){
+                // Show the LogIn window
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInFXML.fxml"));
+                Parent root = loader.load();
+                LogInController logInController = loader.getController();      
+                logInController.initStage(root);
+                // Close this window
+                stage.close();
             }
-        } catch (ConfirmPasswordException e) {
-            this.showErrorAlert(e.getMessage());
-        } catch (Exception e) {
-            this.showErrorAlert(e.getMessage());
+        } catch (Exception ex) {
+            this.showErrorAlert("An unexpected error occurred.");
         }
+    
+    
     }
-
     /**
      * Displays a warning alert dialog with the provided exception message.
      *
@@ -211,7 +270,7 @@ public class SignUpController {
      * representation of the provided exception.
      */
     private void showErrorAlert(String e) {
-        //TODO Cambiar por la label
+        //Showing error message
         lblError.setText(e);
     }
 }

@@ -9,13 +9,14 @@ package exceptions;
  *
  * @author 2dam
  */
-public class EmptyFieldException extends Exception {
-    
-	public EmptyFieldException() {
+public class NameException extends Exception{
+       
+	public NameException() {
 		super();
 	}
-	public EmptyFieldException(String msg)
+	public NameException(String msg)
 	{
 		super(msg);
 	}
+    
 }

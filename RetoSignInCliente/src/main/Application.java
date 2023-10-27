@@ -25,8 +25,8 @@ import java.util.logging.Logger;
  *
  * @author 2dam
  */
+public class Application extends javafx.application.Application {
 
-public class Application extends javafx.application.Application {    
     /**
      * This method is called when the JavaFX application is launched. It is used
      * to initialize the primary stage (the main window) and set up the user
@@ -37,14 +37,14 @@ public class Application extends javafx.application.Application {
      * application.
      */
     @Override
-    public void start(Stage primaryStage) {    
+    public void start(Stage primaryStage) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignUpFXML.fxml"));
             Parent root = (Parent) loader.load();
             SignUpController controller = loader.getController();
             controller.setStage(primaryStage);
             controller.initStage(root);
-            primaryStage.setTitle("LogIn");
+            primaryStage.setTitle("Registro");
             primaryStage.setScene(new Scene(root, 600, 400));
             primaryStage.show();
         } catch (IOException ex) {
