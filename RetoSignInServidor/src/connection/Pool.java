@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Jagoba Bartolomé Barroso
+ * @author Jagoba Bartolomé Barroso, Andoni Sanz
  */
 public final class Pool {
 
@@ -29,13 +29,11 @@ public final class Pool {
      * @throws ClassNotFoundException 
      */
     public Pool() throws ClassNotFoundException {
-        configFile = ResourceBundle.getBundle("logicTier.config");
+        configFile = ResourceBundle.getBundle("properties.Config");
         url = configFile.getString("URL");
         user = configFile.getString("USER");
         pass = configFile.getString("PASSWORD");
-        driver = configFile.getString("DRIVER");
-        
-        Class.forName(driver);
+
     }
     public static Pool getPool() throws ClassNotFoundException {
         if(pool == null){
@@ -53,11 +51,14 @@ public final class Pool {
      * @throws SQLException 
      */
     public synchronized Connection getConnection() throws SQLException{
+        Connection con;
         if (connectionStack.isEmpty()){
-            Connection con = DriverManager.getConnection(url, user, pass);
-            connectionStack.push(con);
+            con = DriverManager.getConnection(url, user, pass);           
+        }else{
+            con =connectionStack.pop();
         }
-        return connectionStack.pop();
+
+        return con;
     }   
     /**
      * 

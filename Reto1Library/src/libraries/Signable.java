@@ -1,9 +1,9 @@
 package libraries;
 
-
 import exceptions.CredentialsException;
 import exceptions.EmailAlreadyExistsException;
 import exceptions.ServerErrorException;
+import java.io.IOException;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -13,9 +13,10 @@ import exceptions.ServerErrorException;
 
 /**
  *
- * @author 2dam
+ * @author Andoni Sanz
  */
 public interface Signable {
-    public User signUp(User user) throws ServerErrorException, EmailAlreadyExistsException;
-    public User logIn(User user) throws ServerErrorException, CredentialsException;
+    public User signUp(User u) throws IOException, ClassNotFoundException, EmailAlreadyExistsException, ServerErrorException;
+    public User logIn(User u) throws IOException, ClassNotFoundException, CredentialsException, EmailAlreadyExistsException, ServerErrorException;
 }
+

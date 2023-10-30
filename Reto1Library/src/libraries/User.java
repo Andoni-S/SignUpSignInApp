@@ -1,5 +1,7 @@
 package libraries;
 
+import java.io.Serializable;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -10,7 +12,7 @@ package libraries;
  *
  * @author 2dam
  */
-public class User {
+public class User implements Serializable{
     private int id; //id res_users, uid res_groups_users_rel, user_id res_company_users_rel
     private int companyId; //cid res_company_users_rel
     private String login; //login res_users
@@ -24,6 +26,15 @@ public class User {
     private NotificationType notificationType; //notification_type res_users
     
     public User() {
+        this.id = -1;
+        this.login = "";
+        this.password = "";
+        this.street = "";
+        this.postalCode = "";
+        this.province = "";
+        this.name = "";
+        this.mobilePhone = "";
+        
         this.companyId = 1;
         this.active= true;
         this.notificationType = NotificationType.email;

@@ -46,7 +46,9 @@ public class SignableImplementation implements Signable{
             
             if(con == null)
                 System.out.println("Error");
-           
+            else{
+                System.out.println("Conexión con base de datos");
+            }
             //String insertResPartner = "INSERT INTO res_partner DEFAULT VALUES";
             String insertResPartner = "INSERT INTO res_partner (id, street, zip, street2, name, mobile, active) VALUES (DEFAULT, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = con.prepareStatement(insertResPartner, Statement.RETURN_GENERATED_KEYS);
@@ -74,17 +76,19 @@ public class SignableImplementation implements Signable{
             pstmt.setString(5, user.getNotificationType().toString()); 
             pstmt.executeUpdate();
             
-            String insertResGroupUsersRel = "INSERT INTO res_groups_users_rel (uid, gid) VALUES (?, ?),(?, ?),(?, ?),(?, ?))";
+            String insertResGroupUsersRel = "INSERT INTO res_groups_users_rel (gid, uid) VALUES (?, ?),(?, ?),(?, ?),(?, ?)";
             pstmt = con.prepareStatement(insertResGroupUsersRel);
             int userID = getUserIdByLogin(con, "correo2@ejemplo.com");
-            pstmt.setInt(1, userID);
-            pstmt.setInt(2, 1);
-            pstmt.setInt(3, userID);
-            pstmt.setInt(4, 7);
-            pstmt.setInt(5, userID);
-            pstmt.setInt(6, 8);
-            pstmt.setInt(7, userID);
-            pstmt.setInt(8, 9);
+
+
+            pstmt.setInt(1, 1);
+            pstmt.setInt(2, userID);
+            pstmt.setInt(3, 7);
+            pstmt.setInt(4, userID);
+            pstmt.setInt(5, 8);
+            pstmt.setInt(6, userID);
+            pstmt.setInt(7, 9);
+            pstmt.setInt(8, userID);
             pstmt.executeUpdate();
             
             String insertResCompanyUsersRel = "INSERT INTO res_company_users_rel (cid, user_id) VALUES (?, ?)";
@@ -118,7 +122,13 @@ public class SignableImplementation implements Signable{
         Connection con;
         Pool pool = Pool.getPool();
         con = pool.getConnection();
-            
+        
+        if(con == null)
+            System.out.println("Error");
+        else{
+            System.out.println("Conexión con base de datos");
+        }
+        
         String selectUser = "SELECT * FROM res_users WHERE login = ? AND password = ?";
         PreparedStatement pstmt;
         

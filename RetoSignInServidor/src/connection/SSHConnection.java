@@ -16,13 +16,13 @@ import java.util.ResourceBundle;
  */
 public class SSHConnection {
     
-    private ResourceBundle configFile;
     private String sshHost = "192.168.20.51";
     private String remoteHost = "192.168.10.2";
     private String sshUsername = "ubu";
     private int localPort = 9000;
     private int remotePort = 5432;
     Session session = null;
+    private ResourceBundle configFile;
     
     public SSHConnection() {
         configFile = ResourceBundle.getBundle("properties.Config");
