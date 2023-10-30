@@ -95,7 +95,7 @@ public class SignableImplementation implements Signable{
         
         ApplicationPDU pdu = null;
         
-        pdu.setMessageType(MessageType.SignIn);
+        pdu.setMessageType(MessageType.LogIn);
         pdu.setUser(u);
         salida = new ObjectOutputStream(sCliente.getOutputStream());
         salida.writeObject(pdu);

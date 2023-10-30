@@ -5,17 +5,130 @@
  */
 package controller;
 
+import javafx.beans.Observable;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import libraries.User;
 
 /**
  *
- * @author angoi
+ * @author Andoni Sanz
  */
-class MainWindowController {
+public class MainWindowController {
 
-    void initStage(Parent root, User mainWindowUser) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    /**
+     * Application stage.
+     */
+    private Stage stage;
+    /**
+     * Stage setter.
+     *
+     * @param stage the stage to set
+     */
+    @FXML
+    private Label lblEmail, lblAddress, lblPostalCode, lblName, lblPhone;
+    @FXML
+    private TextField textEmail, textName, textPhone, textAddress, textPostalCode;
+    @FXML
+    private Button btnLogout;
+
+    private User user;
+
+    public User getUser() {
+        return user;
     }
-    
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    public void initStage(Parent root, User newUser) {
+        try {
+            //Set scene and view DOM root
+            Scene scene = new Scene(root);
+            stage = new Stage();
+            stage.setScene(scene);
+            //Establecer el título de la ventana al valor “Registro.”
+            stage.setTitle("Registro");
+            //La ventana no es redimensionable.
+            stage.setResizable(false);
+            //Establecer el foco en el primer campo del orden de tabulación.
+            textEmail.requestFocus();
+            //Establecer el botón Registrar como Default Button mediante setDefaultButton y el botón Cancelar cómo Cancel Button mediante setCancelButton.
+            btnLogout.setDefaultButton(true);
+            //Mostrar la ventana.
+            user = newUser;
+
+            stage.setOnCloseRequest(event -> handleCloseRequest(event));
+
+            btnLogout.setDefaultButton(true);
+            textEmail.setEditable(false);
+            textName.setEditable(false);
+            textPhone.setEditable(false);
+            textAddress.setEditable(false);
+            textPostalCode.setEditable(false);
+
+            textEmail.setText(user.getLogin());
+            textName.setText(user.getName());
+            textPhone.setText(user.getMobilePhone());
+            //textAddress.setText(user.getAddress());
+            textPostalCode.setText(user.getPostalCode());
+
+            stage.show();
+
+        } catch (Exception e) {
+            this.showErrorAlert(e);
+        }
+    }
+
+    @FXML
+    void handleBtnClose(ActionEvent event) {
+        // Obtenemos el escenario (Stage) actual a través del botón
+        Stage stage = (Stage) btnLogout.getScene().getWindow();
+        // Cerramos la ventana
+        stage.close();
+    }
+
+    private void handleCloseRequest(WindowEvent event) {
+        // Obtenemos el escenario (Stage) actual a través del botón
+        Stage stage = (Stage) btnLogout.getScene().getWindow();
+        // Cerramos la ventana
+        stage.close();
+    }
+
+    public void handleOnButtonClick(Observable observable) {
+        try {
+
+        } catch (Exception e) {
+
+        }
+    }
+
+    /**
+     * Displays a warning alert dialog with the provided exception message.
+     *
+     * @param e The exception to display in the alert.
+     * @implNote This method creates a modal alert dialog of the type
+     * AlertType#WARNING. The content of the alert is set to the string
+     * representation of the provided exception.
+     */
+    private void showErrorAlert(Exception e) {
+        Alert alert = new Alert(AlertType.WARNING);
+        alert.setContentText(e.toString());
+        alert.showAndWait();
+    }
+
 }
