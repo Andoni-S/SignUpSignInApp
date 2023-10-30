@@ -39,7 +39,7 @@ public class Application extends javafx.application.Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInFXML.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignUpFXML.fxml"));
             Parent root = (Parent) loader.load();
             SignUpController controller = loader.getController();
             controller.setStage(primaryStage);

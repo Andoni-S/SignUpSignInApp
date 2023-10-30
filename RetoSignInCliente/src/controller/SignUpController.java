@@ -15,6 +15,8 @@ import exceptions.PasswordFormatException;
 import exceptions.ServerErrorException;
 import factory.SignableFactory;
 import java.util.Optional;
+import java.util.function.Supplier;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
@@ -44,6 +46,10 @@ public class SignUpController {
      * Instance of the signable implementation which implements the logic
      */
     Signable sign = SignableFactory.getSignable();
+    /**
+     * Logger
+     */
+    private final static Logger LOGGER = Logger.getLogger(SignUpController.class.getName());
     /**
      * Register button
      */
@@ -130,8 +136,11 @@ public class SignUpController {
             btnRegistrar.setOnAction(this::handleOnButtonClick);
             //Listener of handleOnCancelClick
             btnCancelar.setOnAction(this::handleOnCancelButton);
+            
+            LOGGER.info("SignUp window initialized.");
         } catch (Exception e) {
-             showError("An unexpected error occurred.");
+            LOGGER.severe(e.getMessage());
+            showError("An unexpected error occurred.");
         }
     }
     /**
@@ -139,15 +148,8 @@ public class SignUpController {
      * @param event 
      */
     public void handleOnButtonClick(ActionEvent event) {
-        try {
-            //Validate the format of the password, it must have at least 4 characters
-            if (pwdContrasena.getText().length() < 4){
-                throw new PasswordFormatException("The password must be at least 4 characters long.");
-            }
-            //Validate if the password field and the confirmation field have the same text
-            if (!pwdContrasena.getText().equals(pwdConfirmar.getText())) {
-                throw new ConfirmPasswordException("Password must be the same.");
-            }         
+        try {   
+            LOGGER.info("Register button clicked.");         
             //Validate the format of the email, it must have a text before an '@' and a text before and after '.'
             //Pattern that must be respected
             String regexEmail = "^[A-Za-z0-9]+@[A-Za-z0-9]+\\.[A-Za-z]{2,}$";
@@ -156,6 +158,7 @@ public class SignUpController {
             if (!patternEmail.matcher(txtEmail.getText()).matches()){
                 throw new EmailFormatException("The email doesn't have a correct format.");
             }
+            LOGGER.info("Email format validated.");  
             //Validate the format of the name. Must be alphabetic and must have at least two words.
             //Pattern that must be respected
             String regexName="^[A-Za-z]+( [A-Za-z]+)$";
@@ -164,12 +167,23 @@ public class SignUpController {
             if (!patternName.matcher(txtNombreCompleto.getText()).matches()){
                 throw new NameException("The name must include a surname.");
             }
+            LOGGER.info("Name format validated.");
+            //Validate the format of the password, it must have at least 4 characters
+            if (pwdContrasena.getText().length() < 4){
+                throw new PasswordFormatException("The password must be at least 4 characters long.");
+            }
+            LOGGER.info("Password format validated.");
+            //Validate if the password field and the confirmation field have the same text
+            if (!pwdContrasena.getText().equals(pwdConfirmar.getText())) {
+                throw new ConfirmPasswordException("Password must be the same.");
+            }       
+            LOGGER.info("Password confirmation validated.");
             //Creating a new User to send back to the Server with its proper attributes
             User newUser = new User(); 
             newUser.setLogin(txtEmail.getText());          
             newUser.setName(txtNombreCompleto.getText());          
             newUser.setPassword(pwdConfirmar.getText());
-                     
+            LOGGER.info("User created and set.");
             //Validate if the TextField is empty
             if (!txtCodigoPostal.getText().trim().isEmpty()){  
                 //Validate the format of the postal code. Must be numeric and be 5 character long.
@@ -186,6 +200,8 @@ public class SignUpController {
                 //Setting the postal code for the user
                 newUser.setPostalCode(txtCodigoPostal.getText());
             }
+            LOGGER.info("Postal code format validated and set in the User.");
+
             //Validate if the TextField is empty
             if (!txtTelefonoMovil.getText().trim().isEmpty()){
                 //Validate the format of the telephone number. Must be numeric and be 9 character long.
@@ -202,13 +218,17 @@ public class SignUpController {
                 //Setting the telephone number for the user
                 newUser.setMobilePhone(txtTelefonoMovil.getText());
             }
+            LOGGER.info("Telephone number format validated and set in the User.");                
+
             //Validate if the TextField is empty
             if (!txtDireccion.getText().trim().isEmpty()){
                 //Setting the street address for the user
                 newUser.setStreet(txtDireccion.getText());
-            }    
+            }
+            LOGGER.info("Address set in the User.");
             //Register the user, if it already exists, it will throw an EmailAlreadyExistsException
             User userServer = sign.signUp(newUser); 
+            LOGGER.info("User profile correctly set.");
             //Show the MainWindow window
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainWindow.fxml"));
             Parent root = loader.load();
@@ -216,13 +236,18 @@ public class SignUpController {
             mainWindowController.initStage(root, userServer);
             // Close this window
             stage.close();
+            LOGGER.info("SignUp window closed and MainWindow initialized.");
         } catch (ConfirmPasswordException | EmailFormatException | PasswordFormatException e) {
+            LOGGER.warning(e.getMessage());
             showError(e.getMessage());
         } catch (EmailAlreadyExistsException e) {
+            LOGGER.warning(e.getMessage());
             showError("This email already exists.");
         } catch (ServerErrorException e) {
+            LOGGER.severe(e.getMessage());
             showError("A server error occurred. Please, try later.");
         } catch (Exception e) {
+            LOGGER.severe(e.getMessage());
             showError(e.getMessage());
         }
     }
@@ -241,7 +266,8 @@ public class SignUpController {
                 //We clean the error label
                 lblError.setText("");
                 //All the text fields are complete, we enable the button
-                btnRegistrar.setDisable(false);           
+                btnRegistrar.setDisable(false);         
+                LOGGER.info("Fields not empty.");
             } else {
                 //Disable the button
                 btnRegistrar.setDisable(true); 
@@ -254,8 +280,12 @@ public class SignUpController {
             } else {
                 //Enable the button
                 btnRegistrar.setDisable(false);
-            }
+            } 
+        } catch (MaxCharException e){
+            LOGGER.warning(e.getMessage());
+            showError(e.getMessage());
         } catch (Exception e) {
+            LOGGER.warning("An unexpected error occurred.");
             showError("An unexpected error occurred.");
         }
     }
@@ -265,14 +295,17 @@ public class SignUpController {
      */
     public void handleOnCancelButton(ActionEvent event){
         try {   
+            LOGGER.info("Cancel button pressed.");
             //Show an alert to confirm going to the Log in window
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText(null);
-            alert.setTitle("Confirmación");
+            alert.setTitle("Confirmation");
             alert.setContentText("Are you sure you want to exit?");
             Optional<ButtonType> action = alert.showAndWait();
+            LOGGER.info("Showed alert.");
             //If the user selects the confirmation button of the alert
             if(action.get() == ButtonType.OK){
+                LOGGER.info("Confirmation button selected.");
                 // Show the LogIn window
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInFXML.fxml"));
                 Parent root = loader.load();
@@ -280,8 +313,10 @@ public class SignUpController {
                 logInController.initStage(root);
                 //Close this window
                 stage.close();
+                LOGGER.info("SignUp window closed and LogIn initialiazed.");
             }
         } catch (Exception ex) {
+            LOGGER.warning("An unexpected error occurred.");
             showError("An unexpected error occurred.");
         }
     
@@ -294,6 +329,7 @@ public class SignUpController {
      */
     private void showError(String e) {
         //Showing error message
+        LOGGER.info("Error label text changed.");
         lblError.setText(e);
     }
 }

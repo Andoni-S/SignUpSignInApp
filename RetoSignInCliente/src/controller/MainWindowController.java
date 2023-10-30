@@ -93,7 +93,7 @@ public class MainWindowController {
         }
     }
     public void loadUser(){
-        textEmail.setText("andoni@gmail.com");
+        textEmail.setText(user.getLogin());
         //textEmail.setText(user.getLogin());
         textName.setText(user.getName());
         textPhone.setText(user.getMobilePhone());
