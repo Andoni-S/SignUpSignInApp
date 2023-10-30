@@ -11,9 +11,8 @@ package libraries;
  * @author Andoni Sanz
  */
 public enum MessageType {
-    SignIn,
+    SignUp,
     LogIn,
-    Ex_ClassNotFound,
     Ex_Credentials,
     Ex_EmailAlreadyExists,
     Ex_ServerError
