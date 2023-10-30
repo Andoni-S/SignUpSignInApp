@@ -42,9 +42,10 @@ public class SignableImplementation implements Signable{
     /**
      * This method writes a User through the Socket with the MessageType indicating that its a login. 
      * It returns a User with all the necessary data and a MessageType indicating any exception.
-     * @param User u
+     * @param u
      * @throws IOException, ClassNotFoundException, CredentialsException, EmailAlreadyExistsException
      */
+    @Override
     public User logIn(User u) throws IOException, ClassNotFoundException, CredentialsException, EmailAlreadyExistsException, ServerErrorException{
         ObjectOutputStream salida = null;
         ObjectInputStream entrada = null;
