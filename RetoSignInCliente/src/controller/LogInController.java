@@ -69,8 +69,8 @@ public class LogInController {
             // Set control events handlers
             loginButton.setOnAction(this::handleLoginButtonAction);
             hrefSignUp.setOnAction(this::handleHrefSignupAction);
-            txtEmail.textProperty().addListener(this::handleTextChange);
-            pwdPassword.textProperty().addListener(this::handleTextChange);
+            //txtEmail.textProperty().addListener(this::handleTextChange);
+            //pwdPassword.textProperty().addListener(this::handleTextChange);
             //txtEmail.addEventHandler(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, this::handleTextChange);
             //pwdPassword.addEventHandler(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, this::handleTextChange);
 

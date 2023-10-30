@@ -45,6 +45,7 @@ public class SignableImplementation implements Signable{
      * @param u
      * @throws IOException, ClassNotFoundException, CredentialsException, EmailAlreadyExistsException
      */
+    @Override
     public User logIn(User u) throws CredentialsException, ServerErrorException{
         try {
             ObjectOutputStream salida = null;
@@ -87,6 +88,7 @@ public class SignableImplementation implements Signable{
      * @param User u
      * @throws IOException
      */
+    @Override
     public User signUp(User u) throws EmailAlreadyExistsException, ServerErrorException{
         try {
             ObjectOutputStream salida = null;
