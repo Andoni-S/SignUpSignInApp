@@ -68,8 +68,10 @@ public class LogInController {
             // Set control events handlers
             loginButton.setOnAction(this::handleLoginButtonAction);
             hrefSignUp.setOnAction(this::handleHrefSignupAction);
-            txtEmail.addEventHandler(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, this::handleTextChange);
-            pwdPassword.addEventHandler(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, this::handleTextChange);
+            txtEmail.textProperty().addListener(this::handleTextChange);
+            pwdPassword.textProperty().addListener(this::handleTextChange);
+            //txtEmail.addEventHandler(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, this::handleTextChange);
+            //pwdPassword.addEventHandler(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, this::handleTextChange);
 
         } catch (Exception ex) {
             ex.getMessage();
@@ -99,9 +101,15 @@ public class LogInController {
             user.setPassword(password);
 
             // Send the User created to the logic Tier and recieve a full informed User
-            //User mainWindowUser = new User();
-            //mainWindowUser = SignableFactory.getSignable().logIn(user);
-            // Close this window and open a MainWindow
+            User mainWindowUser = new User();
+            mainWindowUser = SignableFactory.getSignable().logIn(user);
+
+            // Open a MainWindow instance and close this window
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainWindow.fxml"));
+            Parent root = loader.load();
+            MainWindowController mainWindowController = loader.getController();
+            mainWindowController.initStage(root, mainWindowUser);
+
             stage.close();
 
         } catch (Exception ex) { //de momento está puesta una exception generica pero aqui deberian saltar las excepciones de conexion a la base de datos y de credenciales
@@ -115,14 +123,14 @@ public class LogInController {
             String email = txtEmail.getText();
             String password = pwdPassword.getText();
 
-            if (email.trim().isEmpty() || password.trim().isEmpty()) {
+            if (!email.trim().isEmpty() && !password.trim().isEmpty()) {
+                // Enable 'Entrar' button
+                loginButton.setDisable(false);
+                // throw EmptyFieldException
+            } else {
                 // Disable 'Entrar' button
                 loginButton.setDisable(true);
-                // throw EmptyFieldException
             }
-
-            // Enable 'Entrar' button
-            loginButton.setDisable(false);
 
         } catch (Exception ex) {
             ex.getMessage();
@@ -136,7 +144,6 @@ public class LogInController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignUpFXML.fxml"));
             Parent root = (Parent) loader.load();
             SignUpController signupcontroller = ((SignUpController) loader.getController());
-
             signupcontroller.initStage(root);
 
             // Close this window
