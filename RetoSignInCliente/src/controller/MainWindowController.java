@@ -76,7 +76,7 @@ public class MainWindowController {
             textEmail.requestFocus();
             //Establecer el botón Registrar como Default Button mediante setDefaultButton y el botón Cancelar cómo Cancel Button mediante setCancelButton.
             btnLogout.setDefaultButton(true);
-            //Mostrar la ventana.
+            //We save the user passed from the previous controller
             this.user = user;
             stage.setOnCloseRequest(event -> handleCloseRequest(event));
             btnLogout.setDefaultButton(true);
@@ -86,6 +86,7 @@ public class MainWindowController {
             textAddress.setEditable(false);
             textPostalCode.setEditable(false);
             loadUser();
+            //Mostrar la ventana.
             stage.show();
         } catch (Exception e) {
              this.showErrorAlert(e);

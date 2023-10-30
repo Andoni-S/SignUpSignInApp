@@ -47,6 +47,7 @@ public class LogInController {
     public void initStage(Parent root) {
         try {
             Scene scene = new Scene(root);
+            stage = new Stage();
             stage.setScene(scene);
 
             // Establish window title

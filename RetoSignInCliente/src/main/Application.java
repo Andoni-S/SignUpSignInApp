@@ -39,12 +39,12 @@ public class Application extends javafx.application.Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignUpFXML.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInFXML.fxml"));
             Parent root = (Parent) loader.load();
             SignUpController controller = loader.getController();
             controller.setStage(primaryStage);
             controller.initStage(root);
-            primaryStage.setTitle("Registro");
+            primaryStage.setTitle("Log In");
             primaryStage.setScene(new Scene(root, 600, 400));
             primaryStage.show();
         } catch (IOException ex) {

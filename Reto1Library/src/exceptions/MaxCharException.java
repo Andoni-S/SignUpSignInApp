@@ -7,7 +7,7 @@ package exceptions;
 
 /**
  *
- * @author 2dam
+ * @author Jagoba Bartolomé Barroso
  */
 public class MaxCharException extends Exception{
         public MaxCharException() {
