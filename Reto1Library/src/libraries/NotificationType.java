@@ -8,13 +8,8 @@ package libraries;
 
 /**
  *
- * @author andoni
+ * @author 2dam
  */
-public enum MessageType {
-    LogIn,
-    SignUp,
-    Ex_ClassNotFound,
-    Ex_Credentials,
-    Ex_EmailAlreadyExists,
-    Ex_ServerError
+public enum NotificationType {
+    inbox, email
 }

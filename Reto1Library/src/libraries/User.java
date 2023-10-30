@@ -11,16 +11,22 @@ package libraries;
  * @author 2dam
  */
 public class User {
-    private int id;
-    private String login;
-    private String password;
-    private String street;
-    private String postalCode;
-    private String province;
-    private String name;
-    private String mobilePhone;
-
+    private int id; //id res_users, uid res_groups_users_rel, user_id res_company_users_rel
+    private int companyId; //cid res_company_users_rel
+    private String login; //login res_users
+    private String password; //password res_users
+    private String street; //street res_partner
+    private String postalCode; //zip res_partner
+    private String province; //street2 res_partner
+    private String name; //name res_partner
+    private String mobilePhone; //mobile res_partner
+    private boolean active; //active res_partner
+    private NotificationType notificationType; //notification_type res_users
+    
     public User() {
+        this.companyId = 1;
+        this.active= true;
+        this.notificationType = NotificationType.email;
     }
 
     public User(int id, String login, String password, String street, String postalCode, String province, String name, String mobilePhone) {
@@ -32,6 +38,10 @@ public class User {
         this.province = province;
         this.name = name;
         this.mobilePhone = mobilePhone;
+        
+        this.companyId = 1;
+        this.active= true;
+        this.notificationType = NotificationType.email;
     }
 
     public int getId() {
@@ -98,5 +108,27 @@ public class User {
         this.mobilePhone = mobilePhone;
     }
     
+    public void setCompanyId(int companyId) {
+        this.companyId = companyId;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public int getCompanyId() {
+        return companyId;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
     
+    public NotificationType getNotificationType() {
+        return notificationType;
+    }
+
+    public void setNotificationType(NotificationType notificationType) {
+        this.notificationType = notificationType;
+    }
 }
