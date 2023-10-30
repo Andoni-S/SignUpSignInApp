@@ -99,7 +99,7 @@ public class MainWindowController {
             //Establecer el botón Registrar como Default Button mediante setDefaultButton y el botón Cancelar cómo Cancel Button mediante setCancelButton.
             btnLogout.setDefaultButton(true);
             //Mostrar la ventana.
-            user = new User();
+            user = newUser;
             
             stage.setOnCloseRequest(event -> handleCloseRequest(event));
             
@@ -109,7 +109,12 @@ public class MainWindowController {
             textPhone.setEditable(false);
             textAddress.setEditable(false);
             textPostalCode.setEditable(false);
-            loadUser();
+            
+            textEmail.setText(user.getLogin());
+            textName.setText(user.getName());
+            textPhone.setText(user.getMobilePhone());
+            textAddress.setText(user.getAddress());
+            textPostalCode.setText(user.getPostalCode());
             
             stage.show();
            
@@ -118,14 +123,6 @@ public class MainWindowController {
         }
     }
 
-    public void loadUser(){
-        textEmail.setText("andoni@gmail.com");
-        //textEmail.setText(user.getLogin());
-        textName.setText(user.getName());
-        textPhone.setText(user.getMobilePhone());
-        textAddress.setText(user.getStreet());
-        textPostalCode.setText(user.getPostalCode());
-    }
     
     @FXML
     void handleBtnClose(ActionEvent event) {

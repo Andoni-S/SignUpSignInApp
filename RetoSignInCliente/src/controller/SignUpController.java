@@ -149,7 +149,7 @@ public class SignUpController {
             }
             if (!txtDireccion.getText().trim().isEmpty()){
                 //Setting the street address for the user
-                newUser.setStreet(txtDireccion.getText());
+                newUser.setAddress(txtDireccion.getText());
             }
             //Register the user, if it already exists, it will throw an EmailAlreadyExistsException
             User userServer = sign.signUp(newUser);
