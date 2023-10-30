@@ -49,6 +49,7 @@ public class LogInController {
     public void initStage(Parent root) {
         try {
             Scene scene = new Scene(root);
+            stage = new Stage();
             stage.setScene(scene);
 //TO-DO: mirar que se cargue la escena bien
             // Establish window title

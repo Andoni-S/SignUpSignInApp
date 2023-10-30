@@ -45,36 +45,40 @@ public class SignableImplementation implements Signable{
      * @param u
      * @throws IOException, ClassNotFoundException, CredentialsException, EmailAlreadyExistsException
      */
-    @Override
-    public User logIn(User u) throws IOException, ClassNotFoundException, CredentialsException, EmailAlreadyExistsException, ServerErrorException{
-        ObjectOutputStream salida = null;
-        ObjectInputStream entrada = null;
-        sCliente = new Socket(IP, PUERTO);
-        entrada = new ObjectInputStream(sCliente.getInputStream());
-        salida = new ObjectOutputStream(sCliente.getOutputStream());
-
-        String noConnection = (String) entrada.readObject();
-        System.out.println(noConnection);
-        
-        ApplicationPDU pdu = null;
-        
-        pdu.setMessageType(MessageType.LogIn);
-        pdu.setUser(u);
-        salida = new ObjectOutputStream(sCliente.getOutputStream());
-        salida.writeObject(pdu); 
-        
-        entrada = new ObjectInputStream(sCliente.getInputStream());
-        pdu = (ApplicationPDU) entrada.readObject();
-        if (pdu.getMessageType().toString().equals("Ex_Credentials")){
-            throw new CredentialsException();
+    public User logIn(User u) throws CredentialsException, ServerErrorException{
+        try {
+            ObjectOutputStream salida = null;
+            ObjectInputStream entrada = null;
+            sCliente = new Socket(IP, PUERTO);
+            entrada = new ObjectInputStream(sCliente.getInputStream());
+            salida = new ObjectOutputStream(sCliente.getOutputStream());
+            
+            String noConnection = (String) entrada.readObject();
+            System.out.println(noConnection);
+            
+            ApplicationPDU pdu = null;
+            
+            pdu.setMessageType(MessageType.LogIn);
+            pdu.setUser(u);
+            salida = new ObjectOutputStream(sCliente.getOutputStream());
+            salida.writeObject(pdu);
+            
+            entrada = new ObjectInputStream(sCliente.getInputStream());
+            pdu = (ApplicationPDU) entrada.readObject();
+            if (pdu.getMessageType().toString().equals("Ex_Credentials")){
+                throw new CredentialsException();
+            }
+            if (pdu.getMessageType().toString().equals("Ex_ServerError")){
+                throw new ServerErrorException();
+            }
+            u = pdu.getUser();
+            return pdu.getUser();
+        } catch (IOException ex) {
+            Logger.getLogger(SignableImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SignableImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if (pdu.getMessageType().toString().equals("Ex_EmailAlreadyExists")){
-            throw new EmailAlreadyExistsException();
-        }
-        if (pdu.getMessageType().toString().equals("Ex_ServerError")){
-            throw new ServerErrorException();
-        }
-        return pdu.getUser();      
+        return u;
     }
     
     /**
@@ -83,31 +87,38 @@ public class SignableImplementation implements Signable{
      * @param User u
      * @throws IOException
      */
-    public User signUp(User u) throws IOException, ClassNotFoundException, EmailAlreadyExistsException, ServerErrorException{
-        ObjectOutputStream salida = null;
-        ObjectInputStream entrada = null;
-        sCliente = new Socket(IP, PUERTO);
-        entrada = new ObjectInputStream(sCliente.getInputStream());
-        salida = new ObjectOutputStream(sCliente.getOutputStream());
-
-        String noConnection = (String) entrada.readObject();
-        System.out.println(noConnection);
-        
-        ApplicationPDU pdu = null;
-        
-        pdu.setMessageType(MessageType.SignIn);
-        pdu.setUser(u);
-        salida = new ObjectOutputStream(sCliente.getOutputStream());
-        salida.writeObject(pdu);
-        
-        entrada = new ObjectInputStream(sCliente.getInputStream());
-        pdu = (ApplicationPDU) entrada.readObject();
-        if (pdu.getMessageType().toString().equals("Ex_EmailAlreadyExists")){
-            throw new EmailAlreadyExistsException();
+    public User signUp(User u) throws EmailAlreadyExistsException, ServerErrorException{
+        try {
+            ObjectOutputStream salida = null;
+            ObjectInputStream entrada = null;
+            sCliente = new Socket(IP, PUERTO);
+            entrada = new ObjectInputStream(sCliente.getInputStream());
+            salida = new ObjectOutputStream(sCliente.getOutputStream());
+            
+            String noConnection = (String) entrada.readObject();
+            System.out.println(noConnection);
+            
+            ApplicationPDU pdu = null;
+            
+            pdu.setMessageType(MessageType.SignUp);
+            pdu.setUser(u);
+            salida = new ObjectOutputStream(sCliente.getOutputStream());
+            salida.writeObject(pdu);
+            
+            entrada = new ObjectInputStream(sCliente.getInputStream());
+            pdu = (ApplicationPDU) entrada.readObject();
+            if (pdu.getMessageType().toString().equals("Ex_EmailAlreadyExists")){
+                throw new EmailAlreadyExistsException("This email already exists.");
+            }
+            if (pdu.getMessageType().toString().equals("Ex_ServerError")){
+                throw new ServerErrorException("An error with the server has occurred.");
+            }     
+            u = pdu.getUser();      
+        } catch (IOException ex) {
+            Logger.getLogger(SignableImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SignableImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if (pdu.getMessageType().toString().equals("Ex_ServerError")){
-            throw new ServerErrorException();
-        }
-        return pdu.getUser();
+        return u;
     }
 }

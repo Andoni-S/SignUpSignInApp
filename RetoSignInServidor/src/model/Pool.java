@@ -9,11 +9,22 @@ import java.util.Stack;
 
 /**
  *
- * @author 2dam
+ * @author Jagoba Bartolomé Barroso
  */
+<<<<<<<< HEAD:RetoSignInServidor/src/model/Pool.java
 public class Pool {
     //Stack<Conexion> conexiones;
     
     
     
+========
+public class NumericException extends Exception{
+      public NumericException() {
+		super();
+	}
+	public NumericException(String msg)
+	{
+		super(msg);
+	}
+>>>>>>>> dev_signUpController:Reto1Library/src/exceptions/NumericException.java
 }

@@ -13,7 +13,6 @@ import logic.SignableImplementation;
  * @author Andoni Sanz
  */
 public class SignableFactory {
-
     public static Signable getSignable() {
         //return the Implementation of Signable interface
         return new SignableImplementation();

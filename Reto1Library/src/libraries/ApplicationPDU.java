@@ -8,7 +8,7 @@ package libraries;
 
 /**
  *
- * @author 2dam
+ * @author Andoni Sanz
  */
 public class ApplicationPDU {
     private MessageType messageType;

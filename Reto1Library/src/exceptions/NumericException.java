@@ -1,20 +1,21 @@
-package exceptions;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package exceptions;
+
+import java.util.Stack;
 
 /**
  *
  * @author Jagoba Bartolomé Barroso
  */
-public class CredentialsException extends Exception {
-	public CredentialsException() {
+public class NumericException extends Exception{
+      public NumericException() {
 		super();
 	}
-	public CredentialsException(String msg)
+	public NumericException(String msg)
 	{
 		super(msg);
 	}
