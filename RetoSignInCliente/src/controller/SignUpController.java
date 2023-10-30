@@ -131,7 +131,7 @@ public class SignUpController {
             //Listener of handleOnCancelClick
             btnCancelar.setOnAction(this::handleOnCancelButton);
         } catch (Exception e) {
-             this.showErrorAlert("An unexpected error occurred.");
+             showError("An unexpected error occurred.");
         }
     }
     /**
@@ -217,13 +217,13 @@ public class SignUpController {
             // Close this window
             stage.close();
         } catch (ConfirmPasswordException | EmailFormatException | PasswordFormatException e) {
-            this.showErrorAlert(e.getMessage());
+            showError(e.getMessage());
         } catch (EmailAlreadyExistsException e) {
-            this.showErrorAlert("This email already exists.");
+            showError("This email already exists.");
         } catch (ServerErrorException e) {
-            this.showErrorAlert("A server error occurred. Please, try later.");
+            showError("A server error occurred. Please, try later.");
         } catch (Exception e) {
-            this.showErrorAlert(e.getMessage());
+            showError(e.getMessage());
         }
     }
 
@@ -256,7 +256,7 @@ public class SignUpController {
                 btnRegistrar.setDisable(false);
             }
         } catch (Exception e) {
-            this.showErrorAlert("An unexpected error occurred.");
+            showError("An unexpected error occurred.");
         }
     }
     /**
@@ -282,7 +282,7 @@ public class SignUpController {
                 stage.close();
             }
         } catch (Exception ex) {
-            this.showErrorAlert("An unexpected error occurred.");
+            showError("An unexpected error occurred.");
         }
     
     
@@ -292,7 +292,7 @@ public class SignUpController {
      *
      * @param e The exception to display in the alert.
      */
-    private void showErrorAlert(String e) {
+    private void showError(String e) {
         //Showing error message
         lblError.setText(e);
     }
