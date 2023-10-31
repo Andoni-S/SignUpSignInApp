@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Threads;
 
 import exceptions.CredentialsException;
@@ -22,8 +17,7 @@ import libraries.MessageType;
 import libraries.Signable;
 
 /**
- *
- * @author 2dam
+ * WorkerThread represents a thread that handles client requests in a server application.
  */
 public class WorkerThread extends Thread {
 
@@ -32,43 +26,53 @@ public class WorkerThread extends Thread {
     ObjectOutputStream salida = null;
     User user = null;
     ApplicationPDU pdu = null;
+
+    /**
+     * Constructs a new WorkerThread with a given socket.
+     *
+     * @param socket The socket for communication with the client.
+     */
     public WorkerThread(Socket socket) {
         this.socket = socket;
     }
-    
+
     @Override
     public void run() {
-        System.out.println("lanzando thread");
+        System.out.println("Launching thread");
         try {
-            
+            // Initialize input and output streams
             salida = new ObjectOutputStream(socket.getOutputStream());
             entrada = new ObjectInputStream(socket.getInputStream());
-        
-            salida.writeObject("entraste");
-        
+
+            // Send a welcome message to the client
+            salida.writeObject("You have entered the server");
+
+            // Read a request PDU from the client
             pdu = (ApplicationPDU) entrada.readObject();
-        
+
             Signable s = SignableFactory.getSignable();
-               
-            if(pdu.getMessageType().toString().equalsIgnoreCase("LogIn")){
-                System.out.println("Verificando usuario en la base de datos"); 
+
+            if (pdu.getMessageType().toString().equalsIgnoreCase("LogIn")) {
+                System.out.println("Verifying user in the database");
                 user = new User();
                 user = s.logIn(pdu.getUser());
                 pdu.setMessageType(MessageType.LogIn);
                 pdu.setUser(user);
+                salida.writeObject(pdu);
                 interrupt();
-            
-            }else if(pdu.getMessageType().toString().equalsIgnoreCase("SignUp")){
-                System.out.println("Registrando usuario en la base de datos");
+
+            } else if (pdu.getMessageType().toString().equalsIgnoreCase("SignUp")) {
+                System.out.println("Registering user in the database");
                 user = new User();
-                user = s.signUp(pdu.getUser()); 
+                user = s.signUp(pdu.getUser());
                 pdu.setMessageType(MessageType.SignUp);
                 pdu.setUser(user);
+                salida.writeObject(pdu);
                 interrupt();
-            } else{
-                //ESTO NO DEBERIA OCURRIR, SIEMPRE SIGN IN O SIGN UP
-                System.out.println("Ocurrio algun tipo de error");
-            }          
+            } else {
+                // This should not occur; it should always be Sign In or Sign Up
+                System.out.println("Some type of error occurred");
+            }
         } catch (IOException ex) {
             Logger.getLogger(WorkerThread.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
@@ -91,14 +95,12 @@ public class WorkerThread extends Thread {
             pdu = new ApplicationPDU();
             pdu.setMessageType(MessageType.Ex_EmailAlreadyExists);
             interrupt();
-        }
-        finally{
+        } finally {
             try {
                 salida.writeObject(pdu);
             } catch (IOException ex) {
                 Logger.getLogger(WorkerThread.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
     }
 }

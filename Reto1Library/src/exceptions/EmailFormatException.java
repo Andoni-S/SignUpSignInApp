@@ -11,11 +11,12 @@ package exceptions;
  */
 public class EmailFormatException extends Exception {        
 	public EmailFormatException() {
+
 		super();
 	}
 	public EmailFormatException(String msg)
 	{
 		super(msg);
 	}
-    
+
 }

@@ -1,5 +1,7 @@
 package libraries;
 
+import java.io.Serializable;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -10,32 +12,38 @@ package libraries;
  *
  * @author Andoni Sanz
  */
-public class User {
+public class User implements Serializable{
     private int id; //id res_users, uid res_groups_users_rel, user_id res_company_users_rel
     private int companyId; //cid res_company_users_rel
     private String login; //login res_users
     private String password; //password res_users
-    private String street; //street res_partner
     private String postalCode; //zip res_partner
-    private String province; //street2 res_partner
+    private String address; //street2 res_partner
     private String name; //name res_partner
     private String mobilePhone; //mobile res_partner
     private boolean active; //active res_partner
     private NotificationType notificationType; //notification_type res_users
     
     public User() {
+        this.id = -1;
+        this.login = "";
+        this.password = "";
+        this.postalCode = "";
+        this.address = "";
+        this.name = "";
+        this.mobilePhone = "";
+        
         this.companyId = 1;
         this.active= true;
         this.notificationType = NotificationType.email;
     }
 
-    public User(int id, String login, String password, String street, String postalCode, String province, String name, String mobilePhone) {
+    public User(int id, String login, String password, String postalCode, String address, String name, String mobilePhone) {
         this.id = id;
         this.login = login;
         this.password = password;
-        this.street = street;
         this.postalCode = postalCode;
-        this.province = province;
+        this.address = address;
         this.name = name;
         this.mobilePhone = mobilePhone;
         
@@ -56,16 +64,12 @@ public class User {
         return password;
     }
 
-    public String getStreet() {
-        return street;
-    }
-
     public String getPostalCode() {
         return postalCode;
     }
 
-    public String getProvince() {
-        return province;
+    public String getAddress() {
+        return address;
     }
 
     public String getName() {
@@ -88,16 +92,12 @@ public class User {
         this.password = password;
     }
 
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
 
-    public void setProvince(String province) {
-        this.province = province;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public void setName(String name) {

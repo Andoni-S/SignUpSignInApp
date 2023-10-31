@@ -7,6 +7,7 @@ package controller;
 
 import factory.SignableFactory;
 import java.io.IOException;
+import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -49,9 +50,7 @@ public class LogInController {
     public void initStage(Parent root) {
         try {
             Scene scene = new Scene(root);
-            stage = new Stage();
             stage.setScene(scene);
-//TO-DO: mirar que se cargue la escena bien
             // Establish window title
             stage.setTitle("Iniciar sesión");
             // Window is not resizable
@@ -69,11 +68,11 @@ public class LogInController {
             // Set control events handlers
             loginButton.setOnAction(this::handleLoginButtonAction);
             hrefSignUp.setOnAction(this::handleHrefSignupAction);
-            //txtEmail.textProperty().addListener(this::handleTextChange);
-            //pwdPassword.textProperty().addListener(this::handleTextChange);
-            //txtEmail.addEventHandler(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, this::handleTextChange);
-            //pwdPassword.addEventHandler(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, this::handleTextChange);
-
+            txtEmail.textProperty().addListener(this::handleTextChange);
+            pwdPassword.textProperty().addListener(this::handleTextChange);
+            /*txtEmail.addEventHandler(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, this::handleTextChange);
+            pwdPassword.addEventHandler(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, this::handleTextChange);*/
+  
         } catch (Exception ex) {
             ex.getMessage();
         }
@@ -89,6 +88,7 @@ public class LogInController {
 
     @FXML
     private void handleLoginButtonAction(ActionEvent e) {
+        System.out.println("Logeando");
         try {
             // Validate that compulsory fields are not empty
 
@@ -104,22 +104,21 @@ public class LogInController {
             // Send the User created to the logic Tier and recieve a full informed User
             User mainWindowUser = new User();
             mainWindowUser = SignableFactory.getSignable().logIn(user);
-
-            // Open a MainWindow instance and close this window
+            // Close this window and open a MainWindow
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainWindow.fxml"));
             Parent root = loader.load();
             MainWindowController mainWindowController = loader.getController();
             mainWindowController.initStage(root, mainWindowUser);
-
+            
             stage.close();
 
         } catch (Exception ex) { //de momento está puesta una exception generica pero aqui deberian saltar las excepciones de conexion a la base de datos y de credenciales
-            ex.getMessage();
+            System.out.println(ex.getMessage());
         }
     }
 
     @FXML
-    private void handleTextChange(InputMethodEvent e) {
+    private void handleTextChange(Observable o) {
         try {
             String email = txtEmail.getText();
             String password = pwdPassword.getText();
@@ -128,10 +127,12 @@ public class LogInController {
                 // Enable 'Entrar' button
                 loginButton.setDisable(false);
                 // throw EmptyFieldException
-            } else {
+            }else{
                 // Disable 'Entrar' button
-                loginButton.setDisable(true);
+            loginButton.setDisable(true);
             }
+
+            
 
         } catch (Exception ex) {
             ex.getMessage();
@@ -143,10 +144,10 @@ public class LogInController {
         try {
             // Show the Sign Up window
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignUpFXML.fxml"));
-            Parent root = (Parent) loader.load();
-            SignUpController signupcontroller = ((SignUpController) loader.getController());
+            Parent root = loader.load();
+            SignUpController signupcontroller =  loader.getController();
             signupcontroller.initStage(root);
-
+            
             // Close this window
             stage.close();
         } catch (IOException ex) {
