@@ -7,7 +7,7 @@ package exceptions;
 
 /**
  *
- * @author angoi
+ * @author Ander Goirigolzarri Iturburu
  */
 public class EmailFormatException extends Exception {
 

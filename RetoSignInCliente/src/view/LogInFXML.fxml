@@ -22,6 +22,6 @@
          </font>
       </Label>
       <Button fx:id="loginButton" defaultButton="true" layoutX="532.0" layoutY="354.0" mnemonicParsing="false" onAction="#handleLoginButtonAction" text="Entrar" />
-      <Label id="lblError" fx:id="lblError" layoutX="408.0" layoutY="168.0" textFill="RED" />
+      <Label id="lblError" fx:id="lblError" layoutX="199.0" layoutY="109.0" prefHeight="17.0" prefWidth="0.0" textFill="RED" />
    </children>
 </Pane>
