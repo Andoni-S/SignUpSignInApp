@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import libraries.ApplicationPDU;
 import libraries.MessageType;
 import libraries.Signable;
+import main.Server;
 
 /**
  * WorkerThread represents a thread that handles client requests in a server application.
@@ -98,6 +99,7 @@ public class WorkerThread extends Thread {
         } finally {
             try {
                 salida.writeObject(pdu);
+                Server.setClienteN(Server.getClienteN()-1);
             } catch (IOException ex) {
                 Logger.getLogger(WorkerThread.class.getName()).log(Level.SEVERE, null, ex);
             }

@@ -5,12 +5,16 @@
  */
 package controller;
 
+import java.io.IOException;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -71,7 +75,8 @@ public class MainWindowController {
     private Button btnLogout;
       
     private User user;
-
+    private Stage parentstage;
+    
     public User getUser() {
         return user;
     }
@@ -84,8 +89,9 @@ public class MainWindowController {
         this.stage = stage;
     }
       
-    public void initStage(Parent root, User newUser) {
+    public void initStage(Parent root, User newUser, Stage parentStage) {
         try {
+            this.parentstage = parentStage;
             //Set scene and view DOM root
             Scene scene = new Scene(root);
             stage = new Stage();
@@ -126,10 +132,23 @@ public class MainWindowController {
     
     @FXML
     void handleBtnClose(ActionEvent event) {
-        // Obtenemos el escenario (Stage) actual a través del botón
-        Stage stage = (Stage) btnLogout.getScene().getWindow();
-        // Cerramos la ventana
-        stage.close();
+        
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInFXML.fxml"));
+            Parent root = loader.load();
+            LogInController controller = loader.getController();
+            controller.setStage(parentstage);
+            controller.initStage(root);
+            parentstage.show();
+            // Obtenemos el escenario (Stage) actual a través del botón
+            Stage stage = (Stage) btnLogout.getScene().getWindow();
+            
+            
+            // Cerramos la ventana
+            stage.close();
+        } catch (IOException ex) {
+            Logger.getLogger(MainWindowController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
      private void handleCloseRequest(WindowEvent event) {

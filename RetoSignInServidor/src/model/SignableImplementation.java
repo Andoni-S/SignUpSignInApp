@@ -29,6 +29,8 @@ import libraries.User;
  */
 public class SignableImplementation implements Signable{
 
+    Pool pool = null;
+    Connection con = null;
     /**
      * Registers a new user in the database.
      *
@@ -41,9 +43,7 @@ public class SignableImplementation implements Signable{
     public User signUp(User user) throws ServerErrorException, EmailAlreadyExistsException {
        // Paso 1: Conectar a PostgreSQL
         try {
-            	
-            Connection con;
-            Pool pool = Pool.getPool();
+            pool = Pool.getPool();
             con = pool.getConnection();
             
             if(con == null)
@@ -52,6 +52,7 @@ public class SignableImplementation implements Signable{
                 System.out.println("Conexión con base de datos");
             }
             
+            //Check that the user does not exist in the database
             if(getUserIdByLogin(con, user.getLogin())== -1){
                 //String insertResPartner = "INSERT INTO res_partner DEFAULT VALUES";
                 String insertResPartner = "INSERT INTO res_partner (id, street, zip, email, name, mobile, active) VALUES (DEFAULT, ?, ?, ?, ?, ?, ?)";
@@ -82,7 +83,7 @@ public class SignableImplementation implements Signable{
 
                 String insertResGroupUsersRel = "INSERT INTO res_groups_users_rel (gid, uid) VALUES (?, ?),(?, ?),(?, ?),(?, ?)";
                 pstmt = con.prepareStatement(insertResGroupUsersRel);
-                int userID = getUserIdByLogin(con, "correo2@ejemplo.com");
+                int userID = getUserIdByLogin(con, user.getLogin());
 
                 pstmt.setInt(1, 1);
                 pstmt.setInt(2, userID);
@@ -101,7 +102,8 @@ public class SignableImplementation implements Signable{
                 pstmt.executeUpdate();
 
                 pstmt.close();
-
+                //pool.saveConnection(con);
+                
                 return user;
             }else{
                 throw new EmailAlreadyExistsException("Email ya registrado en la base de datos");
@@ -109,10 +111,13 @@ public class SignableImplementation implements Signable{
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             throw new ServerErrorException(e.getMessage());
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SignableImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally{
-            return new User();
+            pool.saveConnection(con);
         }
+        return user;
     }
     
     /**
@@ -162,10 +167,10 @@ public class SignableImplementation implements Signable{
            
                 if (resultPartner.next()) {
                     user.setAddress(resultPartner.getString("street"));
-                    user.setPostalCode(result.getString("zip"));
-                    user.setName(result.getString("name"));
-                    user.setMobilePhone(result.getString("mobile"));
-                    user.setActive(result.getBoolean("active"));                  
+                    user.setPostalCode(resultPartner.getString("zip"));
+                    user.setName(resultPartner.getString("name"));
+                    user.setMobilePhone(resultPartner.getString("mobile"));
+                    user.setActive(resultPartner.getBoolean("active"));                  
                 }
                 else{
                     throw new ServerErrorException("Ocurrio un error al encontrar el res_partner del usuario");
@@ -173,11 +178,10 @@ public class SignableImplementation implements Signable{
         } else {
             throw new CredentialsException("Usuario o contraseña incorrectos.");
         }
-
         result.close();
         pstmt.close();
             
-        return new User();
+        return user;
         
         } catch (SQLException ex) {
             Logger.getLogger(SignableImplementation.class.getName()).log(Level.SEVERE, null, ex);

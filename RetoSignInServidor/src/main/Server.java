@@ -9,15 +9,18 @@ import java.net.Socket;
 import java.util.ResourceBundle;
 import libraries.User;
 import connection.Pool;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class Server {
+public final class Server {
     
+    private static Server server;
     //declare resource bundle
     private ResourceBundle configFile = ResourceBundle.getBundle("properties.Config");
     //Port to listen to
     private final int PUERTO = 6666;
     //client number
-    private int clienteN = 0;
+    private static int clienteN = 0;
     //maximum clients
     private final int  MAXIMUM_CLIENTS = Integer.valueOf(configFile.getString("MAXCLIENTS"));
 
@@ -52,6 +55,7 @@ public class Server {
                     //create a worker thread where SignIn/SignUp operations are done
                     WorkerThread wt = new WorkerThread(cliente);
                     clienteN++;
+                    
                     wt.start();
                     
                 } else{ //In case you have reached the maximum number of clients create a thread to reject the client.
@@ -80,9 +84,28 @@ public class Server {
             System.out.println("Fin servidor");
         }
     }
-
-    public static void main(String[] args) {
-        Server s1 = new Server();
-        s1.iniciar();
+    
+    public static Server getServer() {
+        if(server == null){
+            server = new Server();
+        }       
+        return server;
     }
+    public static void setPool(Pool pool) {
+        Server.server = server;
+    }
+    public static int getClienteN() {
+        return clienteN;
+    }
+
+    public static void setClienteN(int clienteN) {
+        Server.clienteN = clienteN;
+    }
+    
+    public static void main(String[] args) {
+            Server s1 = getServer();
+            s1.iniciar();
+    }
+
+    
 }

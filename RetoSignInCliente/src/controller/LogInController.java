@@ -108,7 +108,9 @@ public class LogInController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainWindow.fxml"));
             Parent root = loader.load();
             MainWindowController mainWindowController = loader.getController();
-            mainWindowController.initStage(root, mainWindowUser);
+            
+            Stage parentStage = stage;
+            mainWindowController.initStage(root, mainWindowUser, parentStage);
             
             stage.close();
 
