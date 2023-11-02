@@ -10,12 +10,11 @@ import java.io.Serializable;
 
 /**
  *
- * @author andoni
+ * @author Andoni Sanz
  */
 public enum MessageType implements Serializable{
-    LogIn,
     SignUp,
-    Ex_ClassNotFound,
+    LogIn,
     Ex_Credentials,
     Ex_EmailAlreadyExists,
     Ex_ServerError

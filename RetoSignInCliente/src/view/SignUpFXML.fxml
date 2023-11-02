@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@design.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SignUpController">
+
+<Pane fx:id="SignUpFXML" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@design.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SignUpController">
    <children>
       <Label id="lblEmail" fx:id="lblEmail" layoutX="39.0" layoutY="66.0" prefHeight="18.0" prefWidth="48.0" text="Email" />
       <Label id="lblContrasena" fx:id="lblContrasena" layoutX="37.0" layoutY="130.0" text="Contraseña" />
@@ -28,12 +30,13 @@
          </font>
       </Label>
       <Label id="lblConfirmar" fx:id="lblConfirmar" layoutX="301.0" layoutY="130.0" text="Confirmar Contraseña" />
+      
       <Label id="lblTitulo" fx:id="lblTitulo" layoutX="35.0" layoutY="22.0" prefHeight="27.0" prefWidth="176.0" text="Registrar usuario">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <Label id="lblError" fx:id="lblError" layoutX="216.0" layoutY="28.0" prefHeight="18.0" prefWidth="362.0" textFill="#FF0202">
+      <Label id="lblError" fx:id="lblError" layoutX="216.0" layoutY="28.0" prefHeight="18.0" prefWidth="362.0" textFill="#ff0202">
          <font>
             <Font name="Arial" size="14.0" />
          </font>

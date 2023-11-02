@@ -7,15 +7,17 @@ package exceptions;
 
 /**
  *
- * @author 2dam
+ * @author Jagoba Bartolomé Barroso
  */
-public class EmailFormatException extends Exception{
-     
+public class EmailFormatException extends Exception {
+
     public EmailFormatException() {
-		super();
-	}
-	public EmailFormatException(String msg)
-	{
-		super(msg);
-	}
+
+        super();
+    }
+
+    public EmailFormatException(String msg) {
+        super(msg);
+    }
+
 }

@@ -8,7 +8,7 @@ package libraries;
 
 /**
  *
- * @author 2dam
+ * @author Andoni Sanz
  */
 public enum NotificationType {
     inbox, email
