@@ -5,21 +5,17 @@
  */
 package main;
 
+import static javafx.application.Application.launch;
 import controller.LogInController;
 import java.io.IOException;
-import static javafx.application.Application.launch;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import controller.LogInController;
 import controller.SignUpController;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.Scene;
 
 /**
  *
@@ -33,22 +29,20 @@ public class Application extends javafx.application.Application {
      * interface of the application.
      *
      * @param primaryStage The primary stage for this application, where the
-     * application scene can be set. The stage represents the main window of the
+     * application scene can be set. The first stage represents the Log In Window of the
      * application.
      */
     @Override
-    public void start(Stage primaryStage) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignUpFXML.fxml"));
-            Parent root = (Parent) loader.load();
-            SignUpController controller = loader.getController();
+    public void start(Stage primaryStage){
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInFXML.fxml"));
+            Parent root = ((Parent) loader.load());
+            LogInController controller = ((LogInController) loader.getController());
             controller.setStage(primaryStage);
             controller.initStage(root);
-            primaryStage.setTitle("Log In");
-            primaryStage.setScene(new Scene(root, 600, 400));
             primaryStage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
+        } catch(Exception ex){
+            ex.printStackTrace();
         }
     }
 

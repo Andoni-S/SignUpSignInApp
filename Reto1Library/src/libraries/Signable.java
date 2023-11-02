@@ -16,7 +16,7 @@ import java.io.IOException;
  * @author Andoni Sanz
  */
 public interface Signable {
-    public User signUp(User u) throws EmailAlreadyExistsException, ServerErrorException;
-    public User logIn(User u) throws CredentialsException, ServerErrorException;
+    public User signUp(User u) throws IOException, ClassNotFoundException, EmailAlreadyExistsException, ServerErrorException;
+    public User logIn(User u) throws IOException, ClassNotFoundException, CredentialsException, EmailAlreadyExistsException, ServerErrorException;
 }
 

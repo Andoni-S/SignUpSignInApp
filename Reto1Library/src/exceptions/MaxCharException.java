@@ -11,6 +11,7 @@ package exceptions;
  */
 public class MaxCharException extends Exception{
         public MaxCharException() {
+
 		super();
 	}
 	public MaxCharException(String msg)
