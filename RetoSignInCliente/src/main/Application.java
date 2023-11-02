@@ -29,7 +29,7 @@ public class Application extends javafx.application.Application {
      * interface of the application.
      *
      * @param primaryStage The primary stage for this application, where the
-     * application scene can be set. The stage represents the main window of the
+     * application scene can be set. The first stage represents the Log In Window of the
      * application.
      */
     @Override
