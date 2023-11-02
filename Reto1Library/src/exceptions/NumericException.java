@@ -4,15 +4,14 @@
  * and open the template in the editor.
  */
 package exceptions;
-import java.util.Stack;
 
 /**
  *
- * @author Jagoba Bartolomé Barroso
+ * @author 2dam
  */
 public class NumericException extends Exception{
-      public NumericException() {
-
+     
+    public NumericException() {
 		super();
 	}
 	public NumericException(String msg)

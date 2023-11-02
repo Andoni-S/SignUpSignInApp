@@ -8,9 +8,10 @@ package exceptions;
 
 /**
  *
- * @author Jagoba Bartolomé Barroso
+ * @author 2dam
  */
 public class CredentialsException extends Exception {
+
 	public CredentialsException() {
 		super();
 	}

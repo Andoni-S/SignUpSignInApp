@@ -7,10 +7,11 @@ package exceptions;
 
 /**
  *
- * @author Jagoba Bartolomé Barroso
+ * @author 2dam
  */
 public class ConfirmPasswordException extends Exception{
-	public ConfirmPasswordException() {
+     
+    public ConfirmPasswordException() {
 		super();
 	}
 	public ConfirmPasswordException(String msg)

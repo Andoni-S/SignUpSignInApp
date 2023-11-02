@@ -46,25 +46,29 @@ public class SignableImplementation implements Signable{
         entrada = new ObjectInputStream(sCliente.getInputStream());
         salida = new ObjectOutputStream(sCliente.getOutputStream());
 
-        String noConnection = (String) entrada.readObject();
-        System.out.println(noConnection);
-        
         ApplicationPDU pdu = new ApplicationPDU();
         
-        pdu.setMessageType(MessageType.LogIn);
-        pdu.setUser(u);
-        salida.writeObject(pdu); 
         pdu = (ApplicationPDU) entrada.readObject();
         
-        if (pdu.getMessageType().toString().equals("Ex_Credentials")){
-            throw new CredentialsException();
-        }
-        if (pdu.getMessageType().toString().equals("Ex_EmailAlreadyExists")){
-            throw new EmailAlreadyExistsException();
-        }
-        if (pdu.getMessageType().toString().equals("Ex_ServerError")){
+        if(pdu.getMessageType().toString().equals("Accept")){
+            pdu.setMessageType(MessageType.LogIn);
+            pdu.setUser(u);
+            salida.writeObject(pdu); 
+            pdu = (ApplicationPDU) entrada.readObject();
+        
+            if (pdu.getMessageType().toString().equals("Ex_Credentials")){
+                throw new CredentialsException();
+            }
+            if (pdu.getMessageType().toString().equals("Ex_EmailAlreadyExists")){
+                throw new EmailAlreadyExistsException();
+            }
+            if (pdu.getMessageType().toString().equals("Ex_ServerError")){
+                throw new ServerErrorException();
+            }
+        }else if(pdu.getMessageType().toString().equals("Ex_ServerError")){
             throw new ServerErrorException();
         }
+    
         return pdu.getUser();      
     }
     
@@ -81,22 +85,26 @@ public class SignableImplementation implements Signable{
         entrada = new ObjectInputStream(sCliente.getInputStream());
         salida = new ObjectOutputStream(sCliente.getOutputStream());
 
-        String connectionACK = (String) entrada.readObject();
-        System.out.println(connectionACK);
-        
         ApplicationPDU pdu = new ApplicationPDU();
         
-        pdu.setMessageType(MessageType.SignUp);
-        pdu.setUser(u);
-        salida.writeObject(pdu);
-
         pdu = (ApplicationPDU) entrada.readObject();
-        if (pdu.getMessageType().toString().equals("Ex_EmailAlreadyExists")){
-            throw new EmailAlreadyExistsException();
-        }
-        if (pdu.getMessageType().toString().equals("Ex_ServerError")){
+        
+        if(pdu.getMessageType().toString().equals("Accept")){
+            pdu.setMessageType(MessageType.SignUp);
+            pdu.setUser(u);
+            salida.writeObject(pdu);
+
+            pdu = (ApplicationPDU) entrada.readObject();
+            if (pdu.getMessageType().toString().equals("Ex_EmailAlreadyExists")){
+                throw new EmailAlreadyExistsException();
+            }
+            if (pdu.getMessageType().toString().equals("Ex_ServerError")){
+                throw new ServerErrorException();
+            }
+        }else if(pdu.getMessageType().toString().equals("Ex_ServerError")){
             throw new ServerErrorException();
         }
+        
         return pdu.getUser();
     }
 }

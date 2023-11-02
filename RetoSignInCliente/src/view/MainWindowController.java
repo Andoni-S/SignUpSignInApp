@@ -3,18 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller;
+package main;
 
-import java.io.IOException;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -25,8 +21,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-import libraries.User;
 
 /**
  *
@@ -41,7 +35,7 @@ public class MainWindowController {
      * Stage setter.
      * @param stage the stage to set
     */
-    @FXML
+@FXML
     private Label lblEmail;
 
     @FXML
@@ -74,28 +68,15 @@ public class MainWindowController {
     @FXML
     private Button btnLogout;
       
-    private User user;
-    private Stage parentstage;
-    
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-   
     public void setStage(Stage stage) {
         this.stage = stage;
     }
       
-    public void initStage(Parent root, User newUser, Stage parentStage) {
+    public void initStage(Parent root) {
         try {
-            this.parentstage = parentStage;
             //Set scene and view DOM root
             Scene scene = new Scene(root);
             stage = new Stage();
-            stage.setScene(scene);
             //Establecer el título de la ventana al valor “Registro.”
             stage.setTitle("Registro");
             //La ventana no es redimensionable.
@@ -105,23 +86,6 @@ public class MainWindowController {
             //Establecer el botón Registrar como Default Button mediante setDefaultButton y el botón Cancelar cómo Cancel Button mediante setCancelButton.
             btnLogout.setDefaultButton(true);
             //Mostrar la ventana.
-            user = newUser;
-            
-            stage.setOnCloseRequest(event -> handleCloseRequest(event));
-            
-            btnLogout.setDefaultButton(true);
-            textEmail.setEditable(false);
-            textName.setEditable(false);
-            textPhone.setEditable(false);
-            textAddress.setEditable(false);
-            textPostalCode.setEditable(false);
-            
-            textEmail.setText(user.getLogin());
-            textName.setText(user.getName());
-            textPhone.setText(user.getMobilePhone());
-            textAddress.setText(user.getAddress());
-            textPostalCode.setText(user.getPostalCode());
-            
             stage.show();
            
         } catch (Exception e) {
@@ -129,35 +93,6 @@ public class MainWindowController {
         }
     }
 
-    
-    @FXML
-    void handleBtnClose(ActionEvent event) {
-        
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInFXML.fxml"));
-            Parent root = loader.load();
-            LogInController controller = loader.getController();
-            controller.setStage(parentstage);
-            controller.initStage(root);
-            parentstage.show();
-            // Obtenemos el escenario (Stage) actual a través del botón
-            Stage stage = (Stage) btnLogout.getScene().getWindow();
-            
-            
-            // Cerramos la ventana
-            stage.close();
-        } catch (IOException ex) {
-            Logger.getLogger(MainWindowController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-     private void handleCloseRequest(WindowEvent event) {
-        // Obtenemos el escenario (Stage) actual a través del botón
-        Stage stage = (Stage) btnLogout.getScene().getWindow();
-        // Cerramos la ventana
-        stage.close();
-    }
-     
     public void handleOnButtonClick(Observable observable) {
         try {
            
@@ -178,7 +113,5 @@ public class MainWindowController {
         alert.setContentText(e.toString());
         alert.showAndWait();
     }
-
-   
 
 }
