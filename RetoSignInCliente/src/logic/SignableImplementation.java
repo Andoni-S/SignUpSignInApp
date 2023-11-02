@@ -89,8 +89,7 @@ public class SignableImplementation implements Signable{
         pdu.setMessageType(MessageType.SignUp);
         pdu.setUser(u);
         salida.writeObject(pdu);
-        
-        entrada = new ObjectInputStream(sCliente.getInputStream());
+
         pdu = (ApplicationPDU) entrada.readObject();
         if (pdu.getMessageType().toString().equals("Ex_EmailAlreadyExists")){
             throw new EmailAlreadyExistsException();

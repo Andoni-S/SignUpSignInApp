@@ -18,7 +18,7 @@ public class User implements Serializable{
     private String login; //login res_users
     private String password; //password res_users
     private String postalCode; //zip res_partner
-    private String address; //street2 res_partner
+    private String address; //street res_partner
     private String name; //name res_partner
     private String mobilePhone; //mobile res_partner
     private boolean active; //active res_partner

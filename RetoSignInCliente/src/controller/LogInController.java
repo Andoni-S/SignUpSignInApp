@@ -129,6 +129,7 @@ public class LogInController {
             Parent root = (Parent) loader.load();
             MainWindowController mainWindowController = loader.getController();
             mainWindowController.initStage(root, user);
+
             stage.close();
 
         } catch (EmailFormatException | PasswordFormatException ex) {

@@ -43,7 +43,8 @@ public class MainWindowController {
     private Button btnLogout;
 
     private User user;
-
+    private Stage parentstage;
+    
     public User getUser() {
         return user;
     }
@@ -57,7 +58,9 @@ public class MainWindowController {
     }
 
     public void initStage(Parent root, User newUser) {
+
         try {
+            this.parentstage = parentStage;
             //Set scene and view DOM root
             Scene scene = new Scene(root);
             stage = new Stage();

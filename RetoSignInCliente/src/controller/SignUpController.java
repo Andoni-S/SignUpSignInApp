@@ -225,7 +225,8 @@ public class SignUpController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainWindowFXML.fxml"));
             Parent root = loader.load();
             MainWindowController mainWindowController = loader.getController();
-            mainWindowController.initStage(root, newUser);
+             Stage parentStage = stage;
+            mainWindowController.initStage(root, newUser, parentStage);
             // Close this window
             stage.close();
         } catch (ConfirmPasswordException | EmailFormatException | PasswordFormatException e) {
