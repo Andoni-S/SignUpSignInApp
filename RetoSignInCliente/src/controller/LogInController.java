@@ -5,6 +5,8 @@ import exceptions.PasswordFormatException;
 import factory.SignableFactory;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.function.Supplier;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
@@ -34,6 +36,7 @@ import javafx.stage.WindowEvent;
  */
 public class LogInController {
 
+    private final static Logger LOGGER = Logger.getLogger(SignUpController.class.getName());
     private Stage stage;
     @FXML
     private Label lblEmail, lblPassword, lblError;
@@ -53,6 +56,7 @@ public class LogInController {
      */
     public void initStage(Parent root) {
         try {
+            LOGGER.info("Initializing stage...");
             Scene scene = new Scene(root);
             stage.setScene(scene);
             // Establish window title
@@ -67,12 +71,15 @@ public class LogInController {
             loginButton.setDefaultButton(true);
             // Show the window
             stage.show();
+            LOGGER.info("Log In Window initialized and shown");
             // Set control events handlers
+            LOGGER.info("Setting control evetns handlers...");
             loginButton.setOnAction(this::handleLoginButtonAction);
             hrefSignUp.setOnAction(this::handleHrefSignupAction);
             txtEmail.textProperty().addListener(this::handleTextChange);
             pwdPassword.textProperty().addListener(this::handleTextChange);
             stage.setOnCloseRequest(event -> handleCloseRequest(event));
+            LOGGER.info("Control events handlers set");
         } catch (Exception ex) {
             // Show an error message to the user
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -80,8 +87,7 @@ public class LogInController {
             alert.setHeaderText("Application Error");
             alert.setContentText("Failed to initialize the application. Please try restarting the app.");
             alert.showAndWait();
-            // You can also print the exception details for debugging purposes.
-            ex.printStackTrace();
+            LOGGER.severe((Supplier<String>) ex);
         }
     }
 

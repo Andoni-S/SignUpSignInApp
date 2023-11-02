@@ -226,7 +226,7 @@ public class SignUpController {
             Parent root = loader.load();
             MainWindowController mainWindowController = loader.getController();
              Stage parentStage = stage;
-            mainWindowController.initStage(root, newUser, parentStage);
+            mainWindowController.initStage(root, newUser);
             // Close this window
             stage.close();
         } catch (ConfirmPasswordException | EmailFormatException | PasswordFormatException e) {
