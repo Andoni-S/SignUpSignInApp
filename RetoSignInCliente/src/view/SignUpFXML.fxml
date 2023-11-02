@@ -1,39 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@design.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane fx:id="SignUpFXML" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SignUpController">
    <children>
-      <Label id="lblEmail" layoutX="39.0" layoutY="66.0" prefHeight="18.0" prefWidth="48.0" text="Email" />
-      <Label id="lblContrasena" layoutX="37.0" layoutY="130.0" text="Contraseña" />
-      <Label id="lblDireccion" layoutX="37.0" layoutY="296.0" prefHeight="18.0" prefWidth="68.0" text="Dirección" />
-      <Label id="lblCodigoPostal" layoutX="37.0" layoutY="241.0" prefHeight="18.0" prefWidth="94.0" text="Codigo Postal" />
-      <Label id="lblNombre" layoutX="300.0" layoutY="67.0" text="Nombre Completo" />
-      <Label id="lblTelefonoMovil" layoutX="300.0" layoutY="241.0" prefHeight="18.0" prefWidth="104.0" text="Teléfono Móvil" />
-      <TextField id="txtEmail" layoutX="37.0" layoutY="84.0" prefHeight="26.0" prefWidth="230.0" />
-      <TextField id="txtContrasena" layoutX="37.0" layoutY="147.0" prefHeight="26.0" prefWidth="230.0" />
-      <TextField id="txtNombreCompleto" layoutX="300.0" layoutY="85.0" prefHeight="26.0" prefWidth="255.0" />
-      <TextField id="txtTelefonoMovil" layoutX="300.0" layoutY="258.0" prefHeight="26.0" prefWidth="201.0" />
-      <TextField id="txtDireccion" layoutX="37.0" layoutY="313.0" prefHeight="26.0" prefWidth="318.0" />
-      <TextField id="txtCodigoPostal" layoutX="37.0" layoutY="258.0" prefHeight="26.0" prefWidth="152.0" />
-      <Button id="btnRegistrar" layoutX="516.0" layoutY="354.0" mnemonicParsing="false" text="Registrar" textFill="WHITE" />
-      <Label id="lblCamposOpcionales" layoutX="37.0" layoutY="203.0" prefHeight="21.0" prefWidth="164.0" text="Campos Opcionales">
+      <Label id="lblEmail" fx:id="lblEmail" layoutX="39.0" layoutY="66.0" prefHeight="18.0" prefWidth="48.0" text="Email" />
+      <Label id="lblContrasena" fx:id="lblContrasena" layoutX="37.0" layoutY="130.0" text="Contraseña" />
+      <Label id="lblDireccion" fx:id="lblDireccion" layoutX="37.0" layoutY="296.0" prefHeight="18.0" prefWidth="68.0" text="Dirección" />
+      <Label id="lblCodigoPostal" fx:id="lblCodigoPostal" layoutX="37.0" layoutY="241.0" prefHeight="18.0" prefWidth="94.0" text="Codigo Postal" />
+      <Label id="lblNombre" fx:id="lblNombre" layoutX="300.0" layoutY="67.0" text="Nombre Completo" />
+      <Label id="lblTelefonoMovil" fx:id="lblTelefono" layoutX="300.0" layoutY="241.0" prefHeight="18.0" prefWidth="104.0" text="Teléfono Móvil" />
+      <TextField id="txtEmail" fx:id="txtEmail" layoutX="37.0" layoutY="84.0" prefHeight="26.0" prefWidth="230.0" />
+      <TextField id="txtNombreCompleto" fx:id="txtNombreCompleto" layoutX="300.0" layoutY="85.0" prefHeight="26.0" prefWidth="255.0" />
+      <PasswordField id="pwdContrasena" fx:id="pwdContrasena" layoutX="39.0" layoutY="147.0" prefHeight="25.0" prefWidth="230.0" />
+      <PasswordField id="pwdConfirmar" fx:id="pwdConfirmar" layoutX="301.0" layoutY="148.0" prefHeight="25.0" prefWidth="255.0" />
+      <TextField id="txtCodigoPostal" fx:id="txtCodigoPostal" layoutX="37.0" layoutY="258.0" prefHeight="26.0" prefWidth="152.0" />
+      <TextField id="txtTelefonoMovil" fx:id="txtTelefonoMovil" layoutX="300.0" layoutY="258.0" prefHeight="26.0" prefWidth="201.0" />
+      <TextField id="txtDireccion" fx:id="txtDireccion" layoutX="37.0" layoutY="313.0" prefHeight="26.0" prefWidth="318.0" />
+      <Button id="btnCancelar" fx:id="btnCancelar" layoutX="17.0" layoutY="354.0" mnemonicParsing="false" opacity="0.7" text="Cancelar" textFill="WHITE" />
+      <Button id="btnRegistrar" fx:id="btnRegistrar" layoutX="516.0" layoutY="354.0" mnemonicParsing="false" onAction="#handleOnButtonClick" text="Registrar" textFill="WHITE" />
+      <Label id="lblCamposOpcionales" fx:id="lblCamposOpcionales" layoutX="37.0" layoutY="203.0" prefHeight="21.0" prefWidth="164.0" text="Campos Opcionales">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
       </Label>
-      <Label id="lblConfirmar" layoutX="301.0" layoutY="130.0" text="Confirmar Contraseña" />
-      <TextField id="txtConfirmar" layoutX="300.0" layoutY="147.0" prefHeight="26.0" prefWidth="255.0" />
-      <Button id="btnCancelar" layoutX="17.0" layoutY="354.0" mnemonicParsing="false" opacity="0.7" text="Cancelar" textFill="WHITE" />
-      <Label id="lblTitulo" layoutX="35.0" layoutY="22.0" prefHeight="27.0" prefWidth="176.0" text="Registrar usuario">
+      <Label id="lblConfirmar" fx:id="lblConfirmar" layoutX="301.0" layoutY="130.0" text="Confirmar Contraseña" />
+      
+      <Label id="lblTitulo" fx:id="lblTitulo" layoutX="35.0" layoutY="22.0" prefHeight="27.0" prefWidth="176.0" text="Registrar usuario">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <Label id="altError" layoutX="301.0" layoutY="28.0" prefHeight="18.0" prefWidth="277.0" text="Error de ejemplo" textFill="#ff0202">
+      <Label id="lblError" fx:id="lblError" layoutX="216.0" layoutY="28.0" prefHeight="18.0" prefWidth="362.0" textFill="#ff0202">
          <font>
             <Font name="Arial" size="14.0" />
          </font>

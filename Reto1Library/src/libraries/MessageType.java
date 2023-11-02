@@ -1,5 +1,7 @@
 package libraries;
 
+import java.io.Serializable;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -8,12 +10,11 @@ package libraries;
 
 /**
  *
- * @author andoni
+ * @author Andoni Sanz
  */
-public enum MessageType {
-    LogIn,
+public enum MessageType implements Serializable{
     SignUp,
-    Ex_ClassNotFound,
+    LogIn,
     Ex_Credentials,
     Ex_EmailAlreadyExists,
     Ex_ServerError

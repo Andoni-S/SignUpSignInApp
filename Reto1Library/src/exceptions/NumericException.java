@@ -3,17 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
-
+package exceptions;
 import java.util.Stack;
 
 /**
  *
- * @author 2dam
+ * @author Jagoba Bartolomé Barroso
  */
-public class Pool {
-    //Stack<Conexion> conexiones;
-    
-    
-    
+public class NumericException extends Exception{
+      public NumericException() {
+
+		super();
+	}
+	public NumericException(String msg)
+	{
+		super(msg);
+	}
 }

@@ -5,9 +5,12 @@
  */
 package controller;
 
-import static javafx.application.ConditionalFeature.FXML;
+import factory.SignableFactory;
+import java.io.IOException;
+import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -42,13 +45,12 @@ public class LogInController {
     /**
      * This method creates the Stage for this window.
      *
-     * @param Stage
+     * @param root
      */
     public void initStage(Parent root) {
         try {
             Scene scene = new Scene(root);
             stage.setScene(scene);
-
             // Establish window title
             stage.setTitle("Iniciar sesión");
             // Window is not resizable
@@ -66,9 +68,11 @@ public class LogInController {
             // Set control events handlers
             loginButton.setOnAction(this::handleLoginButtonAction);
             hrefSignUp.setOnAction(this::handleHrefSignupAction);
-            txtEmail.addEventHandler(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, this::handleTextChange);
-            pwdPassword.addEventHandler(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, this::handleTextChange);
-
+            txtEmail.textProperty().addListener(this::handleTextChange);
+            pwdPassword.textProperty().addListener(this::handleTextChange);
+            /*txtEmail.addEventHandler(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, this::handleTextChange);
+            pwdPassword.addEventHandler(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, this::handleTextChange);*/
+  
         } catch (Exception ex) {
             ex.getMessage();
         }
@@ -84,6 +88,7 @@ public class LogInController {
 
     @FXML
     private void handleLoginButtonAction(ActionEvent e) {
+        System.out.println("Logeando");
         try {
             // Validate that compulsory fields are not empty
 
@@ -91,32 +96,43 @@ public class LogInController {
             String email = txtEmail.getText();
             String password = pwdPassword.getText();
 
-            // Create a User object with the entered data
+            // Create a User object with the provided data
             User user = new User();
             user.setLogin(email);
             user.setPassword(password);
 
-            // Send the User object 
-            // Client.logIn(user);
+            // Send the User created to the logic Tier and recieve a full informed User
+            User mainWindowUser = new User();
+            mainWindowUser = SignableFactory.getSignable().logIn(user);
+            // Close this window and open a MainWindow
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainWindow.fxml"));
+            Parent root = loader.load();
+            MainWindowController mainWindowController = loader.getController();
+            mainWindowController.initStage(root, mainWindowUser);
+            
+            stage.close();
+
         } catch (Exception ex) { //de momento está puesta una exception generica pero aqui deberian saltar las excepciones de conexion a la base de datos y de credenciales
-            ex.getMessage();
+            System.out.println(ex.getMessage());
         }
     }
 
     @FXML
-    private void handleTextChange(InputMethodEvent e) {
+    private void handleTextChange(Observable o) {
         try {
             String email = txtEmail.getText();
             String password = pwdPassword.getText();
 
-            if (email.trim().isEmpty() || password.trim().isEmpty()) {
-                // Disable 'Entrar' button
-                loginButton.setDisable(true);
+            if (!email.trim().isEmpty() && !password.trim().isEmpty()) {
+                // Enable 'Entrar' button
+                loginButton.setDisable(false);
                 // throw EmptyFieldException
+            }else{
+                // Disable 'Entrar' button
+            loginButton.setDisable(true);
             }
 
-            // Enable 'Entrar' button
-            loginButton.setDisable(false);
+            
 
         } catch (Exception ex) {
             ex.getMessage();
@@ -125,10 +141,17 @@ public class LogInController {
 
     @FXML
     private void handleHrefSignupAction(ActionEvent e) {
-        // Show the Register window
-        //view.SignUpController.initStage(Parent root);
-        // Close this window
-        stage.close();
+        try {
+            // Show the Sign Up window
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignUpFXML.fxml"));
+            Parent root = loader.load();
+            SignUpController signupcontroller =  loader.getController();
+            signupcontroller.initStage(root);
+            
+            // Close this window
+            stage.close();
+        } catch (IOException ex) {
+            // Gestionar la exception
+        }
     }
-
 }

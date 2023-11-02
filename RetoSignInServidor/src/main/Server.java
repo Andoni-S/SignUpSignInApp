@@ -4,19 +4,18 @@ import Threads.DeclineThread;
 import Threads.WorkerThread;
 import connection.SSHConnection;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ResourceBundle;
 import libraries.User;
+import connection.Pool;
 
 public class Server {
     
     //declare resource bundle
     private ResourceBundle configFile = ResourceBundle.getBundle("properties.Config");
     //Port to listen to
-    private final int PUERTO = 5004;
+    private final int PUERTO = 6666;
     //client number
     private int clienteN = 0;
     //maximum clients
@@ -26,20 +25,22 @@ public class Server {
         
         ServerSocket servidor = null;
         Socket cliente = null;
-        ObjectInputStream entrada = null;
-        ObjectOutputStream salida = null;
-        //SSHConnection sshConnection = SSHConnection.getSSHConnection();
+        SSHConnection sshConnection = null;
+        
         try {
+            sshConnection = new SSHConnection();
+            sshConnection.connectSSH();
             
-            //sshConnection.connectSSH();
+            Pool pool = Pool.getPool();
+            
+            
             //Instance ServerSocket
             servidor = new ServerSocket(PUERTO);
             System.out.println("MAXIMUM CLIENTS: "+ MAXIMUM_CLIENTS);
-            
+                      
             //cicle of admission of new clients
             while (true) {
-                             
-                
+                                         
                 User user = new User();
                 //aceptar un cliente en el servidor
                 System.out.println("Esperando conexiones del cliente...");
@@ -59,7 +60,7 @@ public class Server {
                 }
                             
                 System.out.println("Numero de cliente: " + clienteN);
-            }
+            }          
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
         } catch (Exception e) {
@@ -70,10 +71,9 @@ public class Server {
                     servidor.close();
                 if (cliente != null)
                     cliente.close();
-                if (entrada != null)
-                    entrada.close();
-                if (salida != null)
-                    salida.close();
+                
+                sshConnection.discconectSSH();
+               
             } catch (IOException e) {
                 e.printStackTrace();
             }
