@@ -15,6 +15,7 @@ import controller.LogInController;
 import controller.SignUpController;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.Scene;
 
 /**
  *
@@ -32,18 +33,16 @@ public class Application extends javafx.application.Application {
      * application.
      */
     @Override
-    public void start(Stage primaryStage) {
-        try {
+    public void start(Stage primaryStage){
+        try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInFXML.fxml"));
-            Parent root = (Parent) loader.load();
-            SignUpController controller = loader.getController();
+            Parent root = ((Parent) loader.load());
+            LogInController controller = ((LogInController) loader.getController());
             controller.setStage(primaryStage);
             controller.initStage(root);
-            primaryStage.setTitle("Log In");
-            primaryStage.setScene(new Scene(root, 600, 400));
             primaryStage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
+        } catch(Exception ex){
+            ex.printStackTrace();
         }
     }
 

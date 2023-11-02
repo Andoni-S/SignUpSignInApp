@@ -95,7 +95,6 @@ public class LogInController {
 
     @FXML
     private void handleLoginButtonAction(ActionEvent e) {
-        System.out.println("Logeando");
         try {
             // Handle the login button click event here.
             String email = txtEmail.getText();
@@ -106,7 +105,7 @@ public class LogInController {
             Pattern patternEmail = Pattern.compile(regexEmail);
             //Validate if the pattern doesn't match the txtEmail field text
             if (!patternEmail.matcher(txtEmail.getText()).matches()) {
-                throw new EmailFormatException("Email Format is not correct");
+                throw new EmailFormatException("El formato de las credenciales no es correcto");
             }
             //Validate the format of the password, it must be 8 characters long at minimum and contain a capital letter and a number
             //Pattern that must be respected
@@ -114,14 +113,14 @@ public class LogInController {
             Pattern patternPassword = Pattern.compile(regexPassword);
             //Validate if the pattern doesn't match the password field
             if (!patternPassword.matcher(pwdPassword.getText()).matches()) {
-                throw new PasswordFormatException("Password Format is not correct");
+                throw new PasswordFormatException("El formato de las credenciales no es correcto");
             }
             // Create a User object with the provided data
             User user = new User();
             user.setLogin(email);
             user.setPassword(password);
-            // Send the User created to the logic Tier and recieve a full informed User
             /*
+            // Send the User created to the logic Tier and recieve a full informed User
             User mainWindowUser = new User();
             mainWindowUser = SignableFactory.getSignable().logIn(user);
              */
@@ -131,9 +130,8 @@ public class LogInController {
             MainWindowController mainWindowController = loader.getController();
             mainWindowController.initStage(root, user);
             stage.close();
-        } catch (EmailFormatException ex) {
-            showError("Error: " + ex.getMessage());
-        } catch (PasswordFormatException ex) {
+
+        } catch (EmailFormatException | PasswordFormatException ex) {
             showError("Error: " + ex.getMessage());
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -163,7 +161,7 @@ public class LogInController {
             // Show the Sign Up window
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignUpFXML.fxml"));
             Parent root = loader.load();
-            SignUpController signupcontroller =  loader.getController();
+            SignUpController signupcontroller = loader.getController();
             signupcontroller.initStage(root);
             // Close this window
             stage.close();

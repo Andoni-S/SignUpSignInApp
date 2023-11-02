@@ -8,6 +8,7 @@ package controller;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -96,10 +97,20 @@ public class MainWindowController {
 
     @FXML
     void handleBtnClose(ActionEvent event) {
-        // Obtenemos el escenario (Stage) actual a través del botón
-        Stage stage = (Stage) btnLogout.getScene().getWindow();
-        // Cerramos la ventana
-        stage.close();
+        try{
+            // Show the LogIn window
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInFXML.fxml"));
+            Parent root = loader.load();
+            LogInController logInController = loader.getController();
+            Stage parentStage = stage;
+            logInController.setStage(parentStage);
+            logInController.initStage(root);
+            //Close this window
+            stage.close();
+            parentStage.show(); 
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void handleCloseRequest(WindowEvent event) {
