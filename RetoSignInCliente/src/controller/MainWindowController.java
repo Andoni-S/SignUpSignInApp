@@ -5,71 +5,42 @@
  */
 package controller;
 
-import java.util.Optional;
-import javafx.application.Application;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import libraries.User;
 
 /**
  *
- * @author 2dam
+ * @author Andoni Sanz
  */
 public class MainWindowController {
+
     /**
      * Application stage.
-    */
+     */
     private Stage stage;
     /**
      * Stage setter.
+     *
      * @param stage the stage to set
-    */
+     */
     @FXML
-    private Label lblEmail;
-
+    private Label lblEmail, lblAddress, lblPostalCode, lblName, lblPhone;
     @FXML
-    private Label lblAddress;
-
-    @FXML
-    private Label lblPostalCode;
-
-    @FXML
-    private Label lblName;
-
-    @FXML
-    private Label lblPhone;
-
-    @FXML
-    private TextField textEmail;
-
-    @FXML
-    private TextField textName;
-
-    @FXML
-    private TextField textPhone;
-
-    @FXML
-    private TextField textAddress;
-
-    @FXML
-    private TextField textPostalCode;
-    
+    private TextField textEmail, textName, textPhone, textAddress, textPostalCode;
     @FXML
     private Button btnLogout;
-      
+
     private User user;
 
     public User getUser() {
@@ -79,11 +50,11 @@ public class MainWindowController {
     public void setUser(User user) {
         this.user = user;
     }
-   
+
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-      
+
     public void initStage(Parent root, User newUser) {
         try {
             //Set scene and view DOM root
@@ -100,30 +71,29 @@ public class MainWindowController {
             btnLogout.setDefaultButton(true);
             //Mostrar la ventana.
             user = newUser;
-            
+
             stage.setOnCloseRequest(event -> handleCloseRequest(event));
-            
+
             btnLogout.setDefaultButton(true);
             textEmail.setEditable(false);
             textName.setEditable(false);
             textPhone.setEditable(false);
             textAddress.setEditable(false);
             textPostalCode.setEditable(false);
-            
+
             textEmail.setText(user.getLogin());
             textName.setText(user.getName());
             textPhone.setText(user.getMobilePhone());
             textAddress.setText(user.getAddress());
             textPostalCode.setText(user.getPostalCode());
-            
+
             stage.show();
-           
+
         } catch (Exception e) {
-             this.showErrorAlert(e);
+            this.showErrorAlert(e);
         }
     }
 
-    
     @FXML
     void handleBtnClose(ActionEvent event) {
         // Obtenemos el escenario (Stage) actual a través del botón
@@ -131,21 +101,22 @@ public class MainWindowController {
         // Cerramos la ventana
         stage.close();
     }
-    
-     private void handleCloseRequest(WindowEvent event) {
+
+    private void handleCloseRequest(WindowEvent event) {
         // Obtenemos el escenario (Stage) actual a través del botón
         Stage stage = (Stage) btnLogout.getScene().getWindow();
         // Cerramos la ventana
         stage.close();
     }
-     
+
     public void handleOnButtonClick(Observable observable) {
         try {
-           
-        } catch(Exception e){
-        
+
+        } catch (Exception e) {
+
         }
     }
+
     /**
      * Displays a warning alert dialog with the provided exception message.
      *
@@ -159,7 +130,4 @@ public class MainWindowController {
         alert.setContentText(e.toString());
         alert.showAndWait();
     }
-
-   
-
 }
