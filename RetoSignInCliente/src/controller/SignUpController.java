@@ -6,6 +6,7 @@
 package controller;
 
 import exceptions.ConfirmPasswordException;
+import exceptions.CredentialsException;
 import exceptions.EmailAlreadyExistsException;
 import exceptions.EmailFormatException;
 import exceptions.MaxCharException;
@@ -181,7 +182,7 @@ public class SignUpController {
             String regexPwd="^(?=.*[A-Z])(?=.*\\d).{8,}$";
             Pattern patternPassword = Pattern.compile(regexPwd);
             if (pwdContrasena.getText().length() < 4 || !patternPassword.matcher(pwdContrasena.getText()).matches()){
-                throw new PasswordFormatException("La contraseña no tiene el formato correcto.");
+                throw new PasswordFormatException("La contraseña debe incluir mayúsculas, minúsculas, números y carácteres especiales.");
             }
             LOGGER.info("Password format validated.");
             //Validate if the password field and the confirmation field have the same text
@@ -244,7 +245,7 @@ public class SignUpController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainWindowFXML.fxml"));
             Parent root = loader.load();
             MainWindowController mainWindowController = loader.getController();
-            Stage parentStage = stage;
+            Stage parentStage = new Stage();
             mainWindowController.setStage(parentStage);
             mainWindowController.initStage(root, userServer);
             // Close this window
@@ -258,9 +259,6 @@ public class SignUpController {
         /*} catch (EmailAlreadyExistsException e) {
             LOGGER.warning(e.getMessage());
             showError("Este email ya existe.");
-        } catch (CredentialsException e) {
-            LOGGER.warning(e.getMessage());
-            showError("Las credenciales son incorrectas.");
         } catch (ServerErrorException e) {
             LOGGER.severe(e.getMessage());
             showError("Ha ocurrido un problema con el servidor. Inténtalo más tarde.");    

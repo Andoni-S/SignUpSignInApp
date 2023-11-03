@@ -17,6 +17,8 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import controller.LogInController;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -34,14 +36,17 @@ public class Application extends javafx.application.Application{
      * application.
      */
     @Override
-    public void start(Stage primaryStage) throws IOException, ClassNotFoundException {
-        
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInFXML.fxml"));
-        Parent root = loader.load();
-        LogInController controller = loader.getController();
-        controller.setStage(primaryStage);
-        controller.initStage(root);
-        primaryStage.show();
+    public void start(Stage primaryStage) {    
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInFXML.fxml"));
+            Parent root = loader.load();
+            LogInController controller = loader.getController();
+            controller.setStage(primaryStage);
+            controller.initStage(root);
+            primaryStage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

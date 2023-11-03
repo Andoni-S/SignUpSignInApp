@@ -3,7 +3,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
-<Pane fx:id="MainWindowFXML" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@design.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainWindowController">
+<Pane fx:id="mainWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@design.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainWindowController">
    <children>
       <Label fx:id="lblEmail" layoutX="39.0" layoutY="93.0" prefHeight="18.0" prefWidth="48.0" text="Email" />
       <Label fx:id="lblAddress" layoutX="37.0" layoutY="241.0" prefHeight="18.0" prefWidth="84.0" text="Dirección" />
