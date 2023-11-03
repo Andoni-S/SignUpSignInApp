@@ -75,13 +75,12 @@ public class SignableImplementation implements Signable{
                     partner_id = generatedKeys.getInt(1);
                 }
 
-                String insertResUsers = "INSERT INTO res_users (login, password, partner_id, company_id, notification_type) VALUES (?, ?, ?, ?, ?)";
+                String insertResUsers = "INSERT INTO res_users (login, password, partner_id, company_id) VALUES (?, ?, ?, ?)";
                 pstmt = con.prepareStatement(insertResUsers);
                 pstmt.setString(1, user.getLogin());
                 pstmt.setString(2, user.getPassword());
                 pstmt.setInt(3, partner_id);
                 pstmt.setInt(4, 1);
-                pstmt.setString(5, user.getNotificationType().toString()); 
                 pstmt.executeUpdate();
 
                 String insertResGroupUsersRel = "INSERT INTO res_groups_users_rel (gid, uid) VALUES (?, ?),(?, ?),(?, ?),(?, ?)";
