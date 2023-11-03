@@ -35,14 +35,14 @@ public final class Pool {
         pass = configFile.getString("PASSWORD");
 
     }
-    public static Pool getPool() throws ClassNotFoundException {
+    public static synchronized Pool getPool() throws ClassNotFoundException {
         if(pool == null){
             pool = new Pool();
         }       
         return pool;
     }
 
-    public static void setPool(Pool pool) {
+    public static synchronized void setPool(Pool pool) {
         Pool.pool = pool;
     }
     /**

@@ -15,7 +15,7 @@ import model.SignableImplementation;
  */
 public class SignableFactory {
     
-    public static Signable getSignable(){
+    public static synchronized Signable getSignable(){
         //return the Implementation of Signable interface
         return new SignableImplementation();
     }

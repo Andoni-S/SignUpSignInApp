@@ -7,9 +7,10 @@ package exceptions;
 
 /**
  *
- * @author Andoni Sanz
+ * @author 2dam
  */
 public class EmailAlreadyExistsException extends Exception {
+
 	public EmailAlreadyExistsException() {
 		super();
 	}

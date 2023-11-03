@@ -8,8 +8,8 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="RetoSignInCliente.jar" size="17100" download="eager" />
-    <jar href="lib\Reto1Library.jar" size="13749" download="eager" />
+    <jar href="RetoSignInCliente.jar" size="17027" download="eager" />
+    <jar href="lib\Reto1Library.jar" size="13804" download="eager" />
     <jar href="lib\hamcrest-junit-2.0.0.0.jar" size="14347" download="eager" />
     <jar href="lib\java-hamcrest-2.0.0.0.jar" size="112929" download="eager" />
     <jar href="lib\testfx-core-4.0.13-alpha.jar" size="202932" download="eager" />

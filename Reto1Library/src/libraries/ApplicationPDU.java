@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 /**
  *
- * @author Andoni Sanz
+ * @author 2dam
  */
 public class ApplicationPDU implements Serializable{
     private MessageType messageType;
