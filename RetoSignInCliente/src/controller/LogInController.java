@@ -87,7 +87,7 @@ public class LogInController {
             alert.setHeaderText("Application Error");
             alert.setContentText("Failed to initialize the application. Please try restarting the app.");
             alert.showAndWait();
-            LOGGER.severe((Supplier<String>) ex);
+            LOGGER.severe("Exception during initialization: " + ex.getMessage());
         }
     }
 
@@ -102,6 +102,7 @@ public class LogInController {
     @FXML
     private void handleLoginButtonAction(ActionEvent e) {
         try {
+            LOGGER.info("Log In Button pressed...");
             // Handle the login button click event here.
             String email = txtEmail.getText();
             String password = pwdPassword.getText();
@@ -111,6 +112,7 @@ public class LogInController {
             Pattern patternEmail = Pattern.compile(regexEmail);
             //Validate if the pattern doesn't match the txtEmail field text
             if (!patternEmail.matcher(txtEmail.getText()).matches()) {
+                LOGGER.severe("Wrong email format");
                 throw new EmailFormatException("El formato de las credenciales no es correcto");
             }
             //Validate the format of the password, it must be 8 characters long at minimum and contain a capital letter and a number
@@ -119,6 +121,7 @@ public class LogInController {
             Pattern patternPassword = Pattern.compile(regexPassword);
             //Validate if the pattern doesn't match the password field
             if (!patternPassword.matcher(pwdPassword.getText()).matches()) {
+                LOGGER.severe("Wrong password format");
                 throw new PasswordFormatException("El formato de las credenciales no es correcto");
             }
             // Create a User object with the provided data
@@ -139,15 +142,17 @@ public class LogInController {
             stage.close();
 
         } catch (EmailFormatException | PasswordFormatException ex) {
+            LOGGER.severe("Exception during login: " + ex.getMessage());
             showError("Error: " + ex.getMessage());
         } catch (Exception ex) {
-            ex.printStackTrace();
+            LOGGER.severe("Exception during login: " + ex.getMessage());
         }
     }
 
     @FXML
     private void handleTextChange(Observable observable) {
         try {
+            LOGGER.info("Text change detected...");
             String email = txtEmail.getText();
             String password = pwdPassword.getText();
             if (email.trim().isEmpty() || password.trim().isEmpty()) {
@@ -158,6 +163,7 @@ public class LogInController {
                 loginButton.setDisable(false);
             }
         } catch (Exception ex) {
+            LOGGER.severe("Exception during text change: " + ex.getMessage());
             ex.getMessage();
         }
     }
@@ -165,6 +171,7 @@ public class LogInController {
     @FXML
     private void handleHrefSignupAction(ActionEvent e) {
         try {
+            LOGGER.info("Hyperlink 'Sign Up' clicked...");
             // Show the Sign Up window
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignUpFXML.fxml"));
             Parent root = loader.load();
@@ -174,16 +181,18 @@ public class LogInController {
             stage.close();
         } catch (IOException ex) {
             // Gestionar la exception
-            ex.printStackTrace();
+            LOGGER.severe("Exception during handling 'Sign Up' hyperlink: " + ex.getMessage());
         }
     }
 
     private void showError(String e) {
+        LOGGER.warning("Error message displayed: " + e);
         //Show error message
         lblError.setText(e);
     }
 
     private void handleCloseRequest(WindowEvent event) {
+        LOGGER.info("Window close requested...");
         // Create a confirmation dialog
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirm Closure");
@@ -197,10 +206,12 @@ public class LogInController {
         if (result.isPresent() && result.get() == confirmButton) {
             // If the user confirms, close the window
             event.consume(); // Stops the default window close
+            LOGGER.info("Window closed by user confirmation.");
             stage.close();
         } else {
             // If the user cancels, do not close the window
             event.consume(); // Stops the default window close
+            LOGGER.info("Window closure canceled by user.");
         }
     }
 }
