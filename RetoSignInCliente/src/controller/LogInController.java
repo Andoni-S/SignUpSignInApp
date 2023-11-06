@@ -1,7 +1,10 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package controller;
 
-import exceptions.EmailFormatException;
-import exceptions.PasswordFormatException;
 import factory.SignableFactory;
 import java.io.IOException;
 import java.util.Optional;
@@ -22,12 +25,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.InputMethodEvent;
 import javafx.stage.Stage;
 import libraries.User;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.stage.WindowEvent;
 
 /**
  * This class contains the responses for behavior of the Log In view
@@ -38,8 +35,9 @@ public class LogInController {
 
     private final static Logger LOGGER = Logger.getLogger(SignUpController.class.getName());
     private Stage stage;
+
     @FXML
-    private Label lblEmail, lblPassword, lblError;
+    private Label lblEmail, lblPassword;
     @FXML
     private TextField txtEmail;
     @FXML
@@ -63,12 +61,13 @@ public class LogInController {
             stage.setTitle("Iniciar sesión");
             // Window is not resizable
             stage.setResizable(false);
-            //Establish the focus on the first field
-            txtEmail.requestFocus();
             // Disable 'Entrar' button
             loginButton.setDisable(true);
+            // Establish the focus on the first field
+
             // Establish the 'Entrar' button as the default button
             loginButton.setDefaultButton(true);
+
             // Show the window
             stage.show();
             LOGGER.info("Log In Window initialized and shown");
@@ -101,6 +100,7 @@ public class LogInController {
 
     @FXML
     private void handleLoginButtonAction(ActionEvent e) {
+        System.out.println("Logeando");
         try {
             LOGGER.info("Log In Button pressed...");
             // Handle the login button click event here.
@@ -128,19 +128,21 @@ public class LogInController {
             User user = new User();
             user.setLogin(email);
             user.setPassword(password);
-            /*
+
             // Send the User created to the logic Tier and recieve a full informed User
             User mainWindowUser = new User();
             mainWindowUser = SignableFactory.getSignable().logIn(user);
-             */
-            // Open a MainWindow instance and close this window
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainWindowFXML.fxml"));
-            Parent root = (Parent) loader.load();
+            // Close this window and open a MainWindow
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainWindow.fxml"));
+            Parent root = loader.load();
             MainWindowController mainWindowController = loader.getController();
-            mainWindowController.initStage(root, user);
+
+            Stage parentStage = stage;
+            mainWindowController.initStage(root, mainWindowUser, parentStage);
 
             stage.close();
-
+             << << << < HEAD
+        
         } catch (EmailFormatException | PasswordFormatException ex) {
             LOGGER.severe("Exception during login: " + ex.getMessage());
             showError("Error: " + ex.getMessage());
@@ -150,18 +152,21 @@ public class LogInController {
     }
 
     @FXML
-    private void handleTextChange(Observable observable) {
+    private void handleTextChange(Observable o) {
         try {
             LOGGER.info("Text change detected...");
             String email = txtEmail.getText();
             String password = pwdPassword.getText();
-            if (email.trim().isEmpty() || password.trim().isEmpty()) {
-                // Disable 'Entrar' button
-                loginButton.setDisable(true);
-            } else {
+
+            if (!email.trim().isEmpty() && !password.trim().isEmpty()) {
                 // Enable 'Entrar' button
                 loginButton.setDisable(false);
+                // throw EmptyFieldException
+            } else {
+                // Disable 'Entrar' button
+                loginButton.setDisable(true);
             }
+
         } catch (Exception ex) {
             LOGGER.severe("Exception during text change: " + ex.getMessage());
             ex.getMessage();
@@ -177,6 +182,7 @@ public class LogInController {
             Parent root = loader.load();
             SignUpController signupcontroller = loader.getController();
             signupcontroller.initStage(root);
+
             // Close this window
             stage.close();
         } catch (IOException ex) {

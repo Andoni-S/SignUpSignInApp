@@ -7,11 +7,11 @@ package exceptions;
 
 /**
  *
- * @author Jagoba Bartolomé Barroso
+ * @author 2dam
  */
 public class NameException extends Exception{
-        public NameException() {
-
+     
+    public NameException() {
 		super();
 	}
 	public NameException(String msg)

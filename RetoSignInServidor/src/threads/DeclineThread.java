@@ -5,14 +5,14 @@
  */
 package Threads;
 
-import libraries.User;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import libraries.ApplicationPDU;
+import libraries.MessageType;
 
 /**
  *
@@ -30,16 +30,17 @@ public class DeclineThread extends Thread {
     }
     
     @Override
-    public void run() {
+    public synchronized void run() {
         System.out.println("lanzando thread");
         try {
             
         salida = new ObjectOutputStream(cliente.getOutputStream());
         entrada = new ObjectInputStream(cliente.getInputStream());
-       
-        
-        salida.writeObject("jaja no entras");
-        
+           
+        Logger.getLogger(DeclineThread.class.getName()).info("limite de clientes alcanzado");
+        ApplicationPDU pdu = new ApplicationPDU();
+        pdu.setMessageType(MessageType.Ex_ServerError);
+        salida.writeObject(pdu);
         
         } catch (IOException ex) {
             Logger.getLogger(WorkerThread.class.getName()).log(Level.SEVERE, null, ex);

@@ -8,7 +8,6 @@ import libraries.User;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,7 +37,7 @@ public class WorkerThread extends Thread {
     }
 
     @Override
-    public void run() {
+    public synchronized void run() {
         System.out.println("Launching thread");
         try {
             // Initialize input and output streams
@@ -46,7 +45,10 @@ public class WorkerThread extends Thread {
             entrada = new ObjectInputStream(socket.getInputStream());
 
             // Send a welcome message to the client
-            salida.writeObject("You have entered the server");
+            Logger.getLogger(DeclineThread.class.getName()).info("limite de clientes alcanzado");
+            pdu = new ApplicationPDU();
+            pdu.setMessageType(MessageType.Accept);
+            salida.writeObject(pdu);
 
             // Read a request PDU from the client
             pdu = (ApplicationPDU) entrada.readObject();

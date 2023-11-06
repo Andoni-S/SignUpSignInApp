@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 /**
  *
- * @author Andoni Sanz
+ * @author 2dam
  */
 public class User implements Serializable{
     private int id; //id res_users, uid res_groups_users_rel, user_id res_company_users_rel

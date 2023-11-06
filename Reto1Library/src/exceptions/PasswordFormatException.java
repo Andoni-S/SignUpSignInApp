@@ -7,17 +7,15 @@ package exceptions;
 
 /**
  *
- * @author Jagoba Bartolomé Barroso
+ * @author 2dam
  */
-
-
-public class PasswordFormatException extends Exception {
-
+public class PasswordFormatException extends Exception{
+     
     public PasswordFormatException() {
-        super();
-    }
-
-    public PasswordFormatException(String msg) {
-        super(msg);
-    }
+		super();
+	}
+	public PasswordFormatException(String msg)
+	{
+		super(msg);
+	}
 }

@@ -7,11 +7,11 @@ package exceptions;
 
 /**
  *
- * @author Jagoba Bartolomé Barroso
+ * @author 2dam
  */
 public class MaxCharException extends Exception{
-        public MaxCharException() {
-
+     
+    public MaxCharException() {
 		super();
 	}
 	public MaxCharException(String msg)

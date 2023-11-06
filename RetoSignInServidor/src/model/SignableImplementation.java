@@ -1,15 +1,14 @@
 package model;
 
-import connection.DBConnection;
 import connection.Pool;
 import exceptions.CredentialsException;
 import exceptions.EmailAlreadyExistsException;
 import exceptions.ServerErrorException;
-import java.rmi.ServerException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Savepoint;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,6 +30,7 @@ public class SignableImplementation implements Signable{
 
     Pool pool = null;
     Connection con = null;
+    Savepoint save = null;
     /**
      * Registers a new user in the database.
      *
@@ -45,6 +45,9 @@ public class SignableImplementation implements Signable{
         try {
             pool = Pool.getPool();
             con = pool.getConnection();
+            con.setAutoCommit(false); // Iniciar una transacción
+            save = con.setSavepoint();
+            
             
             if(con == null)
                 throw new ServerErrorException("Error al conectar"); 
@@ -72,13 +75,12 @@ public class SignableImplementation implements Signable{
                     partner_id = generatedKeys.getInt(1);
                 }
 
-                String insertResUsers = "INSERT INTO res_users (login, password, partner_id, company_id, notification_type) VALUES (?, ?, ?, ?, ?)";
+                String insertResUsers = "INSERT INTO res_users (login, password, partner_id, company_id) VALUES (?, ?, ?, ?)";
                 pstmt = con.prepareStatement(insertResUsers);
                 pstmt.setString(1, user.getLogin());
                 pstmt.setString(2, user.getPassword());
                 pstmt.setInt(3, partner_id);
                 pstmt.setInt(4, 1);
-                pstmt.setString(5, user.getNotificationType().toString()); 
                 pstmt.executeUpdate();
 
                 String insertResGroupUsersRel = "INSERT INTO res_groups_users_rel (gid, uid) VALUES (?, ?),(?, ?),(?, ?),(?, ?)";
@@ -102,19 +104,27 @@ public class SignableImplementation implements Signable{
                 pstmt.executeUpdate();
 
                 pstmt.close();
-                //pool.saveConnection(con);
+                
+                // Confirm la transaction
+                con.commit();
                 
                 return user;
             }else{
                 throw new EmailAlreadyExistsException("Email ya registrado en la base de datos");
             }         
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
-            throw new ServerErrorException(e.getMessage());
+             // Si ocurre un error, revertir la transacción
+            if (con != null) {
+                try {
+                    con.rollback(save);
+                } catch (SQLException ex) {
+                    throw new ServerErrorException(e.getMessage());
+            }
+        }
+        
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(SignableImplementation.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        finally{
+        }finally{
             pool.saveConnection(con);
         }
         return user;
