@@ -167,7 +167,7 @@ public class SignableImplementation implements Signable{
            user.setCompanyId(result.getInt("company_id"));
            user.setLogin(result.getString("login"));
            user.setPassword(result.getString("password"));
-           user.setNotificationType(NotificationType.valueOf(result.getString("notification_type")));
+           //user.setNotificationType(NotificationType.valueOf(result.getString("notification_type")));
            int partner_id = result.getInt("partner_id");
            
            selectUser = "SELECT * FROM res_partner WHERE id = ?";   

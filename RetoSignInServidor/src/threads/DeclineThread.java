@@ -42,6 +42,8 @@ public class DeclineThread extends Thread {
         pdu.setMessageType(MessageType.Ex_ServerError);
         salida.writeObject(pdu);
         
+        entrada.close();
+        salida.close();
         } catch (IOException ex) {
             Logger.getLogger(WorkerThread.class.getName()).log(Level.SEVERE, null, ex);
         }

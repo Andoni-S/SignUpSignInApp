@@ -22,7 +22,7 @@ public class User implements Serializable{
     private String name; //name res_partner
     private String mobilePhone; //mobile res_partner
     private boolean active; //active res_partner
-    private NotificationType notificationType; //notification_type res_users
+    //private NotificationType notificationType; //notification_type res_users
     
     public User() {
         this.id = -1;
@@ -35,7 +35,7 @@ public class User implements Serializable{
         
         this.companyId = 1;
         this.active= true;
-        this.notificationType = NotificationType.email;
+        //this.notificationType = NotificationType.email;
     }
 
     public User(int id, String login, String password, String postalCode, String address, String name, String mobilePhone) {
@@ -49,7 +49,7 @@ public class User implements Serializable{
         
         this.companyId = 1;
         this.active= true;
-        this.notificationType = NotificationType.email;
+        //this.notificationType = NotificationType.email;
     }
 
     public int getId() {
@@ -124,11 +124,11 @@ public class User implements Serializable{
         return active;
     }
     
-    public NotificationType getNotificationType() {
+    /*public NotificationType getNotificationType() {
         return notificationType;
     }
 
     public void setNotificationType(NotificationType notificationType) {
         this.notificationType = notificationType;
-    }
+    }*/
 }

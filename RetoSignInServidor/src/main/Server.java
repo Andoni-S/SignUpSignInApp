@@ -12,9 +12,8 @@ import connection.Pool;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public final class Server {
+public class Server {
     
-    private static Server server;
     //declare resource bundle
     private ResourceBundle configFile = ResourceBundle.getBundle("properties.Config");
     //Port to listen to
@@ -53,8 +52,10 @@ public final class Server {
                 //If the number of clients has not reached the maximum
                 if(clienteN < MAXIMUM_CLIENTS){
                     //create a worker thread where SignIn/SignUp operations are done
+                        
+                    
                     WorkerThread wt = new WorkerThread(cliente);
-                    clienteN++;
+                    incrementClienteN();
                     
                     wt.start();
                     
@@ -75,6 +76,7 @@ public final class Server {
                     servidor.close();
                 if (cliente != null)
                     cliente.close();
+
                 
                 sshConnection.discconectSSH();
                
@@ -84,26 +86,25 @@ public final class Server {
             System.out.println("Fin servidor");
         }
     }
+    public synchronized static int incrementClienteN() {
+        return clienteN++;
+    }
+
+    public synchronized static int decrementClienteN() {
+        return clienteN--;
+    }
     
-    public static Server getServer() {
-        if(server == null){
-            server = new Server();
-        }       
-        return server;
-    }
-    public static void setPool(Pool pool) {
-        Server.server = server;
-    }
-    public static int getClienteN() {
+
+    public synchronized static int getClienteN() {
         return clienteN;
     }
 
-    public static void setClienteN(int clienteN) {
+    public synchronized static void setClienteN(int clienteN) {
         Server.clienteN = clienteN;
     }
     
     public static void main(String[] args) {
-            Server s1 = getServer();
+            Server s1 = new Server();
             s1.iniciar();
     }
 

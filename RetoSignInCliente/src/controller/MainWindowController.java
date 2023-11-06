@@ -1,10 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controller;
-
 import java.io.IOException;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -27,10 +21,9 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import libraries.User;
-
 /**
  *
- * @author 2dam
+ * @author Andoni Sanz
  */
 public class MainWindowController {
     /**
@@ -43,52 +36,36 @@ public class MainWindowController {
     */
     @FXML
     private Label lblEmail;
-
     @FXML
     private Label lblAddress;
-
     @FXML
     private Label lblPostalCode;
-
     @FXML
     private Label lblName;
-
     @FXML
     private Label lblPhone;
-
     @FXML
     private TextField textEmail;
-
     @FXML
     private TextField textName;
-
     @FXML
     private TextField textPhone;
-
     @FXML
     private TextField textAddress;
-
     @FXML
     private TextField textPostalCode;
-    
     @FXML
     private Button btnLogout;
-      
     private User user;
-    private Stage parentstage;
-    
     public User getUser() {
         return user;
     }
-
     public void setUser(User user) {
         this.user = user;
     }
-   
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-      
     public void initStage(Parent root, User newUser) {
         try {
             //Set scene and view DOM root
@@ -104,63 +81,50 @@ public class MainWindowController {
             btnLogout.setDefaultButton(true);
             //Mostrar la ventana.
             user = newUser;
-            
             stage.setOnCloseRequest(event -> handleCloseRequest(event));
-            
             btnLogout.setDefaultButton(true);
             textEmail.setEditable(false);
             textName.setEditable(false);
             textPhone.setEditable(false);
             textAddress.setEditable(false);
             textPostalCode.setEditable(false);
-            
             textEmail.setText(user.getLogin());
             textName.setText(user.getName());
             textPhone.setText(user.getMobilePhone());
             textAddress.setText(user.getAddress());
             textPostalCode.setText(user.getPostalCode());
-            
             stage.show();
-           
         } catch (Exception e) {
              this.showErrorAlert(e);
         }
     }
-
-    
     @FXML
     void handleBtnClose(ActionEvent event) {
-        
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInFXML.fxml"));
             Parent root = loader.load();
             LogInController controller = loader.getController();
-            controller.setStage(parentstage);
+            Stage parentStage = new Stage();
+            controller.setStage(parentStage);
             controller.initStage(root);
-            parentstage.show();
+            parentStage.show();
             // Obtenemos el escenario (Stage) actual a través del botón
             Stage stage = (Stage) btnLogout.getScene().getWindow();
-            
-            
             // Cerramos la ventana
             stage.close();
         } catch (IOException ex) {
             Logger.getLogger(MainWindowController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
      private void handleCloseRequest(WindowEvent event) {
         // Obtenemos el escenario (Stage) actual a través del botón
         Stage stage = (Stage) btnLogout.getScene().getWindow();
         // Cerramos la ventana
         stage.close();
     }
-     
     public void handleOnButtonClick(Observable observable) {
         try {
-           
         } catch(Exception e){
-        
         }
     }
     /**
@@ -176,7 +140,4 @@ public class MainWindowController {
         alert.setContentText(e.toString());
         alert.showAndWait();
     }
-
-   
-
 }

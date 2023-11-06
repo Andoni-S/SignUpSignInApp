@@ -101,7 +101,12 @@ public class WorkerThread extends Thread {
         } finally {
             try {
                 salida.writeObject(pdu);
-                Server.setClienteN(Server.getClienteN()-1);
+                Server.decrementClienteN();
+                
+                if(salida != null)
+                    salida.close();
+                if(entrada != null)
+                    entrada.close();
             } catch (IOException ex) {
                 Logger.getLogger(WorkerThread.class.getName()).log(Level.SEVERE, null, ex);
             }

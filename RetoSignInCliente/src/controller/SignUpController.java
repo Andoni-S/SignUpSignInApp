@@ -256,13 +256,13 @@ public class SignUpController {
         } catch (ConfirmPasswordException | EmailFormatException | PasswordFormatException | NameException e) {
             LOGGER.warning(e.getMessage());
             showError(e.getMessage());
-        /*} catch (EmailAlreadyExistsException e) {
+        } catch (EmailAlreadyExistsException e) {
             LOGGER.warning(e.getMessage());
             showError("Este email ya existe.");
         } catch (ServerErrorException e) {
             LOGGER.severe(e.getMessage());
             showError("Ha ocurrido un problema con el servidor. Inténtalo más tarde.");    
-        */} catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.severe(e.getMessage());
             showError("Ha ocurrido un error inesperado.");
         }
