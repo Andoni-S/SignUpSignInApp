@@ -24,7 +24,7 @@ import libraries.User;
 
 /**
  *
- * @author 2dam
+ * @author Andoni Sanz
  */
 public class SignableImplementation implements Signable{
 
@@ -45,7 +45,7 @@ public class SignableImplementation implements Signable{
         try {
             pool = Pool.getPool();
             con = pool.getConnection();
-            con.setAutoCommit(false); // Iniciar una transacción
+            //con.setAutoCommit(false); // Iniciar una transacción
             save = con.setSavepoint();
             
             
