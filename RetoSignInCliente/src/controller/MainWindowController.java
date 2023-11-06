@@ -89,7 +89,7 @@ public class MainWindowController {
         this.stage = stage;
     }
       
-    public void initStage(Parent root, User newUser, Stage parentStage) {
+    public void initStage(Parent root, User newUser) {
         try {
             //Set scene and view DOM root
             Scene scene = new Scene(root);

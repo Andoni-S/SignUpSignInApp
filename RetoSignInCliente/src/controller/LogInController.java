@@ -5,6 +5,8 @@
  */
 package controller;
 
+import exceptions.EmailFormatException;
+import exceptions.PasswordFormatException;
 import factory.SignableFactory;
 import java.io.IOException;
 import java.util.Optional;
@@ -17,13 +19,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.InputMethodEvent;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import libraries.User;
 
 /**
@@ -37,7 +43,7 @@ public class LogInController {
     private Stage stage;
 
     @FXML
-    private Label lblEmail, lblPassword;
+    private Label lblEmail, lblPassword, lblError;
     @FXML
     private TextField txtEmail;
     @FXML
@@ -138,11 +144,10 @@ public class LogInController {
             MainWindowController mainWindowController = loader.getController();
 
             Stage parentStage = stage;
-            mainWindowController.initStage(root, mainWindowUser, parentStage);
+            mainWindowController.initStage(root, mainWindowUser);
 
             stage.close();
-             << << << < HEAD
-        
+
         } catch (EmailFormatException | PasswordFormatException ex) {
             LOGGER.severe("Exception during login: " + ex.getMessage());
             showError("Error: " + ex.getMessage());
