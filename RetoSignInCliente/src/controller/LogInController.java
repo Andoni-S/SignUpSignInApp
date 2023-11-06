@@ -139,11 +139,11 @@ public class LogInController {
             User mainWindowUser = new User();
             mainWindowUser = SignableFactory.getSignable().logIn(user);
             // Close this window and open a MainWindow
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainWindow.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainWindowFXML.fxml"));
             Parent root = loader.load();
             MainWindowController mainWindowController = loader.getController();
-
-            Stage parentStage = stage;
+            Stage parentStage = new Stage();
+            mainWindowController.setStage(parentStage);
             mainWindowController.initStage(root, mainWindowUser);
 
             stage.close();

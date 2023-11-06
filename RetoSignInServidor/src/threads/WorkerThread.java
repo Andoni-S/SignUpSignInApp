@@ -45,7 +45,7 @@ public class WorkerThread extends Thread {
             entrada = new ObjectInputStream(socket.getInputStream());
 
             // Send a welcome message to the client
-            Logger.getLogger(DeclineThread.class.getName()).info("limite de clientes alcanzado");
+            Logger.getLogger(WorkerThread.class.getName()).info("thread respondiendo al servidor");
             pdu = new ApplicationPDU();
             pdu.setMessageType(MessageType.Accept);
             salida.writeObject(pdu);
