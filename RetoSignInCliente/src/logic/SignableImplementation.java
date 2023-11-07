@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ResourceBundle;
 import libraries.ApplicationPDU;
 import libraries.MessageType;
 import libraries.Signable;
@@ -17,15 +18,17 @@ import libraries.User;
  * @author Jagoba Bartolomé Barroso
  */
 public class SignableImplementation implements Signable{
-   /**
-    * The port number for the socket communication.
-    */
-    private final int PUERTO = 6666;
+      
     //TODO 
     /**
      * The IP address for the socket communication.
      */
-    private final String IP = "127.0.0.1";
+    private ResourceBundle configFile = ResourceBundle.getBundle("properties.Config");
+    private final String IP = configFile.getString("IP");
+    /**
+    * The port number for the socket communication.
+    */
+    private final int PUERTO = Integer.valueOf(configFile.getString("PORT_C"));
     /**
      * The client socket.
      */
@@ -57,7 +60,7 @@ public class SignableImplementation implements Signable{
             pdu = (ApplicationPDU) entrada.readObject();
         
             if (pdu.getMessageType().toString().equals("Ex_Credentials")){
-                throw new CredentialsException();
+                throw new CredentialsException("Error en las credenciales");
             }
             if (pdu.getMessageType().toString().equals("Ex_EmailAlreadyExists")){
                 throw new EmailAlreadyExistsException();

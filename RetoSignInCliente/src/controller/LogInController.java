@@ -5,6 +5,7 @@
  */
 package controller;
 
+import exceptions.CredentialsException;
 import exceptions.EmailFormatException;
 import exceptions.PasswordFormatException;
 import factory.SignableFactory;
@@ -151,8 +152,12 @@ public class LogInController {
         } catch (EmailFormatException | PasswordFormatException ex) {
             LOGGER.severe("Exception during login: " + ex.getMessage());
             showError("Error: " + ex.getMessage());
+        } catch (CredentialsException ex) {
+            LOGGER.severe("Credentials Exception: " + ex.getMessage());   
+            showError("Error: " + ex.getMessage());
         } catch (Exception ex) {
             LOGGER.severe("Exception during login: " + ex.getMessage());
+            showError("Error: " + ex.getMessage());
         }
     }
 
