@@ -17,7 +17,7 @@ public class CloseThread extends Thread {
     }
 
     @Override
-    public synchronized void start() {
+    public synchronized void run() {
         
         while(!closeLoop){
             Scanner scanner = new Scanner(System.in);

@@ -30,7 +30,7 @@ public class DeclineThread extends Thread {
     }
     
     @Override
-    public synchronized void start() {
+    public synchronized void run() {
         System.out.println("lanzando thread");
         try {
             

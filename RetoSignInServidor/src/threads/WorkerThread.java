@@ -37,7 +37,7 @@ public class WorkerThread extends Thread {
     }
 
     @Override
-    public synchronized void start() {
+    public synchronized void run() {
         System.out.println("Launching thread");
         try {
             // Initialize input and output streams
