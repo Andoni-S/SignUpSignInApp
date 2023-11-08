@@ -19,51 +19,54 @@ import static org.testfx.matcher.base.NodeMatchers.*;
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestSignUpController extends ApplicationTest {
+    // Declaring JavaFX components for UI testing.
     private TextField txtEmail;
     private TextField txtNombreCompleto;
     private PasswordField pwdContrasena;
     private PasswordField pwdConfirmar;
     private Text lblError;
 
+    // Override method to set up the initial stage for testing.
     @Override
     public void start(Stage stage) {
         new Application().start(stage);
         clickOn("#hrefSignUp");
     }
-
+    
+    // Test method to verify the initial state of the SignUpController.
     @Test
     public void testA_initialState() {
-        // Verificar que los campos de texto estén vacíos
+        // Verifying if the texts are empty
         txtEmail = lookup("#txtEmail").query();
         txtNombreCompleto = lookup("#txtNombreCompleto").query();
         pwdContrasena = lookup("#pwdContrasena").query();
         pwdConfirmar = lookup("#pwdConfirmar").query();
-        // Verificar que los botones estén en el estado correcto
+        // Verifying the correct state of the buttons
         verifyThat("#btnCancelar", isEnabled());
         verifyThat("#btnRegistrar", isDisabled());
-        // Verificar que la etiqueta de error esté vacía
+        // Verifying that the error label is empty
         lblError = lookup("#lblError").query();
-        verifyThat(lblError, hasText(""));
+        assertEquals(lblError, "");
     }
-
+    
+    // Test method for a simple sign-up scenario.
     @Test
     public void testB_simpleSignUp() {
-        // Llenar los campos obligatorios con un correo electrónico único
+        // Filling the mandatory fields
         clickOn("#txtEmail").write("email" + new Random().nextInt() + "@gmail.com");
         clickOn("#txtNombreCompleto").write("Nombre Apellido");
         clickOn("#pwdContrasena").write("Abcd*1234");
         clickOn("#pwdConfirmar").write("Abcd*1234");
-        // Verificar que el botón Registrar esté habilitado
+        // Verifying that the register button is enabled
         verifyThat("#btnRegistrar", isEnabled());
-        // Realizar clic en el botón Registrar
         clickOn("#btnRegistrar");
-        // Verificar que la ventana principal esté visible después del registro
+        // Verifying that the Main Window is visible
         verifyThat("#mainWindow", isVisible());
     }
-
+    // Test method for a complete sign-up scenario.
     @Test
     public void testC_fullSignUp() {
-        // Llenar todos los campos con datos válidos
+        // Filling all the optional fields
         clickOn("#txtEmail").write("email" + new Random().nextInt() + "@gmail.com");
         clickOn("#txtNombreCompleto").write("Nombre Apellido");
         clickOn("#pwdContrasena").write("Abcd*1234");
@@ -71,26 +74,25 @@ public class TestSignUpController extends ApplicationTest {
         clickOn("#txtDireccion").write("Dirección");
         clickOn("#txtCodigoPostal").write("01234");
         clickOn("#txtTelefonoMovil").write("012345678");
-        // Verificar que el botón Registrar esté habilitado
+        // Verifying that the register button is enabled
         verifyThat("#btnRegistrar", isEnabled());
-        // Realizar clic en el botón Registrar
         clickOn("#btnRegistrar");
-        // Verificar que la ventana principal esté visible después del registro
+        // Verifying that the Main Window is visible
         verifyThat("#mainWindow", isVisible());
     }
-
+    
+    // Test method for attempting to sign up with an existing email address.
     @Test
     public void testD_emailAlreadyExists() {
-        // Llenar los campos con un correo electrónico que ya existe
+        // Filling the mandatory fields with an existing email
         clickOn("#txtEmail").write("email@example.com");
         clickOn("#txtNombreCompleto").write("Nombre Apellido");
         clickOn("#pwdContrasena").write("Abcd*1234");
         clickOn("#pwdConfirmar").write("Abcd*1234");
-        // Verificar que el botón Registrar esté habilitado
+        // Verifying that the register button is enabled
         verifyThat("#btnRegistrar", isEnabled());
-        // Realizar clic en el botón Registrar
         clickOn("#btnRegistrar");
-        // Verificar que se muestre el mensaje de error adecuado
-        verifyThat(lblError, hasText("Este email ya existe."));
+        // Verifying that the error label shows the EmailAlreadyExists exception error
+        assertEquals(lblError, "Este email ya existe.");
     }
 }
