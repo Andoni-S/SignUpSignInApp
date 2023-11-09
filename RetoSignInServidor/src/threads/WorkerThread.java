@@ -61,8 +61,8 @@ public class WorkerThread extends Thread {
                 user = s.logIn(pdu.getUser());
                 pdu.setMessageType(MessageType.LogIn);
                 pdu.setUser(user);
-                salida.writeObject(pdu);
-                interrupt();
+                //salida.writeObject(pdu);
+                //interrupt();
 
             } else if (pdu.getMessageType().toString().equalsIgnoreCase("SignUp")) {
                 System.out.println("Registering user in the database");
@@ -70,8 +70,8 @@ public class WorkerThread extends Thread {
                 user = s.signUp(pdu.getUser());
                 pdu.setMessageType(MessageType.SignUp);
                 pdu.setUser(user);
-                salida.writeObject(pdu);
-                interrupt();
+                //salida.writeObject(pdu);
+                //interrupt();
             } else {
                 // This should not occur; it should always be Sign In or Sign Up
                 System.out.println("Some type of error occurred");
@@ -82,22 +82,22 @@ public class WorkerThread extends Thread {
             Logger.getLogger(WorkerThread.class.getName()).log(Level.SEVERE, null, ex);
             pdu = new ApplicationPDU();
             pdu.setMessageType(MessageType.Ex_ClassNotFound);
-            interrupt();
+            //interrupt();
         } catch (ServerErrorException ex) {
             Logger.getLogger(WorkerThread.class.getName()).log(Level.SEVERE, null, ex);
             pdu = new ApplicationPDU();
             pdu.setMessageType(MessageType.Ex_ServerError);
-            interrupt();
+            //interrupt();
         } catch (CredentialsException ex) {
             Logger.getLogger(WorkerThread.class.getName()).log(Level.SEVERE, null, ex);
             pdu = new ApplicationPDU();
             pdu.setMessageType(MessageType.Ex_Credentials);
-            interrupt();
+            //interrupt();
         } catch (EmailAlreadyExistsException ex) {
             Logger.getLogger(WorkerThread.class.getName()).log(Level.SEVERE, null, ex);
             pdu = new ApplicationPDU();
             pdu.setMessageType(MessageType.Ex_EmailAlreadyExists);
-            interrupt();
+            //interrupt();
         } finally {
             try {
                 salida.writeObject(pdu);

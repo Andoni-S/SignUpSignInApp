@@ -3,7 +3,6 @@ package main;
 import Threads.CloseThread;
 import Threads.DeclineThread;
 import Threads.WorkerThread;
-import connection.SSHConnection;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -31,13 +30,11 @@ public class Server {
         
         ServerSocket servidor = null;
         Socket cliente = null;
-        SSHConnection sshConnection = null;
         
         try {
             CloseThread ct = new CloseThread();
             ct.start();
-            //sshConnection = new SSHConnection();
-            //sshConnection.connectSSH();       
+            
             Pool pool = Pool.getPool();
                        
             //Instance ServerSocket
@@ -78,8 +75,6 @@ public class Server {
                     servidor.close();
                 if (cliente != null)
                     cliente.close();
-
-                //sshConnection.discconectSSH();
                Logger.getLogger(WorkerThread.class.getName()).info("Fin servidor");
             } catch (IOException e) {
                e.printStackTrace();
@@ -110,7 +105,5 @@ public class Server {
     public static void main(String[] args) {
             Server s1 = new Server();
             s1.iniciar();
-    }
-
-    
+    }   
 }

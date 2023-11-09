@@ -1,6 +1,7 @@
 package Threads;
 
 import connection.Pool;
+import static java.lang.System.exit;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.Scanner;
@@ -30,7 +31,7 @@ public class CloseThread extends Thread {
                     Pool.getPool().closeAllConnection();
                     closeLoop = true;
                     Logger.getLogger(WorkerThread.class.getName()).info("Cerrando Servidor");
-                    interrupt();
+                    exit(0);
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(CloseThread.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (SQLException ex) {
