@@ -69,7 +69,7 @@ public class MainWindowController {
     public void initStage(Parent root, User newUser) {
         try {
             //Set scene and view DOM root
-            Scene scene = new Scene(root);
+            Scene scene = new Scene(root, 600, 400);
             
             stage.setScene(scene);
             //Establecer el título de la ventana al valor “Registro.”

@@ -18,6 +18,7 @@ import factory.SignableFactory;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
@@ -118,7 +119,7 @@ public class SignUpController {
     public void initStage(Parent root) {
         try {
             //Setting the new scene and the new stage
-            Scene scene = new Scene(root);
+            Scene scene = new Scene(root, 600, 400);
             stage = new Stage();
             stage.setScene(scene);
             //Establish the title of the window to "Register"
@@ -170,8 +171,8 @@ public class SignUpController {
             LOGGER.info("Email format validated.");  
             //Validate the format of the name. Must be alphabetic and must have at least two words.
             //Pattern that must be respected
-            String regexName="^[A-Za-z]+( [A-Za-z]+)$";
-            Pattern patternName = Pattern.compile(regexName);
+            String regexName = "^[\\p{L}]+(\\s+[\\p{L}]+){1,}$";
+            Pattern patternName = Pattern.compile(regexName, Pattern.UNICODE_CHARACTER_CLASS);
             //Validate if the name doesn't have the appropiate format
             if (!patternName.matcher(txtNombreCompleto.getText()).matches()){
                 throw new NameException("Debe incluir el apellido.");
@@ -279,11 +280,11 @@ public class SignUpController {
         try {
             //Validate if one of the fields is empty
             if (!txtEmail.getText().trim().isEmpty() && !txtNombreCompleto.getText().trim().isEmpty() && !pwdContrasena.getText().trim().isEmpty() && !pwdConfirmar.getText().trim().isEmpty()) {
-                //We clean the error label
+                //Setting the text of the error and making it not visible
+                lblError.setVisible(false);
                 lblError.setText("");
                 //All the text fields are complete, we enable the button
                 btnRegistrar.setDisable(false);         
-                LOGGER.info("Empty fields.");
             } else {
                 //Disable the button
                 btnRegistrar.setDisable(true); 
@@ -373,6 +374,7 @@ public class SignUpController {
     private void showError(String e) {
         //Showing error message
         LOGGER.info("Error label text changed.");
+        lblError.setVisible(true);
         lblError.setText(e);
     }
 }

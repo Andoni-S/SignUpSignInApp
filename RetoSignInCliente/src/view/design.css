@@ -1,31 +1,42 @@
 /* Set a dark background for the entire window */
 .root {
-    -fx-background-color: #333333; /* Dark gray or any color of your choice */
+    -fx-background-color: #2C3E50; /* Dark blue-gray background */
 }
 
-/* Set a lighter text color for labels and text fields */
+/* Customize the font and color of labels */
 .label {
-    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-text-fill: #ECF0F1; /* Light gray text color */
 }
 
-/* Customize the background of text fields to be darker */
+/* Customize the background of text fields */
 .text-field {
-    -fx-background-color: #222222; /* Darker color for text fields */
-    -fx-text-fill: white; /* Text color */
+    -fx-background-color: #34495E; /* Darker blue-gray background */
+    -fx-text-fill: white; /* White text color */
 }
 
 /* Set a different background color when text fields are focused */
 .text-field:focused {
-    -fx-background-color: #444444; /* A slightly lighter color when focused */
-}
-/* Set button colors */
-.button {
-    -fx-background-color: #555555; /* A slightly lighter gray for buttons */
-    -fx-text-fill: white;
+    -fx-background-color: #2980B9; /* Bright blue when focused */
 }
 
-/* Set a dark background for menus and menu items */
-.menu-bar, .menu, .menu-item {
-    -fx-background-color: #333333;
-    -fx-text-fill: white;
+/* Customize the background and text color of buttons */
+.button {
+    -fx-background-color: #3498DB; /* Bright blue button background */
+    -fx-text-fill: white; /* White text color */
+}
+
+/* Add hover effect to buttons */
+.button:hover {
+    -fx-background-color: #2980B9; /* Darker blue on hover */
+}
+
+/* Set styles for the error label */
+#lblError {
+    -fx-text-fill: #E74C3C; /* Red text color for error messages */
+}
+
+/* Customize the hyperlink color */
+.hyperlink {
+    -fx-text-fill: #3498DB; /* Bright blue hyperlink color */
 }
