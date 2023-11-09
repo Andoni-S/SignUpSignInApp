@@ -8,8 +8,10 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="RetoSignInCliente.jar" size="19599" download="eager" />
-    <jar href="lib\Reto1Library.jar" size="13193" download="eager" />
+    <jar href="RetoSignInCliente.jar" size="20149" download="eager" />
+    <jar href="lib\Reto1Library.jar" size="13247" download="eager" />
+    <jar href="lib\jsch-0.1.55.jar" size="280681" download="eager" />
+    <jar href="lib\postgresql-42.6.0.jar" size="1081604" download="eager" />
   </resources>
   <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="RetoSignInCliente" >
     <param name="requiredFXVersion" value="8.0+"/>

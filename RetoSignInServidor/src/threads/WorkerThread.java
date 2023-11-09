@@ -17,7 +17,8 @@ import libraries.Signable;
 import main.Server;
 
 /**
- * WorkerThread represents a thread that handles client requests in a server application.
+ * WorkerThread represents a thread that handles client requests in a server
+ * application.
  */
 public class WorkerThread extends Thread {
 
@@ -38,6 +39,7 @@ public class WorkerThread extends Thread {
 
     @Override
     public synchronized void run() {
+    //public synchronized void start() {
         System.out.println("Launching thread");
         try {
             // Initialize input and output streams
@@ -102,11 +104,13 @@ public class WorkerThread extends Thread {
             try {
                 salida.writeObject(pdu);
                 Server.decrementClienteN();
-                
-                if(salida != null)
+
+                if (salida != null) {
                     salida.close();
-                if(entrada != null)
+                }
+                if (entrada != null) {
                     entrada.close();
+                }
             } catch (IOException ex) {
                 Logger.getLogger(WorkerThread.class.getName()).log(Level.SEVERE, null, ex);
             }

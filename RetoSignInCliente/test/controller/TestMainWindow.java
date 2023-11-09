@@ -23,13 +23,13 @@ import static org.testfx.matcher.base.NodeMatchers.isVisible;
  *
  * @author 2dam
  */
-public class TestMainWindow extends ApplicationTest{
-    
+public class TestMainWindow extends ApplicationTest {
+
     @Override
     public void start(Stage primaryStage) throws IOException, ClassNotFoundException {
-        
+
         new Application().start(primaryStage);
-        
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInFXML.fxml"));
         Parent root = loader.load();
         LogInController controller = loader.getController();
@@ -37,7 +37,7 @@ public class TestMainWindow extends ApplicationTest{
         controller.initStage(root);
         primaryStage.show();
     }
-    
+
     @Test
     public void test1_MainWindow() {
         clickOn("#txtEmail");
@@ -47,12 +47,14 @@ public class TestMainWindow extends ApplicationTest{
         clickOn("#loginButton");
         FxAssert.verifyThat("#mainWindow", isVisible());
     }
+
     @Test
     public void test2_MainWindow() {
         clickOn("#btnLogout");
         FxAssert.verifyThat("#login", isVisible());
     }
-     @Test
+
+    @Test
     public void test3_MainWindow() {
         clickOn("#txtEmail");
         write("test@check.com");
@@ -61,8 +63,9 @@ public class TestMainWindow extends ApplicationTest{
         clickOn("#loginButton");
         FxAssert.verifyThat("#mainWindow", isVisible());
     }
+
     @Test
     public void test4_MainWindow() {
-         closeCurrentWindow();
+        closeCurrentWindow();
     }
 }

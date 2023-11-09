@@ -31,6 +31,7 @@ public class DeclineThread extends Thread {
     
     @Override
     public synchronized void run() {
+    //public synchronized void start() {        
         System.out.println("lanzando thread");
         try {
             
