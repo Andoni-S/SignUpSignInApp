@@ -1,21 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package exceptions;
 
 /**
+ * Exception that triggers when the confirmation Password does not coincide with
+ * the Password
  *
- * @author 2dam
+ * @author Jagoba Bartolomé
  */
-public class ConfirmPasswordException extends Exception{
-     
+public class ConfirmPasswordException extends Exception {
+
     public ConfirmPasswordException() {
-		super();
-	}
-	public ConfirmPasswordException(String msg)
-	{
-		super(msg);
-	}
+        super();
+    }
+
+    public ConfirmPasswordException(String msg) {
+        super(msg);
+    }
 }

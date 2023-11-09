@@ -1,21 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package exceptions;
 
 /**
+ * Exception that triggers when the written full name does not comply with the
+ * restrictions.
  *
- * @author 2dam
+ * @author Jagoba Bartolomé
  */
-public class NameException extends Exception{
-     
+public class NameException extends Exception {
+
     public NameException() {
-		super();
-	}
-	public NameException(String msg)
-	{
-		super(msg);
-	}
+        super();
+    }
+
+    public NameException(String msg) {
+        super(msg);
+    }
 }
