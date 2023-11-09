@@ -62,7 +62,7 @@ public class LogInController {
     public void initStage(Parent root) {
         try {
             LOGGER.info("Initializing stage...");
-            Scene scene = new Scene(root);
+            Scene scene = new Scene(root, 600, 400);
             stage.setScene(scene);
             // Establish window title
             stage.setTitle("Iniciar sesión");
@@ -107,7 +107,6 @@ public class LogInController {
 
     @FXML
     private void handleLoginButtonAction(ActionEvent e) {
-        System.out.println("Logeando");
         try {
             LOGGER.info("Log In Button pressed...");
             // Handle the login button click event here.
@@ -164,7 +163,6 @@ public class LogInController {
     @FXML
     private void handleTextChange(Observable o) {
         try {
-            LOGGER.info("Text change detected...");
             String email = txtEmail.getText();
             String password = pwdPassword.getText();
 
