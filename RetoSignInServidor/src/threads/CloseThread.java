@@ -18,7 +18,7 @@ public class CloseThread extends Thread {
 
     @Override
     public synchronized void run() {
-        
+    //public synchronized void start() {        
         while(!closeLoop){
             Scanner scanner = new Scanner(System.in);
             Logger.getLogger(WorkerThread.class.getName()).info("Presiona "+ closingKey + " y presiona Enter para cerrar el servidor.");

@@ -8,14 +8,20 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="LogInFXML" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@design.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LogInController">
+<Pane fx:id="LogInFXML" maxHeight="-Infinity" maxWidth="-Infinity" 
+      minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@design.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LogInController">
    <children>
-      <Label fx:id="lblEmail" layoutX="199.0" layoutY="146.0" prefHeight="18.0" prefWidth="48.0" text="Email" />
+      <Label fx:id="lblEmail" layoutX="199.0" layoutY="146.0" prefHeight="18.0" 
+             prefWidth="48.0" text="Email" />
       <Label fx:id="lblPassword" layoutX="199.0" layoutY="203.0" text="Contraseña" />
-      <TextField id="Email" fx:id="txtEmail" layoutX="199.0" layoutY="164.0" prefHeight="25.0" prefWidth="201.0" />
-      <PasswordField fx:id="pwdPassword" layoutX="199.0" layoutY="227.0" prefHeight="25.0" prefWidth="201.0" />
-      <Hyperlink fx:id="hrefSignUp" layoutX="193.0" layoutY="294.0" text="¿No tienes usuario? Registrate Aquí" />
-      <Label layoutX="251.0" layoutY="69.0" prefHeight="18.0" prefWidth="104.0" text="Iniciar Sesión" textAlignment="CENTER">
+      <TextField fx:id="txtEmail" layoutX="199.0" layoutY="164.0" 
+                 prefHeight="25.0" prefWidth="201.0" />
+      <PasswordField fx:id="pwdPassword" layoutX="199.0" layoutY="227.0" 
+                     prefHeight="25.0" prefWidth="201.0" />
+      <Hyperlink fx:id="hrefSignUp" layoutX="193.0" layoutY="294.0" 
+                 text="¿No tienes usuario? Registrate Aquí" />
+      <Label layoutX="251.0" layoutY="69.0" prefHeight="18.0" prefWidth="104.0" 
+             text="Iniciar Sesión" textAlignment="CENTER">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>

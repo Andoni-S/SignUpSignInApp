@@ -1,13 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package exceptions;
 
 /**
- *
- * @author 2dam
+ * Exception that triggers when the password introduced does not comply with the restrictions 
+ * @author Jagoba Bartolomé
  */
 public class PasswordFormatException extends Exception{
      
