@@ -1,21 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package exceptions;
 
 /**
+ * Exception that triggers when a non-numeric character is introduced in a field
+ * where only numeric characters are required.
  *
- * @author 2dam
+ * @author Jagoba Bartolomé
  */
-public class NumericException extends Exception{
-     
+public class NumericException extends Exception {
+
     public NumericException() {
-		super();
-	}
-	public NumericException(String msg)
-	{
-		super(msg);
-	}
+        super();
+    }
+
+    public NumericException(String msg) {
+        super(msg);
+    }
 }

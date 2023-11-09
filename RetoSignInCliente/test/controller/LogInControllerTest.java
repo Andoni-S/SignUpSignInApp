@@ -18,7 +18,7 @@ import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 import static org.testfx.matcher.base.NodeMatchers.isInvisible;
 import static org.testfx.matcher.base.NodeMatchers.isNull;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
-import static org.testfx.matcher.control.LabeledMatchers.hasText;
+import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
 
 /**
  * TestFX class for LogInController. Tests aimed to confirm the usability of th
@@ -44,7 +44,7 @@ public class LogInControllerTest extends ApplicationTest {
      */
     @Test
     public void test1_InitialState() {
-        verifyThat("#txtEmail", hasText(""));
+        verifyThat("#txtEmail", isNull());
         verifyThat("#pwdPassword", hasText(""));
         verifyThat("#loginButton", isDisabled());
     }
