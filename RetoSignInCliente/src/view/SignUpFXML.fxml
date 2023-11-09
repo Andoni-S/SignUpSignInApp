@@ -35,7 +35,7 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <Label fx:id="lblError" layoutX="168.0" layoutY="26.0" prefHeight="20.0" prefWidth="411.0" textFill="#FF0202">
+      <Label fx:id="lblError" layoutX="261.0" layoutY="26.0" prefHeight="20.0" prefWidth="318.0" textFill="#FF0202">
          <font>
             <Font name="Arial" size="14.0" />
          </font>

@@ -9,11 +9,13 @@ import exceptions.CredentialsException;
 import exceptions.EmailFormatException;
 import exceptions.PasswordFormatException;
 import factory.SignableFactory;
+import javafx.scene.shape.Rectangle;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import javafx.animation.TranslateTransition;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,9 +30,11 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.InputMethodEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.Duration;
 import libraries.User;
 
 /**
@@ -54,6 +58,13 @@ public class LogInController {
     @FXML
     private Button loginButton;
 
+    @FXML
+    private Rectangle rectangle;
+    @FXML
+    private ImageView odooIcon;
+
+    private TranslateTransition translateTransition;
+    private TranslateTransition translateTransition2;
     /**
      * This method creates the Stage for this window.
      *
@@ -61,6 +72,7 @@ public class LogInController {
      */
     public void initStage(Parent root) {
         try {
+            initializeRectangleAnim();
             LOGGER.info("Initializing stage...");
             Scene scene = new Scene(root, 600, 400);
             stage.setScene(scene);
@@ -86,6 +98,9 @@ public class LogInController {
             pwdPassword.textProperty().addListener(this::handleTextChange);
             stage.setOnCloseRequest(event -> handleCloseRequest(event));
             LOGGER.info("Control events handlers set");
+            
+            
+            
         } catch (Exception ex) {
             // Show an error message to the user
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -96,7 +111,22 @@ public class LogInController {
             LOGGER.severe("Exception during initialization: " + ex.getMessage());
         }
     }
-
+   
+    public void initializeRectangleAnim() {
+        // Configuración de la transición
+        translateTransition = new TranslateTransition(Duration.seconds(1.8), rectangle);
+        translateTransition.setFromX(-450); // posición inicial fuera de la pantalla
+        translateTransition.setToX(0); // posición final en el centro de la pantalla
+        
+        translateTransition2 = new TranslateTransition(Duration.seconds(3), odooIcon);
+        translateTransition2.setFromY(-600); // posición inicial fuera de la pantalla
+        translateTransition2.setToY(0); // posición final en el centro de la pantalla
+        // Inicia la animación
+        translateTransition.play();
+        translateTransition2.play();
+        
+        
+    }
     public Stage getStage() {
         return stage;
     }
