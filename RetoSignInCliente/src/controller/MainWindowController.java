@@ -70,6 +70,7 @@ public class MainWindowController {
         try {
             //Set scene and view DOM root
             Scene scene = new Scene(root);
+            
             stage.setScene(scene);
             //Establecer el título de la ventana al valor “Registro.”
             stage.setTitle("Registro");

@@ -1,5 +1,6 @@
 package main;
 
+import Threads.CloseThread;
 import Threads.DeclineThread;
 import Threads.WorkerThread;
 import connection.SSHConnection;
@@ -9,6 +10,7 @@ import java.net.Socket;
 import java.util.ResourceBundle;
 import libraries.User;
 import connection.Pool;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,6 +25,8 @@ public class Server {
     //maximum clients
     private final int  MAXIMUM_CLIENTS = Integer.valueOf(configFile.getString("MAXCLIENTS"));
 
+    private static boolean close = false;
+    
     public void iniciar() {
         
         ServerSocket servidor = null;
@@ -30,30 +34,29 @@ public class Server {
         SSHConnection sshConnection = null;
         
         try {
-            sshConnection = new SSHConnection();
-            sshConnection.connectSSH();
-            
+            CloseThread ct = new CloseThread();
+            ct.start();
+            //sshConnection = new SSHConnection();
+            //sshConnection.connectSSH();       
             Pool pool = Pool.getPool();
-            
-            
+                       
             //Instance ServerSocket
             servidor = new ServerSocket(PUERTO);
-            System.out.println("MAXIMUM CLIENTS: "+ MAXIMUM_CLIENTS);
+            Logger.getLogger(WorkerThread.class.getName()).info("MAXIMUM CLIENTS: "+ MAXIMUM_CLIENTS);       
                       
             //cicle of admission of new clients
-            while (true) {
-                                         
+            while (!close) {
+                              
                 User user = new User();
                 //aceptar un cliente en el servidor
-                System.out.println("Esperando conexiones del cliente...");
+                Logger.getLogger(WorkerThread.class.getName()).info("Esperando conexiones del cliente...");       
                 cliente = servidor.accept();
-                System.out.println("Cliente conectado");
+                Logger.getLogger(WorkerThread.class.getName()).info("Cliente "+clienteN+" conectado");       
                 
                 //If the number of clients has not reached the maximum
                 if(clienteN < MAXIMUM_CLIENTS){
                     //create a worker thread where SignIn/SignUp operations are done
-                        
-                    
+                                           
                     WorkerThread wt = new WorkerThread(cliente);
                     incrementClienteN();
                     
@@ -63,13 +66,12 @@ public class Server {
                    DeclineThread dt = new DeclineThread(cliente);
                    dt.start();
                 }
-                            
-                System.out.println("Numero de cliente: " + clienteN);
+                Logger.getLogger(WorkerThread.class.getName()).info("Numero de cliente: " + clienteN);           
             }          
         } catch (IOException e) {
-            System.out.println("Error: " + e.getMessage());
+            Logger.getLogger(WorkerThread.class.getName()).severe("Error: " + e.getMessage());     
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+            Logger.getLogger(WorkerThread.class.getName()).severe("Error: " + e.getMessage());     
         } finally {
             try {
                 if (servidor != null)
@@ -77,13 +79,12 @@ public class Server {
                 if (cliente != null)
                     cliente.close();
 
-                
-                sshConnection.discconectSSH();
-               
+                //sshConnection.discconectSSH();
+               Logger.getLogger(WorkerThread.class.getName()).info("Fin servidor");
             } catch (IOException e) {
-                e.printStackTrace();
+               e.printStackTrace();
+               Logger.getLogger(WorkerThread.class.getName()).severe("Error: " + e.getMessage());     
             }
-            System.out.println("Fin servidor");
         }
     }
     public synchronized static int incrementClienteN() {
@@ -94,7 +95,6 @@ public class Server {
         return clienteN--;
     }
     
-
     public synchronized static int getClienteN() {
         return clienteN;
     }
@@ -103,6 +103,10 @@ public class Server {
         Server.clienteN = clienteN;
     }
     
+    public synchronized static void setClose(boolean close) {
+        Server.close = close;
+    }
+        
     public static void main(String[] args) {
             Server s1 = new Server();
             s1.iniciar();
