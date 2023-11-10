@@ -17,8 +17,10 @@ import main.Server;
  * @author Andoni Sanz
  */
 public class CloseThread extends Thread {
-/**
-     * ResourceBundle for loading configuration properties from the "properties.Config" file.
+
+    /**
+     * ResourceBundle for loading configuration properties from the
+     * "properties.Config" file.
      */
     private ResourceBundle configFile = ResourceBundle.getBundle("properties.Config");
     /**
@@ -26,30 +28,33 @@ public class CloseThread extends Thread {
      */
     private String closingKey = configFile.getString("CLOSING_KEY");
     /**
-     * A flag indicating whether the close loop should continue waiting for input.
+     * A flag indicating whether the close loop should continue waiting for
+     * input.
      */
     private boolean closeLoop = false;
     /**
      * Logger for logging messages related to the CloseThread class.
      */
     private final static Logger LOGGER = Logger.getLogger(CloseThread.class.getName());
-     /**
+
+    /**
      * Constructs a CloseThread object.
      */
 
     public CloseThread() {
     }
-/**
-     * Listens for the specified closing key input to initiate the server closure.
-     * Upon receiving the closing key, it sets the server to close, closes all connections,
-     * and exits the application.
+
+    /**
+     * Listens for the specified closing key input to initiate the server
+     * closure. Upon receiving the closing key, it sets the server to close,
+     * closes all connections, and exits the application.
      */
     @Override
     public synchronized void run() {
-    //public synchronized void start() {        
-        while(!closeLoop){
+        //public synchronized void start() {        
+        while (!closeLoop) {
             Scanner scanner = new Scanner(System.in);
-            Logger.getLogger(WorkerThread.class.getName()).info("Presiona "+ closingKey + " y presiona Enter para cerrar el servidor.");
+            Logger.getLogger(WorkerThread.class.getName()).info("Presiona " + closingKey + " y presiona Enter para cerrar el servidor.");
             String input = scanner.nextLine();
 
             if (input.equalsIgnoreCase(closingKey)) {
@@ -64,11 +69,10 @@ public class CloseThread extends Thread {
                 } catch (SQLException ex) {
                     Logger.getLogger(CloseThread.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
-            else{
+            } else {
                 Logger.getLogger(WorkerThread.class.getName()).info("Input de cerrado incorrecto");
             }
         }
-       
+
     }
 }
