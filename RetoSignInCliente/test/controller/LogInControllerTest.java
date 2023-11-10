@@ -2,11 +2,7 @@ package controller;
 
 import java.util.Random;
 import java.util.concurrent.TimeoutException;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
 import main.Application;
-import org.junit.After;
 import org.junit.Test;
 import org.junit.BeforeClass;
 import static org.testfx.api.FxAssert.verifyThat;
@@ -14,26 +10,31 @@ import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
-import static org.testfx.matcher.base.NodeMatchers.isInvisible;
-import static org.testfx.matcher.base.NodeMatchers.isNull;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
 import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
 
 /**
- * TestFX class for LogInController. Tests aimed to confirm the usability of th
- * window
+ * TestFX class for LogInController. Tests aimed to confirm the usability of the
+ * window.
+ *
+ * This class contains various TestFX tests to validate the functionality and
+ * behavior of the LogInController. The tests cover scenarios such as the
+ * initial state of the login view, enabling/disabling the "Entrar" button,
+ * email and password format checks, navigation to the Sign Up window,
+ * successful login, and the closure of the window.
  *
  * @author Ander Goirigolzarri Iturburu
  */
 public class LogInControllerTest extends ApplicationTest {
 
-    private TextField txtEmail;
-    private PasswordField pwdPassword;
-
     /**
-     * Set up the Window for testing
+     * Set up the Window for testing.
      *
-     * @throws TimeoutException
+     * This method is annotated with `@BeforeClass` to perform setup tasks
+     * before the class is initiated. It registers the primary stage and sets up
+     * the JavaFX application for testing.
+     *
+     * @throws TimeoutException If a timeout occurs during setup.
      */
     @BeforeClass
     public static void setUpClass() throws TimeoutException {
@@ -41,6 +42,12 @@ public class LogInControllerTest extends ApplicationTest {
         FxToolkit.setupApplication(Application.class);
     }
 
+    /**
+     * Tear down the test environment.
+     *
+     * This method is called after each test method to clean up the test
+     * environment. It erases the content from the email and password fields.
+     */
     public void tearDown() {
         doubleClickOn("#txtEmail").eraseText(25); // Deletes the content from the email field
         doubleClickOn("#pwdPassword").eraseText(25); // Deletes the content from the password field
@@ -48,6 +55,10 @@ public class LogInControllerTest extends ApplicationTest {
 
     /**
      * Test of initial state of login view.
+     *
+     * This test method checks the initial state of the login view, verifying
+     * that the email and password fields are empty, and the "Entrar" button is
+     * disabled.
      */
     @Test
     public void test1_InitialState() {
@@ -58,7 +69,10 @@ public class LogInControllerTest extends ApplicationTest {
     }
 
     /**
-     * Test of the button "Entrar" enable/Disable
+     * Test of the button "Entrar" enable/Disable.
+     *
+     * This test method checks the enabling and disabling of the "Entrar" button
+     * based on the content of the email and password fields.
      */
     @Test
     public void test2_loginBtnEnabled() {
@@ -85,7 +99,10 @@ public class LogInControllerTest extends ApplicationTest {
     }
 
     /**
-     * Test for the email format
+     * Test for the email format.
+     *
+     * This test method checks the handling of the email format, displaying an
+     * error message if the email is in an invalid format.
      */
     @Test
     public void test3_emailFormat() {
@@ -99,7 +116,10 @@ public class LogInControllerTest extends ApplicationTest {
     }
 
     /**
-     * Test for the password format
+     * Test for the password format.
+     *
+     * This test method checks the handling of the password format, displaying
+     * an error message if the password is in an invalid format.
      */
     @Test
     public void test4_passwordFormat() {
@@ -113,7 +133,10 @@ public class LogInControllerTest extends ApplicationTest {
     }
 
     /**
-     * Test for the hyperlink to the Sign Up Window
+     * Test for the hyperlink to the Sign Up Window.
+     *
+     * This test method checks the navigation to the Sign Up window when the
+     * hyperlink is clicked.
      */
     @Test
     public void test5_hyperlinkSignUp() {
@@ -124,6 +147,13 @@ public class LogInControllerTest extends ApplicationTest {
         this.tearDown();
     }
 
+    /**
+     * Login test.
+     *
+     * This test method performs a comprehensive test of the login process,
+     * including filling out the registration form, successful registration, and
+     * subsequent login.
+     */
     @Test
     public void test6_loginTest() {
         clickOn("#hrefSignUp");
@@ -157,7 +187,10 @@ public class LogInControllerTest extends ApplicationTest {
     }
 
     /**
-     * Test of the closure of the window
+     * Test of the closure of the window.
+     *
+     * This test method checks the closure of the window and the display of a
+     * confirmation dialog.
      */
     @Test
     public void test7_closeWindow() {

@@ -1,7 +1,5 @@
 package logic;
 
-import com.sun.media.jfxmedia.logging.Logger;
-import controller.SignUpController;
 import exceptions.CredentialsException;
 import exceptions.EmailAlreadyExistsException;
 import exceptions.ServerErrorException;
@@ -16,12 +14,24 @@ import libraries.Signable;
 import libraries.User;
 
 /**
+ * Implementation of the {@link Signable} interface for handling user
+ * authentication and registration using socket communication with a server.
+ * <p>
+ * This class establishes a connection with the server and performs user login
+ * and registration operations by sending and receiving data through a
+ * {@link Socket}. It handles exceptions such as {@link CredentialsException},
+ * {@link EmailAlreadyExistsException}, and {@link ServerErrorException}.
+ * </p>
+ * <p>
+ * The server's IP address and port number are retrieved from a configuration
+ * file, and the communication is facilitated through the {@link ApplicationPDU}
+ * class for data exchange.
+ * </p>
  *
  * @author Jagoba Bartolomé Barroso
  */
 public class SignableImplementation implements Signable {
 
-    //TODO
     /**
      * The IP address for the socket communication.
      */
@@ -36,15 +46,22 @@ public class SignableImplementation implements Signable {
      */
     private Socket sCliente = null;
     private final static java.util.logging.Logger LOGGER = java.util.logging.Logger.getLogger(SignableImplementation.class.getName());
+
     /**
      * This method writes a User through the Socket with the MessageType
-     * indicating that its a login. It returns a User with all the necessary
+     * indicating that it's a login. It returns a User with all the necessary
      * data and a MessageType indicating any exception.
      *
-     * @param u
-     * @throws IOException, ClassNotFoundException, CredentialsException,
-     * EmailAlreadyExistsException
-     * @throws exceptions.EmailAlreadyExistsException
+     * @param u The user attempting to log in.
+     * @return A User object with authenticated data.
+     * @throws IOException if an I/O error occurs.
+     * @throws ClassNotFoundException if the class of a serialized object cannot
+     * be found.
+     * @throws CredentialsException if the provided credentials are invalid.
+     * @throws EmailAlreadyExistsException if the email already exists during
+     * registration.
+     * @throws ServerErrorException if a server error occurs during the
+     * operation.
      */
     @Override
     public User logIn(User u) throws IOException, ClassNotFoundException, CredentialsException, EmailAlreadyExistsException, ServerErrorException {
@@ -80,11 +97,18 @@ public class SignableImplementation implements Signable {
 
     /**
      * This method writes a User through the Socket with the MessageType
-     * indicating that its a register. It returns a User with all the necessary
+     * indicating that it's a register. It returns a User with all the necessary
      * data and a MessageType indicating any exception.
      *
-     * @param User u
-     * @throws IOException
+     * @param u The user to be registered.
+     * @return A User object with registered data.
+     * @throws IOException if an I/O error occurs.
+     * @throws ClassNotFoundException if the class of a serialized object cannot
+     * be found.
+     * @throws EmailAlreadyExistsException if the email already exists during
+     * registration.
+     * @throws ServerErrorException if a server error occurs during the
+     * operation.
      */
     public User signUp(User u) throws IOException, ClassNotFoundException, EmailAlreadyExistsException, ServerErrorException {
         ObjectOutputStream salida = null;

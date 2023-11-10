@@ -1,16 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package factory;
 
 import libraries.Signable;
 import logic.SignableImplementation;
 
 /**
- *
- * @author Andoni Sanz
+ * The {@code SignableFactory} class is responsible for creating instances of
+ * the {@link libraries.Signable} interface. It provides a method to obtain an
+ * implementation of the {@code Signable} interface, allowing the application to
+ * interact with the logic tier for user authentication and registration.
+ * <p>
+ * This factory follows the Factory Method design pattern, where the creation of
+ * objects is delegated to a static method.
+ * </p>
+ * @author: Andoni Sanz
  */
 public class SignableFactory {
 

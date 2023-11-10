@@ -1,12 +1,9 @@
 package controller;
+
 import java.io.IOException;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Application;
-import javafx.beans.Observable;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,39 +11,24 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import libraries.User;
+
 /**
+ *
+ * Controller class for the Main Window of the application. This class handles
+ * user interactions, window initialization, and event handling. The Main Window
+ * displays user information and provides a logout option.
  *
  * @author Andoni Sanz
  */
 public class MainWindowController {
-    /**
-     * Application stage.
-    */
+
     private Stage stage;
-    /**
-     * Stage setter.
-     * @param stage the stage to set
-    */
-    
     private final static Logger LOGGER = Logger.getLogger(SignUpController.class.getName());
-    
-    @FXML
-    private Label lblEmail;
-    @FXML
-    private Label lblAddress;
-    @FXML
-    private Label lblPostalCode;
-    @FXML
-    private Label lblName;
-    @FXML
-    private Label lblPhone;
+
     @FXML
     private TextField textEmail;
     @FXML
@@ -60,20 +42,45 @@ public class MainWindowController {
     @FXML
     private Button btnLogout;
     private User user;
+
+    /**
+     * Getter for the User associated with the Main Window.
+     *
+     * @return The User associated with the Main Window.
+     */
     public User getUser() {
         return user;
     }
+
+    /**
+     * Setter for the User associated with the Main Window.
+     *
+     * @param user The User to set.
+     */
     public void setUser(User user) {
         this.user = user;
     }
+
+    /**
+     * Setter for the Stage of the Main Window.
+     *
+     * @param stage The Stage to set.
+     */
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+
+    /**
+     * Initializes the Main Window stage with specified settings and user
+     * information.
+     *
+     * @param root The root Parent node of the Main Window scene.
+     * @param newUser The User object associated with the Main Window.
+     */
     public void initStage(Parent root, User newUser) {
         try {
             //Set scene and view DOM root
             Scene scene = new Scene(root, 600, 400);
-            
             stage.setScene(scene);
             //Establecer el título de la ventana al valor “Registro.”
             stage.setTitle("Registro");
@@ -98,13 +105,20 @@ public class MainWindowController {
             textAddress.setText(user.getAddress());
             textPostalCode.setText(user.getPostalCode());
             stage.show();
-            
+
             LOGGER.info("Main Window initialized.");
         } catch (Exception e) {
             LOGGER.severe(e.getMessage());
             this.showErrorAlert(e);
         }
     }
+
+    /**
+     * Handles the "Cerrar Sesión" button click event. Closes the current window
+     * and opens the Log In window.
+     *
+     * @param event The ActionEvent triggered by the button click.
+     */
     @FXML
     void handleBtnClose(ActionEvent event) {
         try {
@@ -125,13 +139,20 @@ public class MainWindowController {
             Logger.getLogger(MainWindowController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-     private void handleCloseRequest(WindowEvent event) {
+
+    /**
+     * Handles the window close request event. Closes the current window.
+     *
+     * @param event The WindowEvent representing the window close request.
+     */
+    private void handleCloseRequest(WindowEvent event) {
         // Obtenemos el escenario (Stage) actual a través del botón
         Stage stage = (Stage) btnLogout.getScene().getWindow();
         // Cerramos la ventana
         stage.close();
         LOGGER.info("Closing the window.");
     }
+
     /**
      * Displays a warning alert dialog with the provided exception message.
      *

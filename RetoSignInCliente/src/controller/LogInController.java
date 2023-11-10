@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controller;
 
 import exceptions.CredentialsException;
@@ -12,7 +7,6 @@ import factory.SignableFactory;
 import javafx.scene.shape.Rectangle;
 import java.io.IOException;
 import java.util.Optional;
-import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javafx.animation.TranslateTransition;
@@ -31,7 +25,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.InputMethodEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
@@ -48,7 +41,7 @@ public class LogInController {
     private Stage stage;
 
     @FXML
-    private Label lblEmail, lblPassword, lblError;
+    private Label lblError;
     @FXML
     private TextField txtEmail;
     @FXML
@@ -57,7 +50,6 @@ public class LogInController {
     private Hyperlink hrefSignUp;
     @FXML
     private Button loginButton;
-
     @FXML
     private Rectangle rectangle;
     @FXML
@@ -65,14 +57,16 @@ public class LogInController {
 
     private TranslateTransition translateTransition;
     private TranslateTransition translateTransition2;
+
     /**
-     * This method creates the Stage for this window.
+     * Initializes the Log In window stage with specified settings, controls,
+     * and event handlers.
      *
-     * @param root
+     * @param root The root Parent node of the Log In window scene.
      */
     public void initStage(Parent root) {
         try {
-            initializeRectangleAnim();
+            initializeRectangleAnim(); // This creates the animation for the login windown
             LOGGER.info("Initializing stage...");
             Scene scene = new Scene(root, 600, 400);
             stage.setScene(scene);
@@ -82,11 +76,8 @@ public class LogInController {
             stage.setResizable(false);
             // Disable 'Entrar' button
             loginButton.setDisable(true);
-            // Establish the focus on the first field
-
             // Establish the 'Entrar' button as the default button
             loginButton.setDefaultButton(true);
-
             // Show the window
             stage.show();
             LOGGER.info("Log In Window initialized and shown");
@@ -98,43 +89,64 @@ public class LogInController {
             pwdPassword.textProperty().addListener(this::handleTextChange);
             stage.setOnCloseRequest(event -> handleCloseRequest(event));
             LOGGER.info("Control events handlers set");
-            
-            
-            
         } catch (Exception ex) {
             // Show an error message to the user
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Application Error");
             alert.setContentText("Failed to initialize the application. Please try restarting the app.");
-            alert.showAndWait();
+            alert.showAndWait(); // Shows the alert and waits for the user response 
             LOGGER.severe("Exception during initialization: " + ex.getMessage());
         }
     }
-   
+
+    /**
+     * Creates and initializes the animation for the Log In window.
+     */
     public void initializeRectangleAnim() {
-        // Configuración de la transición
+        // Establish the animation
         translateTransition = new TranslateTransition(Duration.seconds(1.8), rectangle);
-        translateTransition.setFromX(-450); // posición inicial fuera de la pantalla
-        translateTransition.setToX(0); // posición final en el centro de la pantalla
-        
+        translateTransition.setFromX(-450); // Final position outside the screen
+        translateTransition.setToX(0); // Final position inside the screen
+
         translateTransition2 = new TranslateTransition(Duration.seconds(3), odooIcon);
-        translateTransition2.setFromY(-600); // posición inicial fuera de la pantalla
-        translateTransition2.setToY(0); // posición final en el centro de la pantalla
-        // Inicia la animación
+        translateTransition2.setFromY(-600); // Final position outside the screen
+        translateTransition2.setToY(0); // Final position inside the screen
+        // Starts the animation
         translateTransition.play();
         translateTransition2.play();
-        
-        
     }
+
+    /**
+     * Getter for the Log In window stage.
+     *
+     * @return The Log In window stage.
+     */
     public Stage getStage() {
         return stage;
     }
 
+    /**
+     * Setter for the Log In window stage.
+     *
+     * @param stage The new stage to be set.
+     */
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
+    /**
+     * Event handler for the 'Log In' button action.
+     *
+     * This method is triggered when the 'Log In' button is pressed. It
+     * validates the format of the entered email and password, creates a User
+     * object with the provided credentials, sends the User to the logic tier
+     * for authentication, and opens the main window upon successful login. If
+     * there are validation errors or authentication fails, appropriate
+     * exceptions are thrown and logged, and an error message is displayed.
+     *
+     * @param e The ActionEvent representing the 'Log In' button action.
+     */
     @FXML
     private void handleLoginButtonAction(ActionEvent e) {
         try {
@@ -164,7 +176,6 @@ public class LogInController {
             User user = new User();
             user.setLogin(email);
             user.setPassword(password);
-
             // Send the User created to the logic Tier and recieve a full informed User
             User mainWindowUser = new User();
             mainWindowUser = SignableFactory.getSignable().logIn(user);
@@ -175,14 +186,12 @@ public class LogInController {
             Stage parentStage = new Stage();
             mainWindowController.setStage(parentStage);
             mainWindowController.initStage(root, mainWindowUser);
-
             stage.close();
-
         } catch (EmailFormatException | PasswordFormatException ex) {
             LOGGER.severe("Exception during login: " + ex.getMessage());
             showError("Error: " + ex.getMessage());
         } catch (CredentialsException ex) {
-            LOGGER.severe("Credentials Exception: " + ex.getMessage());   
+            LOGGER.severe("Credentials Exception: " + ex.getMessage());
             showError("Error: " + ex.getMessage());
         } catch (Exception ex) {
             LOGGER.severe("Exception during login: " + ex.getMessage());
@@ -190,12 +199,25 @@ public class LogInController {
         }
     }
 
+    /**
+     * Event handler for text changes in the email and password fields.
+     *
+     * This method is responsible for validating the content of the email and
+     * password fields, enabling or disabling the login button accordingly. If
+     * both fields are non-empty, the 'Entrar' button is enabled; otherwise, it
+     * is disabled. Additionally, it catches any exceptions that may occur
+     * during the process and logs them using the class logger.
+     *
+     * @param o The Observable triggering the event (not used in the method
+     * implementation).
+     * @throws Exception If an unexpected error occurs during the handling of
+     * text change.
+     */
     @FXML
     private void handleTextChange(Observable o) {
         try {
             String email = txtEmail.getText();
             String password = pwdPassword.getText();
-
             if (!email.trim().isEmpty() && !password.trim().isEmpty()) {
                 // Enable 'Entrar' button
                 loginButton.setDisable(false);
@@ -204,13 +226,22 @@ public class LogInController {
                 // Disable 'Entrar' button
                 loginButton.setDisable(true);
             }
-
         } catch (Exception ex) {
             LOGGER.severe("Exception during text change: " + ex.getMessage());
-            ex.getMessage();
         }
     }
 
+    /**
+     * Event handler for the 'Sign Up' hyperlink action.
+     *
+     * This method is triggered when the 'Sign Up' hyperlink is clicked. It logs
+     * the event, loads the Sign Up window using an FXML loader, initializes the
+     * corresponding controller, and closes the current window. Any IOException
+     * that occurs during this process is caught and logged using the class
+     * logger.
+     *
+     * @param e The ActionEvent representing the 'Sign Up' hyperlink action.
+     */
     @FXML
     private void handleHrefSignupAction(ActionEvent e) {
         try {
@@ -220,21 +251,41 @@ public class LogInController {
             Parent root = loader.load();
             SignUpController signupcontroller = loader.getController();
             signupcontroller.initStage(root);
-
             // Close this window
             stage.close();
         } catch (IOException ex) {
-            // Gestionar la exception
             LOGGER.severe("Exception during handling 'Sign Up' hyperlink: " + ex.getMessage());
         }
     }
 
+    /**
+     * Displays an error message and logs it as a warning.
+     *
+     * This method takes an error message as input, logs it as a warning using
+     * the class logger, and sets the same message to be displayed in a UI label
+     * (lblError). This is commonly used for presenting user-friendly error
+     * messages in the application.
+     *
+     * @param e The error message to be displayed and logged.
+     */
     private void showError(String e) {
         LOGGER.warning("Error message displayed: " + e);
         //Show error message
         lblError.setText(e);
     }
 
+    /**
+     * Event handler for the window close request.
+     *
+     * This method is triggered when a user attempts to close the window. It
+     * logs the close request, creates a confirmation dialog asking the user to
+     * confirm the closure, and handles the closure based on the user's
+     * response. If the user confirms, the window is closed; otherwise, the
+     * closure is canceled, and the window remains open. The method consumes the
+     * event to prevent the default window close behavior.
+     *
+     * @param event The WindowEvent representing the window close request.
+     */
     private void handleCloseRequest(WindowEvent event) {
         LOGGER.info("Window close requested...");
         // Create a confirmation dialog
