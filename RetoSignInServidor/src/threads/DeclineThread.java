@@ -45,9 +45,8 @@ public class DeclineThread extends Thread {
     }
 
     /**
-     * Constructs a DeclineThread object with the specified client socket.
+     * run method that implements the thread
      *
-     * @param cliente The client socket to be rejected.
      */
     @Override
     public synchronized void run() {

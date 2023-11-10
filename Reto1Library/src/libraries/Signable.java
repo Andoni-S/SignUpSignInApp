@@ -5,13 +5,9 @@ import exceptions.EmailAlreadyExistsException;
 import exceptions.ServerErrorException;
 import java.io.IOException;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
+ * The signable interface used for the implementation of both the client and
+ * the server
  *
  * @author Andoni Sanz
  */

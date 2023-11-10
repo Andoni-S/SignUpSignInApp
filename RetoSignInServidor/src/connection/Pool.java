@@ -57,6 +57,7 @@ public final class Pool {
      * Pool getter
      *
      * @return Pool
+     * @throws ClassNotFoundException
      */
     public static synchronized Pool getPool() throws ClassNotFoundException {
         if (pool == null) {

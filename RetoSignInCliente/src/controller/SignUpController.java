@@ -1,6 +1,12 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package controller;
 
 import exceptions.ConfirmPasswordException;
+import exceptions.CredentialsException;
 import exceptions.EmailAlreadyExistsException;
 import exceptions.EmailFormatException;
 import exceptions.MaxCharException;
@@ -10,7 +16,9 @@ import exceptions.PasswordFormatException;
 import exceptions.ServerErrorException;
 import factory.SignableFactory;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
@@ -36,50 +44,81 @@ import libraries.User;
  * Sign Up window allows users to create a new account by providing their
  * information.
  *
- * @author Jagoba Bartolomé
+ * @author Jagoba Bartolomé Barroso
  */
 public class SignUpController {
-
-    private final static Logger LOGGER = Logger.getLogger(SignUpController.class.getName());
-
+    /**
+     * Application stage.
+    */
     private Stage stage;
+    /**
+     * Instance of the signable implementation which implements the logic
+     */
     Signable sign = SignableFactory.getSignable();
-
+    /**
+     * Logger
+     */
+    private final static Logger LOGGER = Logger.getLogger(SignUpController.class.getName());
+    /**
+     * Register button
+     */
     @FXML
     private Button btnRegistrar;
+    /**
+     * Cancel button
+     */
     @FXML
     private Button btnCancelar;
+    /**
+     * Email text field
+     */
     @FXML
     private TextField txtEmail;
+    /**
+     * Name text field
+     */
     @FXML
     private TextField txtNombreCompleto;
+    /**
+     * Password field
+     */
     @FXML
-    private PasswordField pwdContrasena;
+    private PasswordField pwdContrasena;    
+    /**
+     * Confirmation of password field
+     */
     @FXML
     private PasswordField pwdConfirmar;
+    /**
+     * Postal code field
+     */
     @FXML
     private TextField txtCodigoPostal;
+    /**
+     * Telephone number text field
+     */
     @FXML
     private TextField txtTelefonoMovil;
+    /**
+     * Address text field
+     */
     @FXML
     private TextField txtDireccion;
+    /**
+     * Error label
+     */
     @FXML
     private Label lblError;
-
     /**
      * Stage setter.
-     *
      * @param stage the stage to set
-     */
+    */
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-
     /**
-     * Initializes the Sign Up window stage with specified settings and event
-     * listeners.
-     *
-     * @param root The root Parent node of the Sign Up window scene.
+     * Initialization method of the Sign Up controller
+     * @param root 
      */
     public void initStage(Parent root) {
         try {
@@ -100,6 +139,7 @@ public class SignUpController {
             btnCancelar.setCancelButton(true);
             //Show the window.
             stage.show();
+            
             //Listeners of handleOnTextNotEmpty 
             txtEmail.textProperty().addListener(this::handleOnTextNotEmpty);
             txtNombreCompleto.textProperty().addListener(this::handleOnTextNotEmpty);
@@ -117,64 +157,61 @@ public class SignUpController {
             showError("Ha ocurrido un error inesperado.");
         }
     }
-
     /**
-     * Handles the "Registrar" button click event. Validates user input, creates
-     * a new user, and transitions to the Main Window on success.
-     *
-     * @param event The ActionEvent triggered by the button click.
+     * Handler to validate the information before sending it
+     * @param event 
      */
     public void handleOnButtonClick(ActionEvent event) {
-        try {
-            LOGGER.info("Register button clicked.");
+        try {   
+            LOGGER.info("Register button clicked.");         
             //Validate the format of the email, it must have a text before an '@' and a text before and after '.'
             //Pattern that must be respected
             String regexEmail = "^[A-Za-z0-9]+@[A-Za-z0-9]+\\.[A-Za-z]{2,}$";
             Pattern patternEmail = Pattern.compile(regexEmail);
             //Validate if the pattern doesn't match the txtEmail field text
-            if (!patternEmail.matcher(txtEmail.getText()).matches()) {
+            if (!patternEmail.matcher(txtEmail.getText()).matches()){
                 throw new EmailFormatException("El email no tiene el formato correcto.");
             }
-            LOGGER.info("Email format validated.");
+            LOGGER.info("Email format validated.");  
             //Validate the format of the name. Must be alphabetic and must have at least two words.
             //Pattern that must be respected
             String regexName = "^[\\p{L}]+(\\s+[\\p{L}]+){1,}$";
             Pattern patternName = Pattern.compile(regexName, Pattern.UNICODE_CHARACTER_CLASS);
             //Validate if the name doesn't have the appropiate format
-            if (!patternName.matcher(txtNombreCompleto.getText()).matches()) {
+            if (!patternName.matcher(txtNombreCompleto.getText()).matches()){
                 throw new NameException("Debe incluir el apellido.");
             }
             LOGGER.info("Name format validated.");
             //Validate the format of the password, it must have at least 4 characters
             //Pattern that must be respected
-            String regexPwd = "^(?=.*[A-Z])(?=.*\\d).{8,}$";
+            String regexPwd="^(?=.*[A-Z])(?=.*\\d).{8,}$";
             Pattern patternPassword = Pattern.compile(regexPwd);
-            if (pwdContrasena.getText().length() < 4 || !patternPassword.matcher(pwdContrasena.getText()).matches()) {
+            if (pwdContrasena.getText().length() < 4 || !patternPassword.matcher(pwdContrasena.getText()).matches()){
                 throw new PasswordFormatException("La contraseña debe incluir mayúsculas, minúsculas, números y carácteres especiales.");
             }
             LOGGER.info("Password format validated.");
             //Validate if the password field and the confirmation field have the same text
             if (!pwdContrasena.getText().equals(pwdConfirmar.getText())) {
                 throw new ConfirmPasswordException("La contraseña debe ser la misma.");
-            }
+            }       
             LOGGER.info("Password confirmation validated.");
             //Creating a new User to send back to the Server with its proper attributes
-            User newUser = new User();
-            newUser.setLogin(txtEmail.getText());
-            newUser.setName(txtNombreCompleto.getText());
+            User newUser = new User(); 
+            newUser.setLogin(txtEmail.getText());          
+            newUser.setName(txtNombreCompleto.getText());          
             newUser.setPassword(pwdConfirmar.getText());
             LOGGER.info("User created and set.");
             //Validate if the TextField is empty
-            if (!txtCodigoPostal.getText().trim().isEmpty()) {
+            if (!txtCodigoPostal.getText().trim().isEmpty()){  
                 //Validate the format of the postal code. Must be numeric and be 5 character long.
-                if (txtCodigoPostal.getText().length() > 5) {
+                if (txtCodigoPostal.getText().length() > 5){
                     throw new MaxCharException("Límite de 5 carácteres alcanzado.");
                 }
                 //Pattern that must be respected
-                String regexCod = "^[0-9]+$";
+                String regexCod="^[0-9]+$";
                 Pattern patternCod = Pattern.compile(regexCod);
                 //Validate the format of the postal code
-                if (!patternCod.matcher(txtCodigoPostal.getText()).matches()) {
+                if (!patternCod.matcher(txtCodigoPostal.getText()).matches()){
                     throw new NumericException("El código debe ser númerico.");
                 }
                 //Setting the postal code for the user
@@ -183,31 +220,31 @@ public class SignUpController {
             LOGGER.info("Postal code format validated and set in the User.");
 
             //Validate if the TextField is empty
-            if (!txtTelefonoMovil.getText().trim().isEmpty()) {
+            if (!txtTelefonoMovil.getText().trim().isEmpty()){
                 //Validate the format of the telephone number. Must be numeric and be 9 character long.
-                if (txtTelefonoMovil.getText().length() > 9) {
+                if (txtTelefonoMovil.getText().length() > 9){
                     throw new MaxCharException("Límite de 9 carácteres alcanzado.");
                 }
                 //Pattern that must be respected
-                String regexCod = "^[0-9]+$";
+                String regexCod="^[0-9]+$";
                 Pattern patternCod = Pattern.compile(regexCod);
                 //Validate the format of the telephone number
-                if (!patternCod.matcher(txtTelefonoMovil.getText()).matches()) {
+                if (!patternCod.matcher(txtTelefonoMovil.getText()).matches()){
                     throw new NumericException("El código debe ser numerico.");
                 }
                 //Setting the telephone number for the user
                 newUser.setMobilePhone(txtTelefonoMovil.getText());
             }
-            LOGGER.info("Telephone number format validated and set in the User.");
+            LOGGER.info("Telephone number format validated and set in the User.");                
 
             //Validate if the TextField is empty
-            if (!txtDireccion.getText().trim().isEmpty()) {
+            if (!txtDireccion.getText().trim().isEmpty()){
                 //Setting the street address for the user
                 newUser.setAddress(txtDireccion.getText());
             }
             LOGGER.info("Address set in the User.");
             //Register the user, if it already exists, it will throw an EmailAlreadyExistsException
-            User userServer = sign.signUp(newUser);
+            User userServer = sign.signUp(newUser); 
             LOGGER.info("User profile correctly set.");
             //Show the MainWindow window
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainWindowFXML.fxml"));
@@ -229,7 +266,7 @@ public class SignUpController {
             showError("Este email ya existe.");
         } catch (ServerErrorException e) {
             LOGGER.severe(e.getMessage());
-            showError("Ha ocurrido un problema con el servidor. Inténtalo más tarde.");
+            showError("Ha ocurrido un problema con el servidor. Inténtalo más tarde.");    
         } catch (Exception e) {
             LOGGER.severe(e.getMessage());
             showError("Ha ocurrido un error inesperado.");
@@ -237,8 +274,8 @@ public class SignUpController {
     }
 
     /**
-     * Handle to validate if a TextField is empty and enabling the "Registrar"
-     * button, if its empty, disable the button.
+     * Handle to validate if a TextField is empty and enabling the "Registrar" button, if its
+     * empty, disable the button.
      *
      * @param observable The observable value associated with the TextField's
      * text property.
@@ -251,21 +288,21 @@ public class SignUpController {
                 lblError.setVisible(false);
                 lblError.setText("");
                 //All the text fields are complete, we enable the button
-                btnRegistrar.setDisable(false);
+                btnRegistrar.setDisable(false);         
             } else {
                 //Disable the button
-                btnRegistrar.setDisable(true);
-            }
+                btnRegistrar.setDisable(true); 
+            }   
             //Validate if the characters' max length is reached
-            if (txtEmail.getText().length() > 300 || txtNombreCompleto.getText().length() > 300 || pwdContrasena.getText().length() > 300 || pwdConfirmar.getText().length() > 300) {
+            if(txtEmail.getText().length() > 300 || txtNombreCompleto.getText().length() > 300 || pwdContrasena.getText().length() > 300 || pwdConfirmar.getText().length() > 300) {
                 //Disable the button
                 btnRegistrar.setDisable(true);
                 throw new MaxCharException("Límite de 300 carácteres alcanzado.");
             } else {
                 //Enable the button
                 btnRegistrar.setDisable(false);
-            }
-        } catch (MaxCharException e) {
+            } 
+        } catch (MaxCharException e){
             LOGGER.warning(e.getMessage());
             showError(e.getMessage());
         } catch (Exception e) {
@@ -273,15 +310,12 @@ public class SignUpController {
             showError("Ha ocurrido un error inesperado.");
         }
     }
-
     /**
-     * This method will handle the Cancel button ActionEvent and if the user
-     * accepts the alert, go back to the LogIn window
-     *
-     * @param event
+     * This method will handle the Cancel button ActionEvent and if the user accepts the alert, go back to the LogIn window
+     * @param event 
      */
-    public void handleOnCancelButton(ActionEvent event) {
-        try {
+    public void handleOnCancelButton(ActionEvent event){
+        try {   
             LOGGER.info("Cancel button pressed.");
             //Show an alert to confirm going to the Log in window
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -291,7 +325,7 @@ public class SignUpController {
             Optional<ButtonType> action = alert.showAndWait();
             LOGGER.info("Showed alert.");
             //If the user selects the confirmation button of the alert
-            if (action.get() == ButtonType.OK) {
+            if(action.get() == ButtonType.OK){
                 LOGGER.info("Confirmation button selected.");
                 // Show the LogIn window
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInFXML.fxml"));
@@ -311,11 +345,9 @@ public class SignUpController {
             showError("Ha ocurrido un error inesperado.");
         }
     }
-
     /**
      * Handler to confirm closing the window
-     *
-     * @param event
+     * @param event 
      */
     private void handleCloseRequest(WindowEvent event) {
         //Create a confirmation dialog

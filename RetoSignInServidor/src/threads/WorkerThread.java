@@ -19,6 +19,8 @@ import main.Server;
 /**
  * WorkerThread represents a thread that handles client requests in a server
  * application.
+ * 
+ * @author Andoni Sanz
  */
 public class WorkerThread extends Thread {
 
