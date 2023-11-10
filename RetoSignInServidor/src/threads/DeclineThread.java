@@ -15,14 +15,15 @@ import libraries.ApplicationPDU;
 import libraries.MessageType;
 
 /**
- * The DeclineThread class represents a thread for handling rejected client connections.
- * It sends an error message to the client when the server reaches the maximum client limit.
+ * The DeclineThread class represents a thread for handling rejected client
+ * connections. It sends an error message to the client when the server reaches
+ * the maximum client limit.
  *
  * @author Andoni Sanz
  */
 public class DeclineThread extends Thread {
 
-     /**
+    /**
      * The client socket to which the rejection message will be sent.
      */
     Socket cliente = null;
@@ -38,31 +39,32 @@ public class DeclineThread extends Thread {
      * Logger for logging messages related to the DeclineThread class.
      */
     private final static Logger LOGGER = Logger.getLogger(DeclineThread.class.getName());
-    
+
     public DeclineThread(Socket cliente) {
         this.cliente = cliente;
     }
-      /**
+
+    /**
      * Constructs a DeclineThread object with the specified client socket.
      *
      * @param cliente The client socket to be rejected.
      */
     @Override
     public synchronized void run() {
-    //public synchronized void start() {        
+        //public synchronized void start() {        
         LOGGER.info("Launching thread");
         try {
-            
-        salida = new ObjectOutputStream(cliente.getOutputStream());
-        entrada = new ObjectInputStream(cliente.getInputStream());
-           
-        Logger.getLogger(DeclineThread.class.getName()).info("Client limite reached.");
-        ApplicationPDU pdu = new ApplicationPDU();
-        pdu.setMessageType(MessageType.Ex_ServerError);
-        salida.writeObject(pdu);
-        
-        entrada.close();
-        salida.close();
+
+            salida = new ObjectOutputStream(cliente.getOutputStream());
+            entrada = new ObjectInputStream(cliente.getInputStream());
+
+            Logger.getLogger(DeclineThread.class.getName()).info("Client limite reached.");
+            ApplicationPDU pdu = new ApplicationPDU();
+            pdu.setMessageType(MessageType.Ex_ServerError);
+            salida.writeObject(pdu);
+
+            entrada.close();
+            salida.close();
         } catch (IOException ex) {
             Logger.getLogger(WorkerThread.class.getName()).log(Level.SEVERE, null, ex);
         }

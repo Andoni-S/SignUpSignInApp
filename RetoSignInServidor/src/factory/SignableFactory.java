@@ -3,15 +3,9 @@ package factory;
 import libraries.Signable;
 import model.SignableImplementation;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- *
- * @author 2dam
+ * SignableImplementation factory that returns a new instance
+ * @author Andoni Sanz
  */
 public class SignableFactory {
     

@@ -16,7 +16,8 @@ import java.util.logging.Logger;
  * This class manages a stack of connection to give to the server as it is
  * needed.
  *
- * @author Jagoba Bartolomé Barroso, Andoni Sanz
+ * @author Jagoba Bartolomé Barroso
+ * @author Andoni Sanz
  */
 public final class Pool {
 
