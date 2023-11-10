@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<Pane fx:id="LogInFXML" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@design.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LogInController">
+    <children>
+        <Label fx:id="lblEmail" layoutX="361.0" layoutY="147.0" prefHeight="18.0" prefWidth="48.0" text="Email" />
+        <Label fx:id="lblPassword" layoutX="360.0" layoutY="209.0" text="Contraseña" />
+        <TextField fx:id="txtEmail" layoutX="360.0" layoutY="170.0" prefHeight="25.0" prefWidth="201.0" />
+        <PasswordField fx:id="pwdPassword" layoutX="360.0" layoutY="233.0" prefHeight="25.0" prefWidth="201.0" />
+        <Hyperlink fx:id="hrefSignUp" layoutX="354.0" layoutY="300.0" text="¿No tienes usuario? Registrate Aquí" />
+        <Label layoutX="411.0" layoutY="40.0" prefHeight="18.0" prefWidth="104.0" text="Iniciar Sesión" textAlignment="CENTER">
+            <font>
+                <Font name="System Bold" size="16.0" />
+            </font>
+        </Label>
+        <Button fx:id="loginButton" defaultButton="true" layoutX="532.0" layoutY="354.0" mnemonicParsing="false" onAction="#handleLoginButtonAction" text="Entrar" />
+        <Label fx:id="lblError" layoutX="333.0" layoutY="65.0" prefHeight="81.0" prefWidth="355.0" textFill="RED" />
+      <Rectangle fx:id="rectangle" arcHeight="5.0" arcWidth="5.0" fill="#f1f8ff" height="432.0" layoutX="-1.0" layoutY="-12.0" stroke="BLACK" strokeType="INSIDE" width="325.0" />
+      <ImageView fx:id="odooIcon" fitHeight="337.0" fitWidth="455.0" layoutX="-3.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../image/odoo_logo.png" />
+         </image>
+      </ImageView>
+    </children>
+</Pane>
