@@ -4,13 +4,16 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import main.Application;
 import java.util.Random;
+import java.util.concurrent.TimeoutException;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import javafx.stage.Stage;
+import org.junit.BeforeClass;
 import static org.testfx.api.FxAssert.verifyThat;
+import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
@@ -36,11 +39,20 @@ public class TestSignUpController extends ApplicationTest {
     private Button btnCancelar;
     private Label lblError;
 
-    // Override method to set up the initial stage for testing.
-    @Override
-    public void start(Stage stage) {
-        new Application().start(stage);
-        clickOn("#hrefSignUp");
+    private static String mail;
+
+    /**
+     * Sets up the TestFX environment for the entire test class. This method is
+     * annotated with {@code @BeforeClass}, indicating that it runs once before
+     * any tests in the class. It registers the primary stage and sets up the
+     * application using TestFX.
+     *
+     * @throws TimeoutException If a timeout occurs during the setup.
+     */
+    @BeforeClass
+    public static void setUpClass() throws TimeoutException {
+        FxToolkit.registerPrimaryStage();
+        FxToolkit.setupApplication(Application.class);
     }
 
     /**
@@ -51,6 +63,8 @@ public class TestSignUpController extends ApplicationTest {
      */
     @Test
     public void testA_initialState() {
+        //Changing windows
+        clickOn("#hrefSignUp");
         // Verifying if the texts are empty
         txtEmail = lookup("#txtEmail").query();
         txtNombreCompleto = lookup("#txtNombreCompleto").query();
@@ -88,6 +102,8 @@ public class TestSignUpController extends ApplicationTest {
         clickOn("#btnRegistrar");
         // Verifying that the Main Window is visible
         verifyThat("#mainWindow", isVisible());
+        //Changing windows
+        clickOn("#btnLogout");
     }
 
     /**
@@ -100,8 +116,10 @@ public class TestSignUpController extends ApplicationTest {
     @Test
     public void testC_fullSignUp() {
         // Filling all the optional fields
+        clickOn("#hrefSignUp");
         clickOn("#txtEmail");
-        write("email" + new Random().nextInt(1000000) + "@gmail.com");
+        mail = "email" + new Random().nextInt(1000000) + "@gmail.com";
+        write(mail);
         clickOn("#txtNombreCompleto");
         write("Nombre Apellido");
         clickOn("#pwdContrasena");
@@ -119,6 +137,7 @@ public class TestSignUpController extends ApplicationTest {
         clickOn("#btnRegistrar");
         // Verifying that the Main Window is visible
         verifyThat("#mainWindow", isVisible());
+        clickOn("#btnLogout");
     }
 
     /**
@@ -131,8 +150,9 @@ public class TestSignUpController extends ApplicationTest {
     @Test
     public void testD_emailAlreadyExists() {
         // Filling the mandatory fields with an existing email
+        clickOn("#hrefSignUp");
         clickOn("#txtEmail");
-        write("email@example.com");
+        write(mail);
         clickOn("#txtNombreCompleto");
         write("Nombre Apellido");
         clickOn("#pwdContrasena");
