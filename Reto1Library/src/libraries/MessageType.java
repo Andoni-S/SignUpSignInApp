@@ -2,15 +2,11 @@ package libraries;
 
 import java.io.Serializable;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
+ * The Message Type used on the PDU that contains all the messages needed for 
+ * the login and signUp as well as the exceptions that the server will throw
  *
- * @author andoni
+ * @author Andoni Sanz
  */
 public enum MessageType implements Serializable{
     Accept,

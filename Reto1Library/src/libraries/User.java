@@ -1,16 +1,13 @@
 package libraries;
 
 import java.io.Serializable;
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
+ * The user that is used to register on the Odoo database with the required and
+ * optional fields. On each parameter in a comment is added the name that it has
+ * in the database depending on the tables that is used and also the table
+ * itself.
  *
- * @author 2dam
+ * @author Andoni Sanz
  */
 public class User implements Serializable{
     private int id; //id res_users, uid res_groups_users_rel, user_id res_company_users_rel
@@ -22,7 +19,6 @@ public class User implements Serializable{
     private String name; //name res_partner
     private String mobilePhone; //mobile res_partner
     private boolean active; //active res_partner
-    //private NotificationType notificationType; //notification_type res_users
     
     public User() {
         this.id = -1;
