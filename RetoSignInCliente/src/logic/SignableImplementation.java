@@ -1,5 +1,7 @@
 package logic;
 
+import com.sun.media.jfxmedia.logging.Logger;
+import controller.SignUpController;
 import exceptions.CredentialsException;
 import exceptions.EmailAlreadyExistsException;
 import exceptions.ServerErrorException;
@@ -33,7 +35,7 @@ public class SignableImplementation implements Signable {
      * The client socket.
      */
     private Socket sCliente = null;
-
+    private final static java.util.logging.Logger LOGGER = java.util.logging.Logger.getLogger(SignableImplementation.class.getName());
     /**
      * This method writes a User through the Socket with the MessageType
      * indicating that its a login. It returns a User with all the necessary
@@ -51,23 +53,26 @@ public class SignableImplementation implements Signable {
         sCliente = new Socket(IP, PUERTO);
         entrada = new ObjectInputStream(sCliente.getInputStream());
         salida = new ObjectOutputStream(sCliente.getOutputStream());
+        LOGGER.info("Opening input and output streams.");
         ApplicationPDU pdu = new ApplicationPDU();
         pdu = (ApplicationPDU) entrada.readObject();
         if (pdu.getMessageType().toString().equals("Accept")) {
+            LOGGER.info("Connection with the server.");
             pdu.setMessageType(MessageType.LogIn);
             pdu.setUser(u);
+            LOGGER.info("Connection with the server.");
             salida.writeObject(pdu);
             pdu = (ApplicationPDU) entrada.readObject();
             if (pdu.getMessageType().toString().equals("Ex_Credentials")) {
+                LOGGER.info("Credential error.");
                 throw new CredentialsException("Error en las credenciales");
             }
-            if (pdu.getMessageType().toString().equals("Ex_EmailAlreadyExists")) {
-                throw new EmailAlreadyExistsException();
-            }
             if (pdu.getMessageType().toString().equals("Ex_ServerError")) {
+                LOGGER.info("Server error.");
                 throw new ServerErrorException();
             }
         } else if (pdu.getMessageType().toString().equals("Ex_ServerError")) {
+            LOGGER.info("Server error.");
             throw new ServerErrorException();
         }
         return pdu.getUser();
@@ -87,20 +92,26 @@ public class SignableImplementation implements Signable {
         sCliente = new Socket(IP, PUERTO);
         entrada = new ObjectInputStream(sCliente.getInputStream());
         salida = new ObjectOutputStream(sCliente.getOutputStream());
+        LOGGER.info("Opening input and output streams.");
         ApplicationPDU pdu = new ApplicationPDU();
         pdu = (ApplicationPDU) entrada.readObject();
         if (pdu.getMessageType().toString().equals("Accept")) {
+            LOGGER.info("Connection with the server.");
             pdu.setMessageType(MessageType.SignUp);
             pdu.setUser(u);
+            LOGGER.info("User saved in the PDU.");
             salida.writeObject(pdu);
             pdu = (ApplicationPDU) entrada.readObject();
             if (pdu.getMessageType().toString().equals("Ex_EmailAlreadyExists")) {
+                LOGGER.info("Existing email.");
                 throw new EmailAlreadyExistsException();
             }
             if (pdu.getMessageType().toString().equals("Ex_ServerError")) {
+                LOGGER.info("Server error.");
                 throw new ServerErrorException();
             }
         } else if (pdu.getMessageType().toString().equals("Ex_ServerError")) {
+            LOGGER.info("Server error.");
             throw new ServerErrorException();
         }
         return pdu.getUser();

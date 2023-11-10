@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import controller.LogInController;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import logic.SignableImplementation;
 
 /**
  *
@@ -26,6 +27,7 @@ import java.util.logging.Logger;
  */
 
 public class Application extends javafx.application.Application{    
+    private final static java.util.logging.Logger LOGGER = java.util.logging.Logger.getLogger(SignableImplementation.class.getName());
     /**
      * This method is called when the JavaFX application is launched. It is used
      * to initialize the primary stage (the main window) and set up the user
@@ -44,8 +46,9 @@ public class Application extends javafx.application.Application{
             controller.setStage(primaryStage);
             controller.initStage(root);
             primaryStage.show();
+            LOGGER.info("Log in window set.");
         } catch (IOException ex) {
-            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
+           LOGGER.severe(ex.getMessage());
         }
     }
 
@@ -53,6 +56,7 @@ public class Application extends javafx.application.Application{
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        LOGGER.info("Application initiated.");
         launch(args);
     }
 }

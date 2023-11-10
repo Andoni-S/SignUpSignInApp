@@ -24,7 +24,8 @@ public class DeclineThread extends Thread {
     Socket cliente = null;
     ObjectInputStream entrada = null;
     ObjectOutputStream salida = null;
-
+    private final static Logger LOGGER = Logger.getLogger(DeclineThread.class.getName());
+    
     public DeclineThread(Socket cliente) {
         this.cliente = cliente;
     }
@@ -32,13 +33,13 @@ public class DeclineThread extends Thread {
     @Override
     public synchronized void run() {
     //public synchronized void start() {        
-        System.out.println("lanzando thread");
+        LOGGER.info("Launching thread");
         try {
             
         salida = new ObjectOutputStream(cliente.getOutputStream());
         entrada = new ObjectInputStream(cliente.getInputStream());
            
-        Logger.getLogger(DeclineThread.class.getName()).info("limite de clientes alcanzado");
+        Logger.getLogger(DeclineThread.class.getName()).info("Client limite reached.");
         ApplicationPDU pdu = new ApplicationPDU();
         pdu.setMessageType(MessageType.Ex_ServerError);
         salida.writeObject(pdu);

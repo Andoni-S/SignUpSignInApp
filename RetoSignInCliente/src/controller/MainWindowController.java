@@ -34,6 +34,9 @@ public class MainWindowController {
      * Stage setter.
      * @param stage the stage to set
     */
+    
+    private final static Logger LOGGER = Logger.getLogger(SignUpController.class.getName());
+    
     @FXML
     private Label lblEmail;
     @FXML
@@ -95,13 +98,17 @@ public class MainWindowController {
             textAddress.setText(user.getAddress());
             textPostalCode.setText(user.getPostalCode());
             stage.show();
+            
+            LOGGER.info("Main Window initialized.");
         } catch (Exception e) {
-             this.showErrorAlert(e);
+            LOGGER.severe(e.getMessage());
+            this.showErrorAlert(e);
         }
     }
     @FXML
     void handleBtnClose(ActionEvent event) {
         try {
+            LOGGER.info("Login button clicked.");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInFXML.fxml"));
             Parent root = loader.load();
             LogInController controller = loader.getController();
@@ -109,6 +116,7 @@ public class MainWindowController {
             controller.setStage(parentStage);
             controller.initStage(root);
             parentStage.show();
+            LOGGER.info("LogInWindow initialized.");
             // Obtenemos el escenario (Stage) actual a través del botón
             Stage stage = (Stage) btnLogout.getScene().getWindow();
             // Cerramos la ventana
@@ -122,11 +130,7 @@ public class MainWindowController {
         Stage stage = (Stage) btnLogout.getScene().getWindow();
         // Cerramos la ventana
         stage.close();
-    }
-    public void handleOnButtonClick(Observable observable) {
-        try {
-        } catch(Exception e){
-        }
+        LOGGER.info("Closing the window.");
     }
     /**
      * Displays a warning alert dialog with the provided exception message.
@@ -137,6 +141,7 @@ public class MainWindowController {
      * representation of the provided exception.
      */
     private void showErrorAlert(Exception e) {
+        LOGGER.info("Alert shown.");
         Alert alert = new Alert(AlertType.WARNING);
         alert.setContentText(e.toString());
         alert.showAndWait();

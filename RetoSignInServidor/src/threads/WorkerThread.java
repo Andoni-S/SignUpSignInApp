@@ -27,7 +27,7 @@ public class WorkerThread extends Thread {
     ObjectOutputStream salida = null;
     User user = null;
     ApplicationPDU pdu = null;
-
+    private final static Logger LOGGER = Logger.getLogger(WorkerThread.class.getName());
     /**
      * Constructs a new WorkerThread with a given socket.
      *
@@ -40,14 +40,14 @@ public class WorkerThread extends Thread {
     @Override
     public synchronized void run() {
     //public synchronized void start() {
-        System.out.println("Launching thread");
+        LOGGER.info("Launching thread");
         try {
             // Initialize input and output streams
             salida = new ObjectOutputStream(socket.getOutputStream());
             entrada = new ObjectInputStream(socket.getInputStream());
 
             // Send a welcome message to the client
-            Logger.getLogger(WorkerThread.class.getName()).info("thread respondiendo al servidor");
+            Logger.getLogger(WorkerThread.class.getName()).info("Thread replying to the server");
             pdu = new ApplicationPDU();
             pdu.setMessageType(MessageType.Accept);
             salida.writeObject(pdu);
@@ -58,7 +58,7 @@ public class WorkerThread extends Thread {
             Signable s = SignableFactory.getSignable();
 
             if (pdu.getMessageType().toString().equalsIgnoreCase("LogIn")) {
-                System.out.println("Verifying user in the database");
+                LOGGER.info("Verifying user in the database");
                 user = new User();
                 user = s.logIn(pdu.getUser());
                 pdu.setMessageType(MessageType.LogIn);
@@ -67,7 +67,7 @@ public class WorkerThread extends Thread {
                 //interrupt();
 
             } else if (pdu.getMessageType().toString().equalsIgnoreCase("SignUp")) {
-                System.out.println("Registering user in the database");
+                LOGGER.info("Registering user in the database");
                 user = new User();
                 user = s.signUp(pdu.getUser());
                 pdu.setMessageType(MessageType.SignUp);
@@ -76,7 +76,7 @@ public class WorkerThread extends Thread {
                 //interrupt();
             } else {
                 // This should not occur; it should always be Sign In or Sign Up
-                System.out.println("Some type of error occurred");
+                LOGGER.severe("Some type of error occurred"); 
             }
         } catch (IOException ex) {
             Logger.getLogger(WorkerThread.class.getName()).log(Level.SEVERE, null, ex);

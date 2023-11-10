@@ -46,9 +46,9 @@ public class Server {
                               
                 User user = new User();
                 //aceptar un cliente en el servidor
-                Logger.getLogger(WorkerThread.class.getName()).info("Esperando conexiones del cliente...");       
+                Logger.getLogger(WorkerThread.class.getName()).info("Waiting for connections from the client...");       
                 cliente = servidor.accept();
-                Logger.getLogger(WorkerThread.class.getName()).info("Cliente "+clienteN+" conectado");       
+                Logger.getLogger(WorkerThread.class.getName()).info("Client "+clienteN+" connected");       
                 
                 //If the number of clients has not reached the maximum
                 if(clienteN < MAXIMUM_CLIENTS){
@@ -63,7 +63,7 @@ public class Server {
                    DeclineThread dt = new DeclineThread(cliente);
                    dt.start();
                 }
-                Logger.getLogger(WorkerThread.class.getName()).info("Numero de cliente: " + clienteN);           
+                Logger.getLogger(WorkerThread.class.getName()).info("Quantity of the clients: " + clienteN);           
             }          
         } catch (IOException e) {
             Logger.getLogger(WorkerThread.class.getName()).severe("Error: " + e.getMessage());     
@@ -75,7 +75,7 @@ public class Server {
                     servidor.close();
                 if (cliente != null)
                     cliente.close();
-               Logger.getLogger(WorkerThread.class.getName()).info("Fin servidor");
+               Logger.getLogger(WorkerThread.class.getName()).info("Server closed.");
             } catch (IOException e) {
                e.printStackTrace();
                Logger.getLogger(WorkerThread.class.getName()).severe("Error: " + e.getMessage());     

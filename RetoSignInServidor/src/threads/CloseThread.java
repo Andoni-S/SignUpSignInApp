@@ -14,6 +14,8 @@ public class CloseThread extends Thread {
     private ResourceBundle configFile = ResourceBundle.getBundle("properties.Config");
     private String closingKey = configFile.getString("CLOSING_KEY");
     private boolean closeLoop = false;
+    private final static Logger LOGGER = Logger.getLogger(CloseThread.class.getName());
+     
     public CloseThread() {
     }
 

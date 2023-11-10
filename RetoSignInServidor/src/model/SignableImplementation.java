@@ -26,7 +26,7 @@ import libraries.User;
  * @author Andoni Sanz
  */
 public class SignableImplementation implements Signable{
-
+    private final static Logger LOGGER = Logger.getLogger(Pool.class.getName());
     Pool pool = null;
     Connection con = null;
     Savepoint save = null;
@@ -46,12 +46,13 @@ public class SignableImplementation implements Signable{
             con = pool.getConnection();
             con.setAutoCommit(false); // Iniciar una transacción
             save = con.setSavepoint();
+            LOGGER.info("Savepoint set.");
             
-            
-            if(con == null)
+            if(con == null){
+                LOGGER.severe("Connection error.");
                 throw new ServerErrorException("Error al conectar"); 
-            else{
-                System.out.println("Conexión con base de datos");
+            }else{
+                LOGGER.info("Connected.");
             }
             
             //Check that the user does not exist in the database
@@ -66,7 +67,7 @@ public class SignableImplementation implements Signable{
                 pstmt.setString(5, user.getMobilePhone());
                 pstmt.setBoolean(6, user.isActive());
                 pstmt.executeUpdate();
-
+                
                 // Obtain the ID res_partner
                 ResultSet generatedKeys = pstmt.getGeneratedKeys();
                 int partner_id = -1;
@@ -103,7 +104,7 @@ public class SignableImplementation implements Signable{
                 pstmt.executeUpdate();
 
                 pstmt.close();
-                
+                LOGGER.info("User saved in the database.");
                 // Confirm la transaction
                 con.commit();
                 
@@ -117,13 +118,14 @@ public class SignableImplementation implements Signable{
                 try {
                     con.rollback(save);
                 } catch (SQLException ex) {
+                    LOGGER.severe(ex.getMessage());
                     throw new ServerErrorException(e.getMessage());
+                }
             }
-        }
-        
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(SignableImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
+            LOGGER.info("Connection saved.");
             pool.saveConnection(con);
         }
         return user;
@@ -144,10 +146,11 @@ public class SignableImplementation implements Signable{
         Pool pool = Pool.getPool();
         con = pool.getConnection();
         
-        if(con == null)
-            System.out.println("Error");
-        else{
-            System.out.println("Conexión con base de datos");
+        if(con == null){
+            LOGGER.severe("Connection error.");;
+            throw new ServerErrorException("Error al conectar"); 
+        } else{
+           LOGGER.info("Connected.");
         }
         
         String selectUser = "SELECT * FROM res_users WHERE login = ? AND password = ?";
@@ -182,14 +185,16 @@ public class SignableImplementation implements Signable{
                     user.setActive(resultPartner.getBoolean("active"));                  
                 }
                 else{
+                    LOGGER.severe("Server error.");
                     throw new ServerErrorException("Ocurrio un error al encontrar el res_partner del usuario");
                 }
         } else {
+            LOGGER.warning("Credentials error.");
             throw new CredentialsException("Usuario o contraseña incorrectos.");
         }
         result.close();
         pstmt.close();
-            
+        LOGGER.info("User returned.");
         return user;
         
         } catch (SQLException ex) {
@@ -214,8 +219,10 @@ public class SignableImplementation implements Signable{
         pstmt.setString(1, login);
         ResultSet resultSet = pstmt.executeQuery();
         if (resultSet.next()) {
+            LOGGER.info("User found.");
             return resultSet.getInt("id");
         }
+        LOGGER.info("User not found.");
         return -1;
     }
    
