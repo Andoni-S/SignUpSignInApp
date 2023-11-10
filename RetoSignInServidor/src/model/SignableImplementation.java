@@ -15,48 +15,47 @@ import java.util.logging.Logger;
 import libraries.Signable;
 import libraries.User;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
+ * This class does the signUp and logIn operations with the database, with
+ * inserts and selects.
  *
  * @author Andoni Sanz
  */
-public class SignableImplementation implements Signable{
+public class SignableImplementation implements Signable {
+
     private final static Logger LOGGER = Logger.getLogger(Pool.class.getName());
     Pool pool = null;
     Connection con = null;
     Savepoint save = null;
+
     /**
      * Registers a new user in the database.
      *
      * @param user The user to register.
      * @return The registered user.
      * @throws ServerErrorException If a server error occurs.
-     * @throws EmailAlreadyExistsException If the email address already exists in the database.
+     * @throws EmailAlreadyExistsException If the email address already exists
+     * in the database.
      */
     @Override
     public User signUp(User user) throws ServerErrorException, EmailAlreadyExistsException {
-       // Paso 1: Conectar a PostgreSQL
+        // Paso 1: Conectar a PostgreSQL
         try {
             pool = Pool.getPool();
             con = pool.getConnection();
             con.setAutoCommit(false); // Iniciar una transacción
             save = con.setSavepoint();
             LOGGER.info("Savepoint set.");
-            
-            if(con == null){
+
+            if (con == null) {
                 LOGGER.severe("Connection error.");
-                throw new ServerErrorException("Error al conectar"); 
-            }else{
+                throw new ServerErrorException("Error al conectar");
+            } else {
                 LOGGER.info("Connected.");
             }
-            
+
             //Check that the user does not exist in the database
-            if(getUserIdByLogin(con, user.getLogin())== -1){
+            if (getUserIdByLogin(con, user.getLogin()) == -1) {
                 //String insertResPartner = "INSERT INTO res_partner DEFAULT VALUES";
                 String insertResPartner = "INSERT INTO res_partner (id, street, zip, email, name, mobile, active) VALUES (DEFAULT, ?, ?, ?, ?, ?, ?)";
                 PreparedStatement pstmt = con.prepareStatement(insertResPartner, Statement.RETURN_GENERATED_KEYS);
@@ -67,7 +66,7 @@ public class SignableImplementation implements Signable{
                 pstmt.setString(5, user.getMobilePhone());
                 pstmt.setBoolean(6, user.isActive());
                 pstmt.executeUpdate();
-                
+
                 // Obtain the ID res_partner
                 ResultSet generatedKeys = pstmt.getGeneratedKeys();
                 int partner_id = -1;
@@ -107,13 +106,13 @@ public class SignableImplementation implements Signable{
                 LOGGER.info("User saved in the database.");
                 // Confirm la transaction
                 con.commit();
-                
+
                 return user;
-            }else{
+            } else {
                 throw new EmailAlreadyExistsException("Email ya registrado en la base de datos");
-            }         
+            }
         } catch (SQLException e) {
-             // Si ocurre un error, revertir la transacción
+            // Si ocurre un error, revertir la transacción
             if (con != null) {
                 try {
                     con.rollback(save);
@@ -124,13 +123,13 @@ public class SignableImplementation implements Signable{
             }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(SignableImplementation.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
+        } finally {
             LOGGER.info("Connection saved.");
             pool.saveConnection(con);
         }
         return user;
     }
-    
+
     /**
      * Logs in a user to the application.
      *
@@ -142,61 +141,60 @@ public class SignableImplementation implements Signable{
     @Override
     public User logIn(User user) throws ServerErrorException, CredentialsException {
         try {
-        Connection con;
-        Pool pool = Pool.getPool();
-        con = pool.getConnection();
-        
-        if(con == null){
-            LOGGER.severe("Connection error.");;
-            throw new ServerErrorException("Error al conectar"); 
-        } else{
-           LOGGER.info("Connected.");
-        }
-        
-        String selectUser = "SELECT * FROM res_users WHERE login = ? AND password = ?";
-        PreparedStatement pstmt;
-        
-        pstmt = con.prepareStatement(selectUser);
-       
-        pstmt.setString(1, user.getLogin());
-        pstmt.setString(2, user.getPassword());
-        
-        ResultSet result = pstmt.executeQuery();
+            Connection con;
+            Pool pool = Pool.getPool();
+            con = pool.getConnection();
 
-        if (result.next()) {
-            
-           user.setId(result.getInt("id"));
-           user.setCompanyId(result.getInt("company_id"));
-           user.setLogin(result.getString("login"));
-           user.setPassword(result.getString("password"));
-           //user.setNotificationType(NotificationType.valueOf(result.getString("notification_type")));
-           int partner_id = result.getInt("partner_id");
-           
-           selectUser = "SELECT * FROM res_partner WHERE id = ?";   
-           pstmt = con.prepareStatement(selectUser);     
-           pstmt.setInt(1, partner_id);
-           ResultSet resultPartner = pstmt.executeQuery();
-           
+            if (con == null) {
+                LOGGER.severe("Connection error.");;
+                throw new ServerErrorException("Error al conectar");
+            } else {
+                LOGGER.info("Connected.");
+            }
+
+            String selectUser = "SELECT * FROM res_users WHERE login = ? AND password = ?";
+            PreparedStatement pstmt;
+
+            pstmt = con.prepareStatement(selectUser);
+
+            pstmt.setString(1, user.getLogin());
+            pstmt.setString(2, user.getPassword());
+
+            ResultSet result = pstmt.executeQuery();
+
+            if (result.next()) {
+
+                user.setId(result.getInt("id"));
+                user.setCompanyId(result.getInt("company_id"));
+                user.setLogin(result.getString("login"));
+                user.setPassword(result.getString("password"));
+                //user.setNotificationType(NotificationType.valueOf(result.getString("notification_type")));
+                int partner_id = result.getInt("partner_id");
+
+                selectUser = "SELECT * FROM res_partner WHERE id = ?";
+                pstmt = con.prepareStatement(selectUser);
+                pstmt.setInt(1, partner_id);
+                ResultSet resultPartner = pstmt.executeQuery();
+
                 if (resultPartner.next()) {
                     user.setAddress(resultPartner.getString("street"));
                     user.setPostalCode(resultPartner.getString("zip"));
                     user.setName(resultPartner.getString("name"));
                     user.setMobilePhone(resultPartner.getString("mobile"));
-                    user.setActive(resultPartner.getBoolean("active"));                  
-                }
-                else{
+                    user.setActive(resultPartner.getBoolean("active"));
+                } else {
                     LOGGER.severe("Server error.");
                     throw new ServerErrorException("Ocurrio un error al encontrar el res_partner del usuario");
                 }
-        } else {
-            LOGGER.warning("Credentials error.");
-            throw new CredentialsException("Usuario o contraseña incorrectos.");
-        }
-        result.close();
-        pstmt.close();
-        LOGGER.info("User returned.");
-        return user;
-        
+            } else {
+                LOGGER.warning("Credentials error.");
+                throw new CredentialsException("Usuario o contraseña incorrectos.");
+            }
+            result.close();
+            pstmt.close();
+            LOGGER.info("User returned.");
+            return user;
+
         } catch (SQLException ex) {
             Logger.getLogger(SignableImplementation.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
@@ -204,14 +202,15 @@ public class SignableImplementation implements Signable{
         }
         return user;
     }
-    
+
     /**
      * Retrieves the ID of a user by their login name.
      *
      * @param connection The database connection.
      * @param login The user's login name.
      * @return The user's ID if found, or -1 if not found.
-     * @throws SQLException If an error occurs while interacting with the database.
+     * @throws SQLException If an error occurs while interacting with the
+     * database.
      */
     private static int getUserIdByLogin(Connection connection, String login) throws SQLException {
         String query = "SELECT id FROM res_users WHERE login = ?";
@@ -225,5 +224,5 @@ public class SignableImplementation implements Signable{
         LOGGER.info("User not found.");
         return -1;
     }
-   
+
 }

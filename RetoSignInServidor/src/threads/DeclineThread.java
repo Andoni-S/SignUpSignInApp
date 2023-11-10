@@ -15,21 +15,38 @@ import libraries.ApplicationPDU;
 import libraries.MessageType;
 
 /**
+ * The DeclineThread class represents a thread for handling rejected client connections.
+ * It sends an error message to the client when the server reaches the maximum client limit.
  *
- * @author 2dam
+ * @author Andoni Sanz
  */
 public class DeclineThread extends Thread {
 
-    //ServerSocket servidor = null;
+     /**
+     * The client socket to which the rejection message will be sent.
+     */
     Socket cliente = null;
+    /**
+     * ObjectInputStream for reading objects from the client.
+     */
     ObjectInputStream entrada = null;
+    /**
+     * ObjectOutputStream for writing objects to the client.
+     */
     ObjectOutputStream salida = null;
+    /**
+     * Logger for logging messages related to the DeclineThread class.
+     */
     private final static Logger LOGGER = Logger.getLogger(DeclineThread.class.getName());
     
     public DeclineThread(Socket cliente) {
         this.cliente = cliente;
     }
-    
+      /**
+     * Constructs a DeclineThread object with the specified client socket.
+     *
+     * @param cliente The client socket to be rejected.
+     */
     @Override
     public synchronized void run() {
     //public synchronized void start() {        
