@@ -11,7 +11,8 @@ import exceptions.EmailAlreadyExistsException;
 import exceptions.EmailFormatException;
 import exceptions.MaxCharException;
 import exceptions.NameException;
-import exceptions.NumericException;
+import exceptions.NumericMobileException;
+import exceptions.NumericPostalException;
 import exceptions.PasswordFormatException;
 import exceptions.ServerErrorException;
 import factory.SignableFactory;
@@ -165,6 +166,7 @@ public class SignUpController {
      */
     public void handleOnButtonClick(ActionEvent event) {
         try {   
+            LOGGER.info("Setting numeric labels to black.");     
             txtCodigoPostal.setStyle("-fx-text-inner-color: #000000;");
             txtTelefonoMovil.setStyle("-fx-text-inner-color: #000000;");
             
@@ -216,9 +218,8 @@ public class SignUpController {
                 String regexCod="^[0-9]+$";
                 Pattern patternCod = Pattern.compile(regexCod);
                 //Validate the format of the postal code
-                if (!patternCod.matcher(txtCodigoPostal.getText()).matches()){
-                    txtCodigoPostal.setStyle("-fx-text-inner-color: #FF0000;");
-                    throw new NumericException("El código postal debe ser númerico.");
+                if (!patternCod.matcher(txtCodigoPostal.getText()).matches()){                  
+                    throw new NumericPostalException("El código postal debe ser númerico.");
                 }
                 //Setting the postal code for the user
                 newUser.setPostalCode(txtCodigoPostal.getText());
@@ -235,9 +236,8 @@ public class SignUpController {
                 String regexCod="^[0-9]+$";
                 Pattern patternCod = Pattern.compile(regexCod);
                 //Validate the format of the telephone number
-                if (!patternCod.matcher(txtTelefonoMovil.getText()).matches()){
-                    txtTelefonoMovil.setStyle("-fx-text-inner-color: #FF0000;");
-                    throw new NumericException("El telefono móvil debe ser numerico.");                  
+                if (!patternCod.matcher(txtTelefonoMovil.getText()).matches()){                  
+                    throw new NumericMobileException("El telefono móvil debe ser numerico.");                  
                 }
                 //Setting the telephone number for the user
                 newUser.setMobilePhone(txtTelefonoMovil.getText());
@@ -274,7 +274,12 @@ public class SignUpController {
         } catch (ServerErrorException e) {
             LOGGER.severe(e.getMessage());
             showError("Ha ocurrido un problema con el servidor. Inténtalo más tarde.");    
-        } catch (NumericException e) {
+        } catch (NumericMobileException e) {
+            txtTelefonoMovil.setStyle("-fx-text-inner-color: #FF0000;");
+            LOGGER.severe(e.getMessage());
+            showError(e.getMessage());
+        }catch (NumericPostalException e) {
+            txtCodigoPostal.setStyle("-fx-text-inner-color: #FF0000;");
             LOGGER.severe(e.getMessage());
             showError(e.getMessage());
         }catch (Exception e) {
@@ -391,4 +396,5 @@ public class SignUpController {
         lblError.setVisible(true);
         lblError.setText(e);
     }
+
 }
