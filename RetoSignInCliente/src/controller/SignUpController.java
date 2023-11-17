@@ -205,7 +205,7 @@ public class SignUpController {
             if (!txtCodigoPostal.getText().trim().isEmpty()){  
                 //Validate the format of the postal code. Must be numeric and be 5 character long.
                 if (txtCodigoPostal.getText().length() > 5){
-                    throw new MaxCharException("Límite de 5 carácteres alcanzado.");
+                    throw new MaxCharException("txtCodigoPostal");
                 }
                 //Pattern that must be respected
                 String regexCod="^[0-9]+$";
@@ -223,7 +223,7 @@ public class SignUpController {
             if (!txtTelefonoMovil.getText().trim().isEmpty()){
                 //Validate the format of the telephone number. Must be numeric and be 9 character long.
                 if (txtTelefonoMovil.getText().length() > 9){
-                    throw new MaxCharException("Límite de 9 carácteres alcanzado.");
+                    throw new MaxCharException("txtTelefonoMovil");
                 }
                 //Pattern that must be respected
                 String regexCod="^[0-9]+$";
@@ -238,13 +238,17 @@ public class SignUpController {
             LOGGER.info("Telephone number format validated and set in the User.");                
 
             //Validate if the TextField is empty
-            if (!txtDireccion.getText().trim().isEmpty()){
+            if (!txtDireccion.getText().trim().isEmpty()) {
                 //Setting the street address for the user
                 newUser.setAddress(txtDireccion.getText());
+                 //Validate the format of the telephone number. Must be 300 characters max.
+                if (txtDireccion.getText().length() > 300){
+                    throw new MaxCharException("txtDireccion");
+                }
             }
             LOGGER.info("Address set in the User.");
             //Register the user, if it already exists, it will throw an EmailAlreadyExistsException
-            User userServer = sign.signUp(newUser); 
+            User userServer = sign.signUp(newUser);
             LOGGER.info("User profile correctly set.");
             //Show the MainWindow window
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainWindowFXML.fxml"));
@@ -266,7 +270,27 @@ public class SignUpController {
             showError("Este email ya existe.");
         } catch (ServerErrorException e) {
             LOGGER.severe(e.getMessage());
-            showError("Ha ocurrido un problema con el servidor. Inténtalo más tarde.");    
+            showError("Ha ocurrido un problema con el servidor. Inténtalo más tarde.");
+        } catch (MaxCharException e) {
+            LOGGER.severe(e.getMessage());        
+            if (e.getMessage() == "txtCodigoPostal"){
+                showError("Límite de 5 carácteres sobrepasado.");
+                txtCodigoPostal.setStyle("-fx-text-fill: red;");
+                txtTelefonoMovil.setStyle("-fx-text-fill: white;");
+                txtDireccion.setStyle("-fx-text-fill: white;");
+            }
+            if (e.getMessage() == "txtTelefonoMovil"){
+                showError("Límite de 9 carácteres sobrepasado.");
+                txtCodigoPostal.setStyle("-fx-text-fill: white;");
+                txtTelefonoMovil.setStyle("-fx-text-fill: red;");
+                txtDireccion.setStyle("-fx-text-fill: white;");
+            }
+            if (e.getMessage() == "txtDireccion"){
+                showError("Límite de 300 carácteres sobrepasado.");
+                txtCodigoPostal.setStyle("-fx-text-fill: white;");
+                txtTelefonoMovil.setStyle("-fx-text-fill: white;");
+                txtDireccion.setStyle("-fx-text-fill: red;");
+            }
         } catch (Exception e) {
             LOGGER.severe(e.getMessage());
             showError("Ha ocurrido un error inesperado.");
@@ -274,8 +298,8 @@ public class SignUpController {
     }
 
     /**
-     * Handle to validate if a TextField is empty and enabling the "Registrar" button, if its
-     * empty, disable the button.
+     * Handle to validate if a TextField is empty and enabling the "Registrar"
+     * button, if its empty, disable the button.
      *
      * @param observable The observable value associated with the TextField's
      * text property.
@@ -288,23 +312,83 @@ public class SignUpController {
                 lblError.setVisible(false);
                 lblError.setText("");
                 //All the text fields are complete, we enable the button
-                btnRegistrar.setDisable(false);         
+                btnRegistrar.setDisable(false);
             } else {
-                //Disable the button
-                btnRegistrar.setDisable(true); 
-            }   
-            //Validate if the characters' max length is reached
-            if(txtEmail.getText().length() > 300 || txtNombreCompleto.getText().length() > 300 || pwdContrasena.getText().length() > 300 || pwdConfirmar.getText().length() > 300) {
                 //Disable the button
                 btnRegistrar.setDisable(true);
-                throw new MaxCharException("Límite de 300 carácteres alcanzado.");
+            }
+            //Validate if the characters' max length is reached
+            if (txtEmail.getText().length() > 300) {
+                //Disable the button
+
+                btnRegistrar.setDisable(true);
+                throw new MaxCharException("txtEmail");
             } else {
-                //Enable the button
+                txtEmail.setStyle("-fx-text-fill: white;");
+                lblError.setText("");
                 btnRegistrar.setDisable(false);
-            } 
-        } catch (MaxCharException e){
+            }
+                
+            if (txtNombreCompleto.getText().length() > 300) {
+                //Disable the button
+
+                btnRegistrar.setDisable(true);
+                throw new MaxCharException("txtNombreCompleto");
+            } else {
+                pwdContrasena.setStyle("-fx-text-fill: white;");
+                lblError.setText("");
+                btnRegistrar.setDisable(false);
+            }
+                
+            if (pwdContrasena.getText().length() > 300) {
+                //Disable the button
+
+                btnRegistrar.setDisable(true);
+                throw new MaxCharException("pwdContrasena");
+            } else {
+                pwdContrasena.setStyle("-fx-text-fill: white;");
+                lblError.setText("");
+                btnRegistrar.setDisable(false);
+            }
+                
+            if (pwdConfirmar.getText().length() > 300) {
+                //Disable the button
+
+                btnRegistrar.setDisable(true);
+                throw new MaxCharException("pwdConfirmar");
+
+            } else {
+                pwdConfirmar.setStyle("-fx-text-fill: white;");
+                lblError.setText("");
+                btnRegistrar.setDisable(false);
+            }
+        } catch (MaxCharException e) {
             LOGGER.warning(e.getMessage());
-            showError(e.getMessage());
+            showError("Límite de 300 carácteres sobrepasado.");
+            if (e.getMessage() == "txtEmail") {
+                txtEmail.setStyle("-fx-text-fill: red;");
+                txtNombreCompleto.setStyle("-fx-text-fill: white;");
+                pwdContrasena.setStyle("-fx-text-fill: white;");
+                pwdConfirmar.setStyle("-fx-text-fill: white;");
+            }
+            if (e.getMessage() == "txtNombreCompleto") {
+                txtEmail.setStyle("-fx-text-fill: white;");
+                txtNombreCompleto.setStyle("-fx-text-fill: red;");
+                pwdContrasena.setStyle("-fx-text-fill: white;");
+                pwdConfirmar.setStyle("-fx-text-fill: white;");
+            }
+            if (e.getMessage() == "pwdContrasena") {
+                txtEmail.setStyle("-fx-text-fill: white;");
+                txtNombreCompleto.setStyle("-fx-text-fill: white;");
+                pwdContrasena.setStyle("-fx-text-fill: red;");
+                pwdConfirmar.setStyle("-fx-text-fill: white;");
+            }
+            if (e.getMessage() == "pwdConfirmar") {
+                txtEmail.setStyle("-fx-text-fill: white;");
+                txtNombreCompleto.setStyle("-fx-text-fill: white;");
+                pwdContrasena.setStyle("-fx-text-fill: white;");
+                pwdConfirmar.setStyle("-fx-text-fill: red;");
+            }
         } catch (Exception e) {
             LOGGER.warning(e.getMessage());
             showError("Ha ocurrido un error inesperado.");
