@@ -33,6 +33,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import libraries.Signable;
@@ -137,6 +138,7 @@ public class SignUpController {
             //Set the "Registrar" button as the Default Button using setDefaultButton and the "Cancelar" button as the Cancel Button using setCancelButton.
             btnRegistrar.setDefaultButton(true);
             btnCancelar.setCancelButton(true);
+            lblError.setTextFill(Color.web("#FF0000"));
             //Show the window.
             stage.show();
             
@@ -163,6 +165,9 @@ public class SignUpController {
      */
     public void handleOnButtonClick(ActionEvent event) {
         try {   
+            txtCodigoPostal.setStyle("-fx-text-inner-color: #000000;");
+            txtTelefonoMovil.setStyle("-fx-text-inner-color: #000000;");
+            
             LOGGER.info("Register button clicked.");         
             //Validate the format of the email, it must have a text before an '@' and a text before and after '.'
             //Pattern that must be respected
@@ -212,7 +217,8 @@ public class SignUpController {
                 Pattern patternCod = Pattern.compile(regexCod);
                 //Validate the format of the postal code
                 if (!patternCod.matcher(txtCodigoPostal.getText()).matches()){
-                    throw new NumericException("El código debe ser númerico.");
+                    txtCodigoPostal.setStyle("-fx-text-inner-color: #FF0000;");
+                    throw new NumericException("El código postal debe ser númerico.");
                 }
                 //Setting the postal code for the user
                 newUser.setPostalCode(txtCodigoPostal.getText());
@@ -230,7 +236,8 @@ public class SignUpController {
                 Pattern patternCod = Pattern.compile(regexCod);
                 //Validate the format of the telephone number
                 if (!patternCod.matcher(txtTelefonoMovil.getText()).matches()){
-                    throw new NumericException("El código debe ser numerico.");
+                    txtTelefonoMovil.setStyle("-fx-text-inner-color: #FF0000;");
+                    throw new NumericException("El telefono móvil debe ser numerico.");                  
                 }
                 //Setting the telephone number for the user
                 newUser.setMobilePhone(txtTelefonoMovil.getText());
@@ -267,7 +274,10 @@ public class SignUpController {
         } catch (ServerErrorException e) {
             LOGGER.severe(e.getMessage());
             showError("Ha ocurrido un problema con el servidor. Inténtalo más tarde.");    
-        } catch (Exception e) {
+        } catch (NumericException e) {
+            LOGGER.severe(e.getMessage());
+            showError(e.getMessage());
+        }catch (Exception e) {
             LOGGER.severe(e.getMessage());
             showError("Ha ocurrido un error inesperado.");
         }
