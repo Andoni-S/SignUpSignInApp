@@ -8,16 +8,6 @@
     -fx-text-fill: white;
 }
 
-/* Customize the background of text fields to be darker */
-.text-field {
-    -fx-background-color: #222222; /* Darker color for text fields */
-    -fx-text-fill: white; /* Text color */
-}
-
-/* Set a different background color when text fields are focused */
-.text-field:focused {
-    -fx-background-color: #444444; /* A slightly lighter color when focused */
-}
 /* Set button colors */
 .button {
     -fx-background-color: #555555; /* A slightly lighter gray for buttons */

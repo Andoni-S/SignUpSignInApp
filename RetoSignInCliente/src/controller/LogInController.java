@@ -28,6 +28,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
+import libraries.Signable;
 import libraries.User;
 
 /**
@@ -54,6 +55,9 @@ public class LogInController {
     private Rectangle rectangle;
     @FXML
     private ImageView odooIcon;
+
+    // Instance of the SignableImplementation object
+    private final Signable signable = SignableFactory.getSignable();
 
     private TranslateTransition translateTransition;
     private TranslateTransition translateTransition2;
@@ -83,12 +87,14 @@ public class LogInController {
             LOGGER.info("Log In Window initialized and shown");
             // Set control events handlers
             LOGGER.info("Setting control evetns handlers...");
+
             loginButton.setOnAction(this::handleLoginButtonAction);
             hrefSignUp.setOnAction(this::handleHrefSignupAction);
             txtEmail.textProperty().addListener(this::handleTextChange);
             pwdPassword.textProperty().addListener(this::handleTextChange);
             stage.setOnCloseRequest(event -> handleCloseRequest(event));
             LOGGER.info("Control events handlers set");
+
         } catch (Exception ex) {
             // Show an error message to the user
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -172,20 +178,24 @@ public class LogInController {
                 LOGGER.severe("Wrong password format");
                 throw new PasswordFormatException("El formato de las credenciales no es correcto");
             }
-            // Create a User object with the provided data
+            // Add the provided data to the User
             User user = new User();
             user.setLogin(email);
             user.setPassword(password);
+
             // Send the User created to the logic Tier and recieve a full informed User
-            User mainWindowUser = new User();
-            mainWindowUser = SignableFactory.getSignable().logIn(user);
+            User mainWindowUser = signable.logIn(user);
+
             // Close this window and open a MainWindow
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainWindowFXML.fxml"));
             Parent root = loader.load();
             MainWindowController mainWindowController = loader.getController();
             Stage parentStage = new Stage();
+
             mainWindowController.setStage(parentStage);
+
             mainWindowController.initStage(root, mainWindowUser);
+
             stage.close();
         } catch (EmailFormatException | PasswordFormatException ex) {
             LOGGER.severe("Exception during login: " + ex.getMessage());
