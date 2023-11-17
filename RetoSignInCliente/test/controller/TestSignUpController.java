@@ -139,6 +139,7 @@ public class TestSignUpController extends ApplicationTest {
         // Verifying that the Main Window is visible
         verifyThat("#mainWindow", isVisible());
         clickOn("#btnLogout");
+    
     }
 
     /**
